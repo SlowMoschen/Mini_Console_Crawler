@@ -1,0 +1,14 @@
+D:\Backup\Programming\C#\Console_RPG\bin\Debug\net8.0\Console_RPG.exe
+D:\Backup\Programming\C#\Console_RPG\bin\Debug\net8.0\Console_RPG.deps.json
+D:\Backup\Programming\C#\Console_RPG\bin\Debug\net8.0\Console_RPG.runtimeconfig.json
+D:\Backup\Programming\C#\Console_RPG\bin\Debug\net8.0\Console_RPG.dll
+D:\Backup\Programming\C#\Console_RPG\bin\Debug\net8.0\Console_RPG.pdb
+D:\Backup\Programming\C#\Console_RPG\obj\Debug\net8.0\Console_RPG.GeneratedMSBuildEditorConfig.editorconfig
+D:\Backup\Programming\C#\Console_RPG\obj\Debug\net8.0\Console_RPG.AssemblyInfoInputs.cache
+D:\Backup\Programming\C#\Console_RPG\obj\Debug\net8.0\Console_RPG.AssemblyInfo.cs
+D:\Backup\Programming\C#\Console_RPG\obj\Debug\net8.0\Console_RPG.csproj.CoreCompileInputs.cache
+D:\Backup\Programming\C#\Console_RPG\obj\Debug\net8.0\Console_RPG.dll
+D:\Backup\Programming\C#\Console_RPG\obj\Debug\net8.0\refint\Console_RPG.dll
+D:\Backup\Programming\C#\Console_RPG\obj\Debug\net8.0\Console_RPG.pdb
+D:\Backup\Programming\C#\Console_RPG\obj\Debug\net8.0\Console_RPG.genruntimeconfig.cache
+D:\Backup\Programming\C#\Console_RPG\obj\Debug\net8.0\ref\Console_RPG.dll
