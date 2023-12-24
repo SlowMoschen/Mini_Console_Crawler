@@ -1,5 +1,6 @@
 using Person;
 using System.Collections;
+using Console_RPG;
 namespace Player 
 {
 
@@ -14,6 +15,8 @@ public class Player : Person.Person {
 
     int kickAttackStrength = 5;
     int slashAttackStrength = 10;
+
+    GameState GameState = new GameState();
 
     public Player (string name, int attack, double strength, int armor, double health, int maxHealth, int level, int experience, int experienceToLevelUp) 
         : base(name, attack, strength, armor, health) {
@@ -72,6 +75,7 @@ public class Player : Person.Person {
 
     public void gainExperience (int experience) {
         this.experience += experience;
+        GameState.totalExperience += experience;
         if (this.experience >= this.experienceToLevelUp) {
             Console.WriteLine(" You leveled up!");
             this.levelUp();

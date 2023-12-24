@@ -12,3 +12,4 @@ D:\Backup\Programming\C#\Console_RPG\obj\Debug\net8.0\refint\Console_RPG.dll
 D:\Backup\Programming\C#\Console_RPG\obj\Debug\net8.0\Console_RPG.pdb
 D:\Backup\Programming\C#\Console_RPG\obj\Debug\net8.0\Console_RPG.genruntimeconfig.cache
 D:\Backup\Programming\C#\Console_RPG\obj\Debug\net8.0\ref\Console_RPG.dll
+D:\Backup\Programming\C#\Console_RPG\obj\Debug\net8.0\Console_RPG.sourcelink.json

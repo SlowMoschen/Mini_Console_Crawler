@@ -1,12 +1,35 @@
 using UserInput;
 using Console_RPG;
 
-namespace WriteLine {
+namespace Game_Methods {
 
-    public class WriteLine {
+    public class Game {
 
         InputHandler InputHandler = new InputHandler();
         GameState GameState = new GameState();
+
+        public void displayGreetings() {
+            Console.Clear();
+            Console.WriteLine(" ---------------------------");
+            Console.WriteLine(" |                         |");
+            Console.WriteLine(" |       Console_RPG       |");
+            Console.WriteLine(" |                         |");
+            Console.WriteLine(" |   A simple console RPG  |");
+            Console.WriteLine(" |                         |");
+            Console.WriteLine(" ---------------------------");
+            Console.WriteLine();
+            Console.WriteLine(" Welcome to Console_RPG!");
+            Console.WriteLine(" Your goal is to defeat the hardest Dungeon.");
+            this.waitForInput();
+            Console.Clear();
+        }
+
+        public void waitForInput(string message = " Press any key to continue...") {
+            Console.WriteLine();
+            Console.WriteLine(message);
+            Console.ReadKey();
+            Console.Clear();
+        }
 
         public  void displayNewEncounter(string enemyName) {
             Console.WriteLine();
@@ -30,13 +53,32 @@ namespace WriteLine {
             return playerChoice;
         }
 
-        public void displayBattleStats(Person.Person player, Person.Person enemy) {
+        public void displayGameStats() {
+            Console.WriteLine();
+            Console.WriteLine("---------------------------");
+            Console.WriteLine("        Game Stats         ");
+            Console.WriteLine("---------------------------");
+            Console.WriteLine(" Survived Rooms: " + GameState.surviedRooms);
+            Console.WriteLine(" Killed Enemies: " + GameState.killedEnemies);
+            Console.WriteLine(" Total Experience gained: " + GameState.totalExperience);
+            Console.WriteLine("---------------------------");
+            Console.WriteLine();
+        }
+
+        public void displayBattleStats(Person.Person player, Enemy.Enemy enemy) {
             Console.WriteLine();
             player.printBattleStats();
             Console.WriteLine(" --------------------");
             Console.WriteLine("         VS          ");
             Console.WriteLine(" --------------------");
             enemy.printBattleStats();
+        }
+
+        public void displayEnteredRoom(string difficulty, int enemiesCount) {
+            Console.WriteLine();
+            Console.WriteLine(" You entered the " + difficulty + " Dungeon");
+            string ZombieOrZombies = enemiesCount > 1 ? "Zombies" : "Zombie";
+            Console.WriteLine(" You have to defeat " + enemiesCount + " " + ZombieOrZombies + " to get to the end of the Dungeon");
         }
 
         public void displayBattleOutcome(string playerChoice, string enemyChoice, Player.Player player, Person.Person enemy)
@@ -149,27 +191,29 @@ namespace WriteLine {
                             if (zombie.health <= 0)
                             {
                                 Console.WriteLine(" You defeated the zombie");
-                                            Console.WriteLine(" You gained " + zombie.experienceOnDefeat + " experience");
-                                            player.gainExperience(zombie.experienceOnDefeat);
-                                            Console.WriteLine();
-                                            Console.WriteLine(" Press any key to continue");
-                                            Console.ReadKey();
-                                            break;
-                                        }
-                                        else
-                                        {
-                                            string zombieChoice = zombie.executeMove(player);
-                                            this.displayBattleOutcome(playerChoice, zombieChoice, player, zombie);
-                                            if (player.health <= 0)
-                                            {
-                                                Console.WriteLine(" You died");
-                                            }
-                                        }
+                                GameState.killedEnemies++;
+                                Console.WriteLine(" You gained " + zombie.experienceOnDefeat + " experience");
+                                player.gainExperience(zombie.experienceOnDefeat);
+                                this.waitForInput();
+                                break;
+                            }
+                            else
+                            {
+                                string zombieChoice = zombie.executeMove(player);
+                                this.displayBattleOutcome(playerChoice, zombieChoice, player, zombie);
+                                if (player.health <= 0)
+                                {
+                                    this.displayDefeat();
 
+                                    GameState.isDead = true;
+                                    GameState.isInMenu = true;
+                                    GameState.isInFight = false;
 
-                            Console.WriteLine();
-                            Console.WriteLine(" Press any key to continue");
-                            Console.ReadKey();
+                                    break;
+                                }
+                            }
+
+                            this.waitForInput();
                             Console.Clear();
                         }
         }
@@ -180,10 +224,17 @@ namespace WriteLine {
             Console.WriteLine("         Victory!          ");
             Console.WriteLine("---------------------------");
             Console.WriteLine();
-            Console.WriteLine(" You defeated all the Enemies");
-            Console.WriteLine();
-            Console.WriteLine(" Press any key to get back to the Main Menu");
-            Console.ReadKey();
+            Console.WriteLine(" You defeated all the Enemies in this Dungeon");
+            this.waitForInput(" Press any key to get back to the Main Menu");
+        }
+
+        public void displayDefeat() {
+            Console.Clear();
+            Console.WriteLine("---------------------------");
+            Console.WriteLine("          You died!        ");
+            Console.WriteLine("---------------------------");
+            this.displayGameStats();
+            this.waitForInput(" Press any key to get back to the Main Menu");
         }
     }
 }

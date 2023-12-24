@@ -19,12 +19,10 @@ namespace Enemy
             return choice;
         }
 
-        new public void Attack (Person.Person target) {
-            if(target.isDefending) {
-                target.isDefending = false;
-            } else {
-                target.health -= this.attack * this.strength / target.armor;
-            }
+        public new void printBattleStats () {
+            Console.WriteLine(" Enemy: " + this.name);
+            Console.WriteLine(" Health: " + this.health);
+            Console.WriteLine(" Armor: " + this.armor);
         }
     }
 

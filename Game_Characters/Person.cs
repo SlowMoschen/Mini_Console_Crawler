@@ -24,8 +24,6 @@ namespace Person
 
         public void Attack (Person target) {
             if(target.isDefending) {
-                // target.health -= this.attack * this.strength / target.armor / 2;
-                // Console.WriteLine(" The damage was blocked");
                 target.isDefending = false;
             } else {
                 target.health -= this.attack * this.strength / target.armor;
