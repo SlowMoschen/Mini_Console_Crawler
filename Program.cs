@@ -2,7 +2,9 @@
 using Player;
 using Zombie;
 using Game_Methods;
-using Dungeon;
+using Dungeon_Generator;
+using System;
+using System.Linq;
 
 public class GameState {
     public static bool isInMenu { get; set;}
@@ -40,7 +42,6 @@ class Program
     static void Main(string[] args)
     {
         GameState GameState = new GameState();
-        RoomGenerator RoomGenerator = new RoomGenerator();
         Game Game = new Game();
         Player player = new Player("Player", attack: 50, strength: 1.0, armor: 10, health: 10, maxHealth: 100, level: 1, experience: 0, experienceToLevelUp: 100);
 
@@ -70,26 +71,32 @@ class Program
                     GameState.isInFight = true;
                     string fightChoice = Game.displayOptionMenu(" In wich Dungeon do you want to go?", roomOptions);
 
-                    Zombie[] zombies = RoomGenerator.generateRoom(fightChoice);
+                    Room[] dungeon = DungeonGenerator.generateDungeon(fightChoice);
                     
-                    Game.displayEnteredRoom(fightChoice, zombies.Length);
+                    Game.displayEnteredDungeon(fightChoice);
                     Game.waitForInput();
                     
-                    foreach (Zombie zombie in zombies)
+                    foreach (Room room in dungeon)
                     {
-                        if(GameState.isInFight) {
-                            Game.displayBattleWith(player, zombie, options, attackOptions);
+                        int totalZombiesInDungeon = dungeon.Sum(room => room.zombies.Length);
+                        Game.displayEnteredRoom(room.roomNumber, dungeon.Length, room.zombies.Length, totalZombiesInDungeon);
+                        Game.waitForInput();
+                        foreach (Zombie zombie in room.zombies)
+                        {
+                            if(GameState.isInFight) {
+                                Game.displayBattleWith(player, zombie, options, attackOptions);
+                            }
                         }
-
+                        bool allZombiesDefeated = room.zombies.All(zombie => zombie.health <= 0);
+                        if(allZombiesDefeated) {
+                            Game.displayRoomVictory();
+                            GameState.surviedRooms++;
+                            GameState.isInMenu = true;
+                            GameState.isInFight = false;
+                            break;
+                        }
                     }
-                    bool allZombiesDefeated = zombies.All(zombie => zombie.health <= 0);
-                    if(allZombiesDefeated) {
-                        Game.displayVictory();
-                        GameState.surviedRooms++;
-                        GameState.isInMenu = true;
-                        GameState.isInFight = false;
-                        break;
-                    }
+                    Game.displayDungeonVictory();
                     break;
                 case "Stats":
                     player.printStats();

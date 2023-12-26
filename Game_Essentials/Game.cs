@@ -74,11 +74,17 @@ namespace Game_Methods {
             enemy.printBattleStats();
         }
 
-        public void displayEnteredRoom(string difficulty, int enemiesCount) {
+        public void displayEnteredRoom( int roomNumber, int roomCount,int enemiesCount, int totalEnemiesCount) {
             Console.WriteLine();
-            Console.WriteLine(" You entered the " + difficulty + " Dungeon");
+            Console.WriteLine(" You entered Room " + roomNumber + " of " + enemiesCount + " in this Dungeon");
             string ZombieOrZombies = enemiesCount > 1 ? "Zombies" : "Zombie";
             Console.WriteLine(" You have to defeat " + enemiesCount + " " + ZombieOrZombies + " to get to the end of the Dungeon");
+        }
+
+        public void displayEnteredDungeon(string difficulty) {
+            Console.WriteLine();
+            Console.WriteLine(" You entered the " + difficulty + " Dungeon");
+            Console.WriteLine(" You have to defeat all the enemies to get to the end of the Dungeon");
         }
 
         public void displayBattleOutcome(string playerChoice, string enemyChoice, Player.Player player, Person.Person enemy)
@@ -218,7 +224,7 @@ namespace Game_Methods {
                         }
         }
 
-        public void displayVictory() {
+        public void displayDungeonVictory() {
             Console.Clear();
             Console.WriteLine("---------------------------");
             Console.WriteLine("         Victory!          ");
@@ -226,6 +232,15 @@ namespace Game_Methods {
             Console.WriteLine();
             Console.WriteLine(" You defeated all the Enemies in this Dungeon");
             this.waitForInput(" Press any key to get back to the Main Menu");
+        }
+
+        public void displayRoomVictory() {
+            Console.Clear();
+            Console.WriteLine("---------------------------");
+            Console.WriteLine("       Room Cleared!       ");
+            Console.WriteLine("---------------------------");
+            Console.WriteLine();
+            this.waitForInput(" Press any key to get back to enter the next Room");
         }
 
         public void displayDefeat() {

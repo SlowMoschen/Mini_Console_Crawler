@@ -1,7 +1,7 @@
 using Zombie;
 using Enemy;
 
-namespace Dungeon {
+namespace Dungeon_Generator {
 
     public class ZombieStats {
         public static int attack;
@@ -19,7 +19,46 @@ namespace Dungeon {
         }
     }
 
-    public class RoomGenerator {
+    public class DungeonGenerator {
+            
+            public static Room[] generateDungeon(string difficulty) {
+
+                int rooms;
+                switch (difficulty)
+                {
+                    case "Easy":
+                        rooms = 1;
+                        break;
+                    case "Medium":
+                        rooms = 2;
+                        break;
+                    case "Hard":
+                        rooms = 3;
+                        break;
+                    default:
+                        rooms = 1;
+                        break;
+                }
+                Room[] dungeon = new Room[rooms];
+    
+                for (int i = 0; i < rooms; i++)
+                {
+                    dungeon[i] = new Room(i + 1, difficulty);
+                }
+    
+                return dungeon;
+            }
+    }
+
+    public class Room {
+
+        public int roomNumber { get; set; }
+        public Zombie.Zombie[] zombies { get; set; }
+
+        public Room(int roomNumber, string difficulty) {
+            this.roomNumber = roomNumber;
+            this.zombies = generateRoom(difficulty);
+        }
 
         ZombieStats ZombieStats = new ZombieStats();
         static int easyEnemeies = 1;
