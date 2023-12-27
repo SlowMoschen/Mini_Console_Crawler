@@ -1,8 +1,8 @@
-using Enemy;
+using Game_Characters;
 
 namespace Zombie
 {
-    public class Zombie : Enemy.Enemy
+    public class Zombie : Enemy
     {
         public Zombie(string name, int attack, double strength, int armor, double health, int experienceOnDefeat)
             : base(name, attack, strength, armor, health, experienceOnDefeat)
@@ -11,7 +11,7 @@ namespace Zombie
         }
 
         // Bite Attack - heals zombie for half the damage dealt
-        public void bite(Person.Person target)
+        public void bite(Character target)
         {
             if(target.isDefending) {
                 target.isDefending = false;
@@ -22,7 +22,7 @@ namespace Zombie
         }
 
         // Thrash Attack - deals damage to target and self
-        public void thrash(Person.Person target)
+        public void thrash(Character target)
         {
             if(target.isDefending) {
                 target.isDefending = false;
@@ -33,7 +33,7 @@ namespace Zombie
         }
 
         // Function to execute a random attack based on the attack count
-        public string executeMove(Person.Person target)
+        public string executeMove(Character target)
         {
             string move = "";
             switch (getRandomAttack())

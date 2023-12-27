@@ -1,6 +1,6 @@
 using Zombie;
-using Enemy;
 using Game_Essentials;
+using Game_Characters;
 
 namespace Dungeon_Generator {
 

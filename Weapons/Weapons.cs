@@ -1,3 +1,5 @@
+using Game_Characters;
+
 namespace Weapons 
 {
 
@@ -7,7 +9,7 @@ namespace Weapons
         public int enduranceCost;
         public int specialAttackStrength;
         public string specialAttackName;
-        public Action<Person.Person, Player.Player> specialAttack;
+        public Action<Character, Player> specialAttack;
 
         public Weapon (string name, int attack, int enduranceCost) {
             this.name = name;
@@ -30,7 +32,7 @@ namespace Weapons
             this.specialAttackName = "Slash";
         }
 
-        public void slash(Person.Person target, Player.Player player)
+        public void slash(Character target, Player player)
         {
             if (target.isDefending)
             {
@@ -50,7 +52,7 @@ namespace Weapons
             this.specialAttackName = "Chop";
         }
 
-        public void chop(Person.Person target, Player.Player player)
+        public void chop(Character target, Player player)
         {
             if (target.isDefending)
             {
@@ -70,7 +72,7 @@ namespace Weapons
             this.specialAttackName = "Bash";
         }
 
-        public void bash(Person.Person target, Player.Player player)
+        public void bash(Character target, Player player)
         {
             if (target.isDefending)
             {

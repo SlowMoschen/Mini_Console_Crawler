@@ -1,5 +1,6 @@
 using UserInput;
 using Console_RPG;
+using Game_Characters;
 
 namespace Game_Essentials {
 
@@ -151,7 +152,7 @@ namespace Game_Essentials {
             Console.WriteLine();
         }
 
-        public void displayBattleStats(Player.Player player, Enemy.Enemy enemy) {
+        public void displayBattleStats(Player player, Enemy enemy) {
             Console.WriteLine();
             player.printBattleStats();
             this.displayHeader("VS");
@@ -171,7 +172,7 @@ namespace Game_Essentials {
             Console.WriteLine(" You have to defeat all the enemies to get to the end of the Dungeon");
         }
 
-        public void displayBattleOutcome(string playerChoice, string enemyChoice, Player.Player player, Person.Person enemy, string attackChoice)
+        public void displayBattleOutcome(string playerChoice, string enemyChoice, Player player, Character enemy, string attackChoice)
         {
             double playerDamage = player.currentWeapon.attack * player.strength / enemy.armor;
             double playerKickDamage = (player.attack + player.kickAttackStrength) * player.strength / enemy.armor;
@@ -227,7 +228,7 @@ namespace Game_Essentials {
             }
         }
 
-        public void displayBattleWith(Player.Player player, Zombie.Zombie zombie, string[] options, string[] attackOptions) {
+        public void displayBattleWith(Player player, Zombie.Zombie zombie, string[] options, string[] attackOptions) {
                             Console.Clear();
                             this.displayNewEncounter(zombie.name);
 

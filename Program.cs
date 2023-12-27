@@ -1,8 +1,8 @@
 ﻿namespace Console_RPG;
-using Player;
+using Game_Characters;
+using Game_Essentials;
 using Zombie;
 using Weapons;
-using Game_Essentials;
 using Dungeon_Generator;
 using System;
 using System.Linq;
