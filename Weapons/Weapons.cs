@@ -37,6 +37,7 @@ namespace Weapons
             if (target.isDefending)
             {
                 target.isDefending = false;
+                return;
             }
             else
             {
@@ -57,6 +58,7 @@ namespace Weapons
             if (target.isDefending)
             {
                 target.isDefending = false;
+                return;
             }
             else
             {
@@ -77,6 +79,7 @@ namespace Weapons
             if (target.isDefending)
             {
                 target.isDefending = false;
+                return;
             }
             else
             {

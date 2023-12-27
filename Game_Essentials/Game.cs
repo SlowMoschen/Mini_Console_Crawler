@@ -16,6 +16,7 @@ namespace Game_Essentials {
 
         public class GameSettings {
             
+            public static int healPotionHealRating { get; } = 20;
             public static string playerName { get; set;} = "Player";
             public static int maxEndurance { get; } = 100;
             public static int enduranceRegeneration { get; } = 7;
@@ -23,17 +24,17 @@ namespace Game_Essentials {
             public static int maxZombieAttack { get; } = 10;
             public static double maxZombieStrength { get; } = 1.0;
             public static int maxZombieArmor { get; } = 5;
-            public static int maxZombieHealth { get; } = 10;
+            public static int maxZombieHealth { get; } = 50;
             public static int maxZombieExperience { get; } = 20;
             
             public class Options {
                 public static string[] difficultyOptions { get; } = new string[] { "Easy", "Medium", "Hard" };
-                public static string[] battleOptions { get; } = new string[] { "Attack", "Heal", "Defend", "Run" };
+                public static string[] battleOptions { get; } = new string[] { "Attack", "Rest", "Defend", "Run" };
                 public static string[] attackOptions { get; set; }
                 public static string[] mainMenuOptions { get; } = new string[] { "Enter Dungeon", "View Stats" };
             }
 
-            public class DungeonSettings {
+        public class DungeonSettings {
                 public static int easyRooms { get; } = 1;
                 public static int mediumRooms { get; } = 2;
                 public static int hardRooms { get; } = 3;
@@ -53,11 +54,22 @@ namespace Game_Essentials {
             public static bool isDungeonCleared { get; set;} = false;
         }
 
+        public class PlayerInventory {
+            public static int healPotions { get; set;} = 0;
+        }
+
     }
 
     public class DisplayManager {
 
         InputHandler InputHandler = new InputHandler();
+
+
+        /*
+        /
+        /    Methods for Displaying Logic before the game starts
+        /
+        */
 
         public void displayGameLogo() {
             Console.Clear();
@@ -81,6 +93,7 @@ namespace Game_Essentials {
             Console.Clear();
         }
 
+        // Method to get the player name before the game starts
         public void getPlayerName() {
             Console.Clear();
             this.displayGameLogo();
@@ -93,6 +106,7 @@ namespace Game_Essentials {
             Console.Clear();
         }
 
+        // Method to get the player weapon before the game starts
         public string getPlayerWeapon() {
             Console.Clear();
             this.displayGameLogo();
@@ -104,44 +118,64 @@ namespace Game_Essentials {
             return playerWeapon;
         }
 
+        public string displayMainMenu() {
+            Console.Clear();
+            this.displayHeader("Main Menu");
+            string menuChoice = this.displayOptionMenu(" What would you like to do?", GameVariables.GameSettings.Options.mainMenuOptions);
+            return menuChoice;
+        }
+
+        /*
+        /
+        /    Helper Methods
+        /
+        */
+
+        // Method to wait for user input before continuing
         public void waitForInput(string message = " Press any key to continue...") {
             Console.WriteLine();
             Console.WriteLine(message);
             Console.ReadKey();
             Console.Clear();
         }
+
+        // Method to display a header with a message
+        // Calulate the padding based on the message length
+        // Example: displayHeader("Hello World") will display:
+        // ---------------------------
+        //        Hello World
+        // ---------------------------
         public void displayHeader(string message) {
             // Console.Clear();
             Console.WriteLine();
             Console.WriteLine("---------------------------");
 
             int dashedLineLength = 27;
-            // Calculate the padding needed to center the title
             int padding = (dashedLineLength - message.Length) / 2;
 
-            // Print the title with the calculated padding
             Console.WriteLine("{0," + ((dashedLineLength - message.Length) / 2 + message.Length) + "}", message);
 
             Console.WriteLine("---------------------------");
             Console.WriteLine();
         }
 
-        public  void displayNewEncounter(string enemyName) {
-            this.displayHeader("New Encounter");
-            Console.WriteLine(" You encountered a " + enemyName);
-        }
-
-        public void displayMenuText() {
-            Console.Clear();
-            this.displayHeader("Main Menu");
-        }
-
-
+        // Method to display a menu with a message and options
         public string displayOptionMenu(string message ,string[] options) {
             Console.WriteLine();
             string playerChoice = InputHandler.getChoice(message, options);
             Console.WriteLine();
             return playerChoice;
+        }
+
+        /*
+        /
+        /    Methods for Displaying Logic during the Battle
+        /
+        */
+
+        public  void displayNewEncounter(string enemyName) {
+            this.displayHeader("New Encounter");
+            Console.WriteLine(" You encountered a " + enemyName);
         }
 
         public void displayGameStats() {
@@ -172,7 +206,7 @@ namespace Game_Essentials {
             Console.WriteLine(" You have to defeat all the enemies to get to the end of the Dungeon");
         }
 
-        public void displayBattleOutcome(string playerChoice, string enemyChoice, Player player, Character enemy, string attackChoice)
+        public void displayBattleOutcome(string playerChoice, string enemyChoice, Player player, Enemy enemy, string attackChoice)
         {
             double playerDamage = player.currentWeapon.attack * player.strength / enemy.armor;
             double playerKickDamage = (player.attack + player.kickAttackStrength) * player.strength / enemy.armor;
@@ -181,20 +215,28 @@ namespace Game_Essentials {
             double enemyHeal = enemyDamage / 2;
             double enemySelfDamage = enemyDamage / 4;
 
-            if(!enemy.isDefending) {
                 switch (playerChoice)
                 {
-                    case "Attack":
-                        if(attackChoice == "Normal Attack") {
-                            Console.WriteLine($" You attacked the enemy for {playerDamage} damage");
-                        } else if(attackChoice == "Kick Attack") {
-                            Console.WriteLine($" You kicked the enemy for {playerKickDamage} damage");
-                        } else if(attackChoice == player.currentWeapon.specialAttackName) {
-                            Console.WriteLine($" You used {player.currentWeapon.specialAttackName} for {playerSpecialAttackDamage} damage");
+                    case "Attack":     
+                        if(!enemy.isDefending) {
+                            if(player.endurance >= player.currentWeapon.enduranceCost) {
+                                if(attackChoice == "Normal Attack") {
+                                Console.WriteLine($" You attacked the enemy for {playerDamage} damage");
+                                } else if(attackChoice == "Kick Attack") {
+                                    Console.WriteLine($" You kicked the enemy for {playerKickDamage} damage");
+                                } else if(attackChoice == player.currentWeapon.specialAttackName) {
+                                    Console.WriteLine($" You used {player.currentWeapon.specialAttackName} for {playerSpecialAttackDamage} damage");
+                                }
+                            } else {
+                                Console.WriteLine(" You don't have enough endurance to attack");
+                                break;
+                            }
+                        } else {
+                            enemy.isDefending = false;
                         }
                         break;
-                    case "Heal":
-                        Console.WriteLine($" You healed for {player.healRating} health");
+                    case "Rest":
+                        Console.WriteLine($" You healed for {player.healRating} health and got {GameVariables.GameSettings.enduranceRegeneration * 2} endurance back.");
                         break;
                     case "Defend":
                         Console.WriteLine(" You successfully defended the attack!");
@@ -203,9 +245,7 @@ namespace Game_Essentials {
                         Console.WriteLine(" You ran away");
                         break;
                 }
-            } else {
-                Console.WriteLine(" The damage was blocked by the Enemy");
-            }
+            
             
 
             if (enemy is Zombie.Zombie && !player.isDefending)
@@ -222,7 +262,7 @@ namespace Game_Essentials {
                         Console.WriteLine($" The zombie attacked you for {enemyDamage} damage");
                         break;
                     case "defend":
-                        Console.WriteLine(" The zombie is defending the next attack");
+                        Console.WriteLine(" The zombie defended the attack");
                         break;
                 }
             }
@@ -238,15 +278,17 @@ namespace Game_Essentials {
 
                             this.displayBattleStats(player, zombie);
 
+                            string zombieChoice = zombie.executeMove(player);
                             string playerChoice = this.displayOptionMenu(" What will you do?", options);
                             string attackChoice = "";
+                            
                             switch (playerChoice)
                             {
                                 case "Attack":
                                     attackChoice = player.chooseAttack(zombie);
                                     break;
-                                case "Heal":
-                                    player.Heal();
+                                case "Rest":
+                                    player.Rest();
                                     break;
                                 case "Defend":
                                     player.Defend(zombie);
@@ -283,7 +325,6 @@ namespace Game_Essentials {
                             }
                             else
                             {
-                                string zombieChoice = zombie.executeMove(player);
                                 this.displayBattleOutcome(playerChoice, zombieChoice, player, zombie, attackChoice);
 
                                 // Regenerate Endurance
@@ -310,6 +351,12 @@ namespace Game_Essentials {
                             Console.Clear();
                         }
         }
+
+        /*
+        /
+        /    Methods for Displaying Logic after the Battle
+        /
+        */
 
         public void displayDungeonVictory() {
             this.displayHeader("Dungeon Cleared");

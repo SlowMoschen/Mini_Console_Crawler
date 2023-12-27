@@ -47,11 +47,10 @@ class Program
 
         while(GameVariables.GameLoopBooleans.isInMenu) {
 
-            DisplayManager.displayMenuText();
-            string menuChoice = DisplayManager.displayOptionMenu(" What would you like to do?", GameVariables.GameSettings.Options.mainMenuOptions);
+            string menuChoice = DisplayManager.displayMainMenu();
 
             if(GameVariables.GameLoopBooleans.isDead) {
-                player.Heal();
+                player.health = player.maxHealth;
                 GameVariables.GameLoopBooleans.isDead = false;
                 Console.WriteLine(" You have been revived!");
                 break;

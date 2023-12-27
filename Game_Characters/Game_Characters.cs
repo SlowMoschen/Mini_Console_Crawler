@@ -35,6 +35,7 @@ namespace Game_Characters
         public void Attack (Character target) {
             if(target.isDefending) {
                 target.isDefending = false;
+                return;
             } else {
                 target.health -= this.attack * this.strength / target.armor;
             }
@@ -120,7 +121,7 @@ namespace Game_Characters
         this.level = level;
         this.experience = experience;
         this.experienceToLevelUp = experienceToLevelUp;
-        this.healRating = 10;
+        this.healRating = 100;
     }
 
     //Level rating - how much stats will increase per level
@@ -133,49 +134,72 @@ namespace Game_Characters
         {"healRating", 2}
     };
 
-    public void Heal() {
+    public void useHealPotion() {
+        if(GameVariables.PlayerInventory.healPotions > 0) {
+            this.health += GameVariables.GameSettings.healPotionHealRating;
+            GameVariables.PlayerInventory.healPotions--;
+            if(this.health > this.maxHealth) {
+                this.health = this.maxHealth;
+            }
+        } else {
+            Console.WriteLine(" You don't have any heal potions!");
+        }
+    }
+
+    public void Rest() {
         this.health += this.healRating;
+        this.endurance += GameVariables.GameSettings.enduranceRegeneration * 2;
         if(this.health > this.maxHealth) {
             this.health = this.maxHealth;
+        }
+        if(this.endurance > this.maxEndurance) {
+            this.endurance = this.maxEndurance;
         }
     }
 
     new public void Attack (Character target) {
 
-        if(this.endurance < this.currentWeapon.enduranceCost) {
-            Console.WriteLine(" You don't have enough endurance to attack!");
-            return;
+        if(this.endurance >= this.currentWeapon.enduranceCost) {
+            if(target.isDefending) {
+                return;
+            } else {
+                target.health -= this.currentWeapon.attack * this.strength / target.armor;
+                this.endurance -= this.currentWeapon.enduranceCost;
+            }
         }
 
-        if(target.isDefending) {
-            target.isDefending = false;
-        } else {
-            target.health -= this.currentWeapon.attack * this.strength / target.armor;
-            this.endurance -= this.currentWeapon.enduranceCost;
-        }
+        return;
     }
 
     public void kickAttack (Character target) {
 
-        if(this.endurance < 6) {
-            Console.WriteLine(" You don't have enough endurance to attack!");
-            return;
+        if(this.endurance > 6) {
+            if(target.isDefending) {
+                return;
+            } else {
+                target.health -= (this.attack + kickAttackStrength) * this.strength / target.armor ;
+                this.endurance -= 6;
+            }
         }
-
-        if(target.isDefending) {
-            target.isDefending = false;
-        } else {
-            target.health -= (this.attack + kickAttackStrength) * this.strength / target.armor ;
-            this.endurance -= 6;
-        }
+        
+        return;
     }
 
     public void useSpecialAttack(Character target) {
-        if(this.currentWeapon != null) {
-            this.currentWeapon.specialAttack(target, this);
-        } else {
-            Console.WriteLine(" You don't have a weapon equipped!");
-        }
+
+        if(this.endurance >= this.currentWeapon.enduranceCost) {
+            if(target.isDefending) {
+                return;
+            } else {
+                if(this.currentWeapon != null) {
+                    this.currentWeapon.specialAttack(target, this);
+                    this.endurance -= this.currentWeapon.enduranceCost;
+                }
+            }
+        } 
+
+        return;
+
     }
 
     public string chooseAttack(Character target) {
