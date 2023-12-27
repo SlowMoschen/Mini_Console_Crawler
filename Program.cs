@@ -1,28 +1,11 @@
 ﻿namespace Console_RPG;
 using Player;
 using Zombie;
-using Game_Methods;
+using Weapons;
+using Game_Essentials;
 using Dungeon_Generator;
 using System;
 using System.Linq;
-
-public class GameState {
-    public static bool isInMenu { get; set;}
-    public static bool isInFight { get; set;}
-    public static bool isDead { get; set;}
-    public static int surviedRooms { get; set;}
-    public static int killedEnemies { get; set;}
-    public static int totalExperience { get; set;}
-
-    public GameState() {
-        isDead = false;
-        isInMenu = true;
-        isInFight = false;
-        surviedRooms = 0;
-        killedEnemies = 0;
-        totalExperience = 0;
-    }
-}
 
 class Program
 {
@@ -41,66 +24,88 @@ class Program
     
     static void Main(string[] args)
     {
-        GameState GameState = new GameState();
-        Game Game = new Game();
-        Player player = new Player("Player", attack: 50, strength: 1.0, armor: 10, health: 10, maxHealth: 100, level: 1, experience: 0, experienceToLevelUp: 100);
-
-        string[] mainMenuOptions = { "Fight", "Stats" };
-        string[] options = { "Attack", "Heal", "Defend", "Run" };
-        string[] attackOptions = { "Normal Attack", "Slash Attack", "Kick Attack" }; 
-        string[] roomOptions = { "Easy", "Medium", "Hard" };
+        DisplayManager DisplayManager = new DisplayManager();
         
-        Game.displayGreetings();
+        DisplayManager.displayGreetings();
+        // DisplayManager.getPlayerName();
+        Player player = new Player(GameVariables.GameSettings.playerName, attack: 50, strength: 1.0, armor: 10, health: 100, maxHealth: 100, level: 1, experience: 0, experienceToLevelUp: 100);
 
-        while(GameState.isInMenu) {
+        string playerWeaponChoice = DisplayManager.getPlayerWeapon();
 
-            Game.displayMenuText();
-            string menuChoice = Game.displayOptionMenu(" What would you like to do?", mainMenuOptions);
+        switch (playerWeaponChoice) {
+            case "Sword":
+                player.currentWeapon = new Sword(name: "Sword", attack: 12, enduranceCost: 10);
+                break;
+            case "Axe":
+                player.currentWeapon = new Axe(name: "Axe", attack: 25, enduranceCost: 20);
+                break;
+            case "Mace":
+                player.currentWeapon = new Mace(name: "Mace", attack: 20, enduranceCost: 15);
+                break;
+        }
+        player.setAttackOptions();
 
-            if(GameState.isDead) {
+        while(GameVariables.GameLoopBooleans.isInMenu) {
+
+            DisplayManager.displayMenuText();
+            string menuChoice = DisplayManager.displayOptionMenu(" What would you like to do?", GameVariables.GameSettings.Options.mainMenuOptions);
+
+            if(GameVariables.GameLoopBooleans.isDead) {
                 player.Heal();
-                GameState.isDead = false;
+                GameVariables.GameLoopBooleans.isDead = false;
                 Console.WriteLine(" You have been revived!");
                 break;
             }
 
             switch (menuChoice)
             {
-                case "Fight":
-                    GameState.isInMenu = false;
-                    GameState.isInFight = true;
-                    string fightChoice = Game.displayOptionMenu(" In wich Dungeon do you want to go?", roomOptions);
+                case "Enter Dungeon":
+                    GameVariables.GameLoopBooleans.isInMenu = false;
+                    GameVariables.GameLoopBooleans.isInFight = true;
+                    string fightChoice = DisplayManager.displayOptionMenu(" In wich Dungeon do you want to go?", GameVariables.GameSettings.Options.difficultyOptions);
 
                     Room[] dungeon = DungeonGenerator.generateDungeon(fightChoice);
                     
-                    Game.displayEnteredDungeon(fightChoice);
-                    Game.waitForInput();
+                    DisplayManager.displayEnteredDungeon(fightChoice);
+                    DisplayManager.waitForInput();
                     
                     foreach (Room room in dungeon)
                     {
                         int totalZombiesInDungeon = dungeon.Sum(room => room.zombies.Length);
-                        Game.displayEnteredRoom(room.roomNumber, dungeon.Length, room.zombies.Length, totalZombiesInDungeon);
-                        Game.waitForInput();
+                        DisplayManager.displayEnteredRoom(room.roomNumber, dungeon.Length, room.zombies.Length, totalZombiesInDungeon);
+                        DisplayManager.waitForInput();
                         foreach (Zombie zombie in room.zombies)
                         {
-                            if(GameState.isInFight) {
-                                Game.displayBattleWith(player, zombie, options, attackOptions);
+                            if(GameVariables.GameLoopBooleans.isInFight) {
+                                DisplayManager.displayBattleWith(player, zombie, GameVariables.GameSettings.Options.battleOptions, GameVariables.GameSettings.Options.attackOptions);
                             }
                         }
                         bool allZombiesDefeated = room.zombies.All(zombie => zombie.health <= 0);
                         if(allZombiesDefeated) {
-                            Game.displayRoomVictory();
-                            GameState.surviedRooms++;
-                            GameState.isInMenu = true;
-                            GameState.isInFight = false;
+                            DisplayManager.displayRoomVictory();
+                            GameVariables.GameStats.surviedRooms++;
+                        }
+                        
+                        bool allRoomsDefeated = dungeon.All(room => room.zombies.All(zombie => zombie.health <= 0));
+                        if(allRoomsDefeated) {
+                            GameVariables.GameLoopBooleans.isDungeonCleared = true;
                             break;
                         }
+
                     }
-                    Game.displayDungeonVictory();
+                    
+
+                    if(GameVariables.GameLoopBooleans.isDungeonCleared) {
+                        DisplayManager.displayDungeonVictory();
+                        GameVariables.GameLoopBooleans.isInMenu = true;
+                        GameVariables.GameLoopBooleans.isInFight = false;
+                        GameVariables.GameLoopBooleans.isDungeonCleared = false;
+                        GameVariables.GameStats.survivedDungeons++;
+                    }
                     break;
-                case "Stats":
+                case "View Stats":
                     player.printStats();
-                    Game.waitForInput();
+                    DisplayManager.waitForInput();
                     break;
             }
         }

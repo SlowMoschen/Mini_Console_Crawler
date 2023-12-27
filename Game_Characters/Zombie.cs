@@ -17,6 +17,7 @@ namespace Zombie
                 target.isDefending = false;
             } else {
                 target.health -= this.attack * this.strength / target.armor;
+                this.health += (this.attack * this.strength / target.armor) / 2;
             }
         }
 
@@ -27,6 +28,7 @@ namespace Zombie
                 target.isDefending = false;
             } else {
                 target.health -= this.attack * this.strength / target.armor;
+                this.health -= (this.attack * this.strength / target.armor) / 4;
             }
         }
 

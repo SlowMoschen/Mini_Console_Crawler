@@ -1,22 +1,24 @@
 using Person;
+using Weapons;
 using System.Collections;
-using Console_RPG;
+using Game_Essentials;
 namespace Player 
 {
 
 
 public class Player : Person.Person {
 
+    DisplayManager DisplayManager = new DisplayManager();
+    public Weapon currentWeapon { get; set; } = new Weapon("Fists", 5, 0);
     public int level;
     public int experience;
     public int experienceToLevelUp;
     public int maxHealth;
     public int healRating;
+    public int endurance = 100;
+    public int maxEndurance = 100;
+    public int kickAttackStrength = 5;
 
-    int kickAttackStrength = 5;
-    int slashAttackStrength = 10;
-
-    GameState GameState = new GameState();
 
     public Player (string name, int attack, double strength, int armor, double health, int maxHealth, int level, int experience, int experienceToLevelUp) 
         : base(name, attack, strength, armor, health) {
@@ -26,6 +28,7 @@ public class Player : Person.Person {
         this.experienceToLevelUp = experienceToLevelUp;
         this.healRating = 10;
     }
+
     //Level rating - how much stats will increase per level
     Hashtable levelUpStats = new Hashtable {
         {"experienceRating", 100},
@@ -43,21 +46,69 @@ public class Player : Person.Person {
         }
     }
 
-    public void slashAttack (Person.Person target) {
+    public void Defend (Person.Person target) {
+        this.isDefending = true;
+    }
+
+    new public void Attack (Person.Person target) {
+
+        if(this.endurance < this.currentWeapon.enduranceCost) {
+            Console.WriteLine(" You don't have enough endurance to attack!");
+            return;
+        }
+
         if(target.isDefending) {
-            // Console.WriteLine(" The damage was blocked");
             target.isDefending = false;
         } else {
-            target.health -= (this.attack * this.strength + slashAttackStrength) / target.armor;
+            target.health -= this.currentWeapon.attack * this.strength / target.armor;
+            this.endurance -= this.currentWeapon.enduranceCost;
         }
     }
 
     public void kickAttack (Person.Person target) {
+
+        if(this.endurance < 6) {
+            Console.WriteLine(" You don't have enough endurance to attack!");
+            return;
+        }
+
         if(target.isDefending) {
-            // Console.WriteLine(" The damage was blocked");
             target.isDefending = false;
         } else {
-            target.health -= (this.attack * this.strength + kickAttackStrength) / target.armor ;
+            target.health -= (this.attack + kickAttackStrength) * this.strength / target.armor ;
+            this.endurance -= 6;
+        }
+    }
+
+    public void useSpecialAttack(Person.Person target) {
+        if(this.currentWeapon != null) {
+            this.currentWeapon.specialAttack(target, this);
+        } else {
+            Console.WriteLine(" You don't have a weapon equipped!");
+        }
+    }
+
+    public string chooseAttack(Person.Person target) {
+        string attackChoice = DisplayManager.displayOptionMenu(" What attack would you like to use?", GameVariables.GameSettings.Options.attackOptions);
+
+        var attackActions = new Dictionary<string, Action<Person.Person>> {
+            { "Normal Attack", this.Attack },
+            { this.currentWeapon?.specialAttackName, this.useSpecialAttack },
+            { "Kick Attack", this.kickAttack }
+        };
+
+        if (attackActions.TryGetValue(attackChoice, out var attackAction)) {
+            attackAction(target);
+        }
+
+        return attackChoice;
+    }
+
+    public void setAttackOptions() {
+        if(this.currentWeapon != null) {
+            GameVariables.GameSettings.Options.attackOptions = new string[] {"Normal Attack", this.currentWeapon.specialAttackName, "Kick Attack"};
+        } else {
+            GameVariables.GameSettings.Options.attackOptions = new string[] { "Normal Attack", "Kick Attack"};
         }
     }
 
@@ -75,7 +126,7 @@ public class Player : Person.Person {
 
     public void gainExperience (int experience) {
         this.experience += experience;
-        GameState.totalExperience += experience;
+        GameVariables.GameStats.totalExperience += experience;
         if (this.experience >= this.experienceToLevelUp) {
             Console.WriteLine(" You leveled up!");
             this.levelUp();
@@ -84,9 +135,16 @@ public class Player : Person.Person {
 
     public new void printStats () {
         base.printStats();
+        Console.WriteLine(" Current Weapon: " + this.currentWeapon.name);
+        Console.WriteLine(" Endurance: " + this.endurance);
         Console.WriteLine(" Level: " + this.level);
         Console.WriteLine(" Experience: " + this.experience);
         Console.WriteLine(" Experience to Level Up: " + this.experienceToLevelUp);
+    }
+
+    new public void printBattleStats () {
+        base.printBattleStats();
+        Console.WriteLine(" Endurance: " + this.endurance);
     }
 
     //Function to print choosen stat
@@ -121,18 +179,7 @@ public class Player : Person.Person {
                 break;
         }
     }
-    
-    //Function to get all stats - returns object with all stats
-    // public object getStatsValues () {
-    //     return new Dictionary<string, float> {
-    //         {"level", this.level},
-    //         {"experience", this.experience},
-    //         {"experienceToLevelUp", this.experienceToLevelUp},
-    //         {"attack", this.attack},
-    //         {"strength", this.strength},
-    //         {"armor", this.armor},
-    //         {"health", this.health}
-    //     };
-    }
+
+}
 
 }

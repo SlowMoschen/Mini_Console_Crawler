@@ -15,7 +15,7 @@ namespace Enemy
     // fucntion to get a random choice for the enemy
         public static int getRandomAttack() {
             Random random = new Random();
-            int choice = random.Next(1, attackCount + optionsCount);
+            int choice = random.Next(1, attackCount + optionsCount + 1);
             return choice;
         }
 

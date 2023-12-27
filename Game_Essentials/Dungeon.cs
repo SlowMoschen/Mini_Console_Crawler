@@ -1,23 +1,8 @@
 using Zombie;
 using Enemy;
+using Game_Essentials;
 
 namespace Dungeon_Generator {
-
-    public class ZombieStats {
-        public static int attack;
-        public static double strength;
-        public static int armor;
-        public static double health;
-        public static int experienceOnDefeat;
-
-        public ZombieStats() {
-            attack = 10;
-            strength = 1.0;
-            armor = 5;
-            health = 50;
-            experienceOnDefeat = 20;
-        }
-    }
 
     public class DungeonGenerator {
             
@@ -27,13 +12,13 @@ namespace Dungeon_Generator {
                 switch (difficulty)
                 {
                     case "Easy":
-                        rooms = 1;
+                        rooms = GameVariables.GameSettings.DungeonSettings.easyRooms;
                         break;
                     case "Medium":
-                        rooms = 2;
+                        rooms = GameVariables.GameSettings.DungeonSettings.mediumRooms;
                         break;
                     case "Hard":
-                        rooms = 3;
+                        rooms = GameVariables.GameSettings.DungeonSettings.hardRooms;
                         break;
                     default:
                         rooms = 1;
@@ -60,11 +45,6 @@ namespace Dungeon_Generator {
             this.zombies = generateRoom(difficulty);
         }
 
-        ZombieStats ZombieStats = new ZombieStats();
-        static int easyEnemeies = 1;
-        static int mediumEnemeies = 3;
-        static int hardEnemeies = 5;
-
         public static Zombie.Zombie[] generateRoom(string difficulty) {
             // Generate a random room based on the difficulty
             // Easy - 1 enemy
@@ -73,11 +53,11 @@ namespace Dungeon_Generator {
             switch (difficulty)
             {
                 case "Easy":
-                    return generateZombies(easyEnemeies);
+                    return generateZombies(GameVariables.GameSettings.DungeonSettings.RoomSettings.easyEnemies);
                 case "Medium":
-                    return generateZombies(mediumEnemeies);
+                    return generateZombies(GameVariables.GameSettings.DungeonSettings.RoomSettings.mediumEnemies);
                 case "Hard":
-                    return generateZombies(hardEnemeies);
+                    return generateZombies(GameVariables.GameSettings.DungeonSettings.RoomSettings.hardEnemies);
             }
 
             return generateZombies(1);
@@ -89,7 +69,7 @@ namespace Dungeon_Generator {
 
             for (int i = 0; i < count; i++)
             {
-                zombies[i] = new Zombie.Zombie("Zombie", attack: ZombieStats.attack, strength: ZombieStats.strength, armor: ZombieStats.armor, health: ZombieStats.health, experienceOnDefeat: ZombieStats.experienceOnDefeat);
+                zombies[i] = new Zombie.Zombie("Zombie", attack: GameVariables.GameSettings.maxZombieAttack, strength: GameVariables.GameSettings.maxZombieStrength, armor: GameVariables.GameSettings.maxZombieArmor, health: GameVariables.GameSettings.maxZombieHealth, experienceOnDefeat: GameVariables.GameSettings.maxZombieExperience);
             }            
 
             return zombies;
