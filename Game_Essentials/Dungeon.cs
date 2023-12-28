@@ -79,10 +79,10 @@ namespace Dungeon_Generator {
             {
                 switch (enemyType) {
                     case "Spider":
-                        enemies[i] = new _Spider.Spider(enemytypes[index], attack: 100, strength: 1.0, armor: 5, health: 100, experienceOnDefeat: 25);
+                        enemies[i] = new _Spider.Spider(enemytypes[index], attack: 100, strength: 1.0, armor: 5, health: 100, experienceOnDefeat: 25, goldOnDefeat: 25);
                         break;
                     case "Zombie":
-                        enemies[i] = new Zombie.Zombie(enemytypes[index], attack: 50, strength: 1.0, armor: 5, health: 50, experienceOnDefeat: 15);
+                        enemies[i] = new Zombie.Zombie(enemytypes[index], attack: 50, strength: 1.0, armor: 5, health: 50, experienceOnDefeat: 15, goldOnDefeat: 15);
                         break;
                 }
             }

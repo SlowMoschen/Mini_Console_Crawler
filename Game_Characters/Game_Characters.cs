@@ -21,6 +21,7 @@ namespace Game_Characters
 
         public bool isDefending = false;
         public bool isPoisoned = false;
+        public bool strengthBuffed = false;
         
         public Character (string name, int attack, double strength, int armor, double health) {
             this.name = name;
@@ -42,6 +43,16 @@ namespace Game_Characters
         // Function to defend next attack
         public void Defend (Character target) {
             this.isDefending = true;
+        }
+
+
+        public void applyOverTimeEffects()
+        {
+            if (this.isPoisoned)
+            {
+                this.health -= GameVariables.GameSettings.poisonDamage;
+                Console.WriteLine(" You took " + GameVariables.GameSettings.poisonDamage + " damage from poison!");
+            }
         }
 
         // Print Battle Stats
@@ -69,16 +80,17 @@ namespace Game_Characters
 
     public class Enemy : Character
     {
-
+        public int goldOnDefeat;
         public int experienceOnDefeat;
         public int specialAttackCount { get; set; }
         public int battleOptionCount { get; set; } = 2;
         public static string[] attackNames { get; set; }
 
-        public Enemy(string name, int attack, double strength, int armor, double health, int experienceOnDefeat)
+        public Enemy(string name, int attack, double strength, int armor, double health, int experienceOnDefeat, int goldOnDefeat)
             : base(name, attack, strength, armor, health)
         {
             this.experienceOnDefeat = experienceOnDefeat;
+            this.goldOnDefeat = goldOnDefeat;
         }
     
     // fucntion to get a random choice for the enemy
@@ -118,7 +130,8 @@ namespace Game_Characters
     public int endurance = 100;
     public int maxEndurance = 100;
     public int kickAttackStrength = 5;
-
+    public GameVariables.PlayerInventory inventory { get; set;} = new GameVariables.PlayerInventory();
+    public int strengthBuffTurns { get; set; }
 
     public Player (string name, int attack, double strength, int armor, double health, int maxHealth, int level, int experience, int experienceToLevelUp) 
         : base(name, attack, strength, armor, health) {
@@ -126,28 +139,56 @@ namespace Game_Characters
         this.level = level;
         this.experience = experience;
         this.experienceToLevelUp = experienceToLevelUp;
-        this.healRating = 100;
+        this.healRating = 20;
     }
 
-    //Level rating - how much stats will increase per level
-    Hashtable levelUpStats = new Hashtable {
-        {"experienceRating", 100},
-        {"attackRating", 2},
-        {"strengthRating", 1.1},
-        {"armorRating", 2},
-        {"healthRating", 2},
-        {"healRating", 2}
-    };
+    public void usePotion(string potionType) {
+        switch (potionType)
+        {
+            case "Heal Potion":
+                if(this.inventory.healPotions > 0) {
+                    this.health += GameVariables.GameSettings.healPotionHealRating;
+                    this.inventory.healPotions--;
+                    if(this.health > this.maxHealth) {
+                        this.health = this.maxHealth;
+                    }
+                } else {
+                    Console.WriteLine(" You don't have any heal potions!");
+                }
+                break;
+            case "Strength Potion":
+                if(this.inventory.strengthPotions > 0) {
+                    this.strengthBuffed = true;
+                    this.strength = GameVariables.GameSettings.strengthPotionStrengthRating;
+                    this.inventory.strengthPotions--;
+                    this.strengthBuffTurns = GameVariables.GameSettings.EffectDurations.strengthDuration;
+                } else {
+                    Console.WriteLine(" You don't have any strength potions!");
+                }
+                break;
+            case "Endurance Potion":
+                if(this.inventory.endurancePotions > 0) {
+                    this.endurance += GameVariables.GameSettings.endurancePotionEnduranceRating;
+                    this.inventory.endurancePotions--;
+                    if(this.endurance > this.maxEndurance) {
+                        this.endurance = this.maxEndurance;
+                    }
+                } else {
+                    Console.WriteLine(" You don't have any endurance potions!");
+                }
+                break;
+            default:
+                break;
+        }
+    }
 
-    public void useHealPotion() {
-        if(GameVariables.PlayerInventory.healPotions > 0) {
-            this.health += GameVariables.GameSettings.healPotionHealRating;
-            GameVariables.PlayerInventory.healPotions--;
-            if(this.health > this.maxHealth) {
-                this.health = this.maxHealth;
+    public void decrementBuffs() {
+        if(this.strengthBuffed) {
+            this.strengthBuffTurns--;
+            if(this.strengthBuffTurns <= 0) {
+                this.strengthBuffed = false;
+                this.strength = 1.0;
             }
-        } else {
-            Console.WriteLine(" You don't have any heal potions!");
         }
     }
 
@@ -231,6 +272,16 @@ namespace Game_Characters
         }
     }
 
+    //Level rating - how much stats will increase per level
+    Hashtable levelUpStats = new Hashtable {
+        {"experienceRating", 100},
+        {"attackRating", 2},
+        {"strengthRating", 1.1},
+        {"armorRating", 2},
+        {"healthRating", 2},
+        {"healRating", 2}
+    };
+
     public void levelUp () {
         this.level++;
         this.experience = 0;
@@ -252,9 +303,21 @@ namespace Game_Characters
         }
     }
 
+    public void gainGold (int gold) {
+        this.inventory.gold += gold;
+        GameVariables.GameStats.totalGold += gold;
+    }
+
+    public void printInventory () {
+        Console.WriteLine(" Current Weapon: " + this.currentWeapon.name);
+        Console.WriteLine(" Gold: " + this.inventory.gold + "G");
+        Console.WriteLine(" Heal Potions: " + this.inventory.healPotions);
+        Console.WriteLine(" Strength Potions: " + this.inventory.strengthPotions);
+        Console.WriteLine(" Endurance Potions: " + this.inventory.endurancePotions);
+    }
+
     public new void printStats () {
         base.printStats();
-        Console.WriteLine(" Current Weapon: " + this.currentWeapon.name);
         Console.WriteLine(" Endurance: " + this.endurance);
         Console.WriteLine(" Level: " + this.level);
         Console.WriteLine(" Experience: " + this.experience);
@@ -264,6 +327,9 @@ namespace Game_Characters
     new public void printBattleStats () {
         base.printBattleStats();
         Console.WriteLine(" Endurance: " + this.endurance);
+        if(this.strengthBuffed) {
+            Console.WriteLine($" Strength is buffed for {this.strengthBuffTurns} turns.");
+        }
     }
 
     //Function to print choosen stat

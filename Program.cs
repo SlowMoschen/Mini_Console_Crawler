@@ -3,7 +3,6 @@ using Game_Characters;
 using Game_Essentials;
 using Zombie;
 using Weapons;
-using Dungeon_Generator;
 using System;
 using System.Linq;
 using System.Diagnostics;
@@ -28,7 +27,6 @@ class Program
         }
 
         // Initialize Game
-
         DisplayManager DisplayManager = new DisplayManager();
         
         DisplayManager.displayGreetings();
@@ -66,50 +64,23 @@ class Program
                 case "Enter Dungeon":
                     GameVariables.GameLoopBooleans.isInMenu = false;
                     GameVariables.GameLoopBooleans.isInFight = true;
-                    string fightChoice = DisplayManager.displayOptionMenu(" In wich Dungeon do you want to go?", GameVariables.GameSettings.Options.difficultyOptions);
-
-                    Room[] dungeon = DungeonGenerator.generateDungeon(fightChoice);
-                    
-                    DisplayManager.displayEnteredDungeon(fightChoice);
-                    int totalMobsInDungeon = dungeon.Sum(room => room.roomEnemies.Length);
-                    DisplayManager.waitForInput();
-                    
-                    foreach (Room room in dungeon)
-                    {
-                        DisplayManager.displayEnteredRoom(room.roomID, dungeon.Length, room.roomEnemies.Length, totalMobsInDungeon);
-                        DisplayManager.waitForInput();
-                        foreach (Enemy enemy in room.roomEnemies)
-                        {
-                            if(GameVariables.GameLoopBooleans.isInFight) {
-                                DisplayManager.displayBattleWith(player, enemy, GameVariables.GameSettings.Options.battleOptions, GameVariables.GameSettings.Options.attackOptions);
-                            }
-                        }
-                        bool allMobsDefeated = room.roomEnemies.All(enemy => enemy.health <= 0);
-                        if(allMobsDefeated) {
-                            DisplayManager.displayRoomVictory();
-                            GameVariables.GameStats.surviedRooms++;
-                        }
-                        
-                        bool allRoomsDefeated = dungeon.All(room => room.roomEnemies.All(zombie => zombie.health <= 0));
-                        if(allRoomsDefeated) {
-                            GameVariables.GameLoopBooleans.isDungeonCleared = true;
-                            break;
-                        }
-
-                    }
-                    
-
-                    if(GameVariables.GameLoopBooleans.isDungeonCleared) {
-                        DisplayManager.displayDungeonVictory();
-                        GameVariables.GameLoopBooleans.isInMenu = true;
-                        GameVariables.GameLoopBooleans.isInFight = false;
-                        GameVariables.GameLoopBooleans.isDungeonCleared = false;
-                        GameVariables.GameStats.survivedDungeons++;
-                    }
+                    DisplayManager.enterDungeon(player);
                     break;
                 case "View Stats":
                     player.printStats();
                     DisplayManager.waitForInput();
+                    break;
+                case "View Inventory":
+                    player.printInventory();
+                    DisplayManager.waitForInput();
+                    break;
+                case "Shop":
+                    GameVariables.GameLoopBooleans.isInMenu = false;
+                    GameVariables.GameLoopBooleans.isInShop = true;
+                    while(GameVariables.GameLoopBooleans.isInShop) {
+                        DisplayManager.displayShop(player);
+                        DisplayManager.waitForInput();
+                    }
                     break;
             }
         }

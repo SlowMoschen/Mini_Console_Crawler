@@ -1,6 +1,7 @@
 using UserInput;
 using Console_RPG;
 using Game_Characters;
+using Dungeon_Generator;
 
 namespace Game_Essentials {
 
@@ -24,26 +25,30 @@ namespace Game_Essentials {
             public static int survivedDungeons { get; set;} = 0;
             public static int killedEnemies { get; set;} = 0;
             public static int totalExperience { get; set;} = 0;
+            public static int totalGold { get; set;} = 0;
         }
 
         public class GameSettings {
             
-            public static int healPotionHealRating { get; } = 20;
             public static string playerName { get; set;} = "Player";
-            public static int maxEndurance { get; } = 100;
+            public static int healPotionHealRating { get; } = 20;
+            public static double strengthPotionStrengthRating { get; } = 2.0;
+            public static int endurancePotionEnduranceRating { get; } = 50;
             public static int enduranceRegeneration { get; } = 7;
-            public static int maxZombieCount { get; } = 3;
-            public static int maxZombieAttack { get; } = 10;
-            public static double maxZombieStrength { get; } = 1.0;
-            public static int maxZombieArmor { get; } = 5;
-            public static int maxZombieHealth { get; } = 50;
-            public static int maxZombieExperience { get; } = 20;
+            public static int poisonDamage { get; } = 5;
+            
+            public class EffectDurations {
+                public static int poisonDuration { get; } = 3;
+                public static int strengthDuration { get; } = 7;
+            }
             
             public class Options {
                 public static string[] difficultyOptions { get; } = new string[] { "Easy", "Medium", "Hard" };
-                public static string[] battleOptions { get; } = new string[] { "Attack", "Rest", "Defend", "Run" };
+                public static string[] battleOptions { get; } = new string[] { "Attack", "Rest", "Use Potion", "Defend", "Run" };
                 public static string[]? attackOptions { get; set; }
-                public static string[] mainMenuOptions { get; } = new string[] { "Enter Dungeon", "View Stats" };
+                public static string[] mainMenuOptions { get; } = new string[] { "Enter Dungeon", "View Stats", "View Inventory", "Shop" };
+                public static string[] shopMenuOptions { get; } = new string[] { "Buy", "Exit" }; 
+                public static string[] shopItems { get; } = new string[] { "Heal Potion", "Strength Potion", "Endurance Potion" };
             }
 
         public class DungeonSettings {
@@ -59,13 +64,22 @@ namespace Game_Essentials {
 
         public class GameLoopBooleans {
             public static bool isInMenu { get; set;} = true;
+            public static bool isInShop { get; set;} = false;
             public static bool isInFight { get; set;} = false;
             public static bool isDead { get; set;} = false;
             public static bool isDungeonCleared { get; set;} = false;
         }
 
+        // Class will be initialized in a Player instance
         public class PlayerInventory {
-            public static int healPotions { get; set;} = 0;
+            public int maxHealPotions { get; } = 5;
+            public int maxEndurancePotions { get; } = 5;
+            public int maxStrengthPotions { get; } = 5;
+
+            public int healPotions { get; set;} = 0;
+            public int endurancePotions { get; set;} = 0;
+            public int strengthPotions { get; set;} = 1;
+            public int gold { get; set;} = 0;
         }
 
     }
@@ -128,12 +142,80 @@ namespace Game_Essentials {
             return playerWeapon;
         }
 
+        /*
+        /
+        /    Methods for Displaying Menu Logic
+        /
+        */
+
         public string displayMainMenu() {
             Console.Clear();
             this.displayHeader("Main Menu");
             string menuChoice = this.displayOptionMenu(" What would you like to do?", GameVariables.GameSettings.Options.mainMenuOptions);
             return menuChoice;
         }
+
+        public void displayShop(Player player) {
+            Console.Clear();
+            this.displayHeader("Shop");
+            Console.WriteLine(" You have " + player.inventory.gold + " gold");
+            string menuChoice = this.displayOptionMenu(" What would you like to do?", GameVariables.GameSettings.Options.shopMenuOptions);
+            
+            switch (menuChoice) {
+                case "Buy":
+                    string itemChoice = this.displayOptionMenu(" What would you like to buy?", GameVariables.GameSettings.Options.shopItems);
+                    switch (itemChoice) {
+                        case "Heal Potion":
+                            if(player.inventory.healPotions < player.inventory.maxHealPotions) {
+                                if(player.inventory.gold >= 10) {
+                                    player.inventory.healPotions++;
+                                    player.inventory.gold -= 10;
+                                    Console.WriteLine(" You bought a Heal Potion");
+                                } else {
+                                    Console.WriteLine(" You don't have enough gold to buy a Heal Potion");
+                                }
+                            } else {
+                                Console.WriteLine(" You can't carry any more Heal Potions");
+                            }
+                            break;
+                        case "Strength Potion":
+                            if(player.inventory.strengthPotions < player.inventory.maxStrengthPotions) {
+                                if(player.inventory.gold >= 20) {
+                                    player.inventory.strengthPotions++;
+                                    player.inventory.gold -= 20;
+                                    Console.WriteLine(" You bought a Strength Potion");
+                                } else {
+                                    Console.WriteLine(" You don't have enough gold to buy a Strength Potion");
+                                }
+                            } else {
+                                Console.WriteLine(" You can't carry any more Strength Potions");
+                            }
+                            break;
+                        case "Endurance Potion":
+                            if(player.inventory.endurancePotions < player.inventory.maxEndurancePotions) {
+                                if(player.inventory.gold >= 30) {
+                                    player.inventory.endurancePotions++;
+                                    player.inventory.gold -= 30;
+                                    Console.WriteLine(" You bought a Endurance Potion");
+                                } else {
+                                    Console.WriteLine(" You don't have enough gold to buy a Endurance Potion");
+                                }
+                            } else {
+                                Console.WriteLine(" You can't carry any more Endurance Potions");
+                            }
+                            break;
+                    }
+                    break;
+                case "Exit":
+                    GameVariables.GameLoopBooleans.isInShop = false;
+                    GameVariables.GameLoopBooleans.isInMenu = true;
+                    Console.WriteLine(" You left the Shop");
+                    break;
+            }
+
+        }
+
+
 
         /*
         /
@@ -248,6 +330,16 @@ namespace Game_Essentials {
                     case "Rest":
                         Console.WriteLine($" You healed for {player.healRating} health and got {(GameVariables.GameSettings.enduranceRegeneration * 2) + GameVariables.GameSettings.enduranceRegeneration } endurance back.");
                         break;
+                    case "Use Potion":
+                        if(attackChoice == "Heal Potion") {
+                            Console.WriteLine($" You healed for {GameVariables.GameSettings.healPotionHealRating} health");
+                        } else if(attackChoice == "Strength Potion") {
+                            Console.WriteLine(player.strength);
+                            Console.WriteLine($" You gained strength for {GameVariables.GameSettings.EffectDurations.strengthDuration} turns");
+                        } else if(attackChoice == "Endurance Potion") {
+                            Console.WriteLine($" You gained {GameVariables.GameSettings.endurancePotionEnduranceRating} endurance");
+                        }
+                        break;
                     case "Defend":
                         Console.WriteLine(" You successfully defended the attack!");
                         break;
@@ -309,6 +401,7 @@ namespace Game_Essentials {
                             string enemyChoice = enemy.executeMove(player);
                             string playerChoice = this.displayOptionMenu(" What will you do?", options);
                             string attackChoice = "";
+                            player.decrementBuffs();
                             
                             switch (playerChoice)
                             {
@@ -317,6 +410,10 @@ namespace Game_Essentials {
                                     break;
                                 case "Rest":
                                     player.Rest();
+                                    break;
+                                case "Use Potion":
+                                    attackChoice = this.displayOptionMenu(" What item do you want to use?", GameVariables.GameSettings.Options.shopItems);
+                                    player.usePotion(attackChoice);
                                     break;
                                 case "Defend":
                                     player.Defend(enemy);
@@ -346,6 +443,8 @@ namespace Game_Essentials {
                                 Console.WriteLine($" You defeated the {enemy.name}");
                                 GameVariables.GameStats.killedEnemies++;
                                 Console.WriteLine(" You gained " + enemy.experienceOnDefeat + " experience");
+                                Console.WriteLine(" The Enemy dropped " + enemy.goldOnDefeat + " gold");
+                                player.gainGold(enemy.goldOnDefeat);
                                 player.gainExperience(enemy.experienceOnDefeat);
                                 this.waitForInput();
                                 break;
@@ -377,6 +476,49 @@ namespace Game_Essentials {
                             this.waitForInput();
                             Console.Clear();
                         }
+        }
+
+        public void enterDungeon(Player player) {
+            string fightChoice = this.displayOptionMenu(" In wich Dungeon do you want to go?", GameVariables.GameSettings.Options.difficultyOptions);
+
+                    Room[] dungeon = DungeonGenerator.generateDungeon(fightChoice);
+                    
+                    this.displayEnteredDungeon(fightChoice);
+                    int totalMobsInDungeon = dungeon.Sum(room => room.roomEnemies.Length);
+                    this.waitForInput();
+                    
+                    foreach (Room room in dungeon)
+                    {
+                        this.displayEnteredRoom(room.roomID, dungeon.Length, room.roomEnemies.Length, totalMobsInDungeon);
+                        this.waitForInput();
+                        foreach (Enemy enemy in room.roomEnemies)
+                        {
+                            if(GameVariables.GameLoopBooleans.isInFight) {
+                                this.displayBattleWith(player, enemy, GameVariables.GameSettings.Options.battleOptions, GameVariables.GameSettings.Options.attackOptions);
+                            }
+                        }
+                        bool allMobsDefeated = room.roomEnemies.All(enemy => enemy.health <= 0);
+                        if(allMobsDefeated) {
+                            this.displayRoomVictory();
+                            GameVariables.GameStats.surviedRooms++;
+                        }
+                        
+                        bool allRoomsDefeated = dungeon.All(room => room.roomEnemies.All(zombie => zombie.health <= 0));
+                        if(allRoomsDefeated) {
+                            GameVariables.GameLoopBooleans.isDungeonCleared = true;
+                            break;
+                        }
+
+                    }
+                    
+
+                    if(GameVariables.GameLoopBooleans.isDungeonCleared) {
+                        this.displayDungeonVictory();
+                        GameVariables.GameLoopBooleans.isInMenu = true;
+                        GameVariables.GameLoopBooleans.isInFight = false;
+                        GameVariables.GameLoopBooleans.isDungeonCleared = false;
+                        GameVariables.GameStats.survivedDungeons++;
+                    }
         }
 
         /*

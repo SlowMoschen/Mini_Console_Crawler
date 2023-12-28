@@ -41,7 +41,7 @@ namespace Weapons
             }
             else
             {
-                target.health -= (this.attack + this.specialAttackStrength * player.strength) / target.armor;
+                target.health -= (this.attack + this.specialAttackStrength) * player.strength / target.armor;
             }
         }
     }
@@ -62,7 +62,7 @@ namespace Weapons
             }
             else
             {
-                target.health -= (this.attack + this.specialAttackStrength * player.strength) / target.armor;
+                target.health -= (this.attack + this.specialAttackStrength) * player.strength / target.armor;
             }
         }
     }
@@ -83,7 +83,7 @@ namespace Weapons
             }
             else
             {
-                target.health -= (this.attack + this.specialAttackStrength * player.strength) / target.armor;
+                target.health -= (this.attack + this.specialAttackStrength) * player.strength / target.armor;
             }
         }
     }

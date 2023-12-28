@@ -4,8 +4,8 @@ namespace Zombie
 {
     public class Zombie : Enemy
     {
-        public Zombie(string name, int attack, double strength, int armor, double health, int experienceOnDefeat)
-            : base(name, attack, strength, armor, health, experienceOnDefeat)
+        public Zombie(string name, int attack, double strength, int armor, double health, int experienceOnDefeat, int goldOnDefeat)
+            : base(name, attack, strength, armor, health, experienceOnDefeat, goldOnDefeat)
         {
             this.specialAttackCount = 2;
         }

@@ -4,8 +4,8 @@ using Game_Essentials;
 namespace _Spider 
 {
     public class Spider : Enemy {
-        public Spider(string name, int attack, double strength, int armor, double health, int experienceOnDefeat)
-            : base(name, attack, strength, armor, health, experienceOnDefeat)
+        public Spider(string name, int attack, double strength, int armor, double health, int experienceOnDefeat, int goldOnDefeat)
+            : base(name, attack, strength, armor, health, experienceOnDefeat, goldOnDefeat)
         {
             this.specialAttackCount = 1;
         }
