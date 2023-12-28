@@ -37,42 +37,57 @@ namespace Dungeon_Generator {
 
     public class Room {
 
-        public int roomNumber { get; set; }
-        public Zombie.Zombie[] zombies { get; set; }
+        public int roomID { get; set; }
+        public Enemy[] roomEnemies { get; set; }
 
-        public Room(int roomNumber, string difficulty) {
-            this.roomNumber = roomNumber;
-            this.zombies = generateRoom(difficulty);
+        public Room(int roomID, string difficulty) {
+            this.roomID = roomID;
+            this.roomEnemies = generateRoom(difficulty);
         }
 
-        public static Zombie.Zombie[] generateRoom(string difficulty) {
-            // Generate a random room based on the difficulty
-            // Easy - 1 enemy
-            // Medium - 3 enemies
-            // Hard - 5 enemies
+        // Generate a room of enemies
+        public static Enemy[] generateRoom(string difficulty) {
+            Enemy[] enemies;
             switch (difficulty)
             {
                 case "Easy":
-                    return generateZombies(GameVariables.GameSettings.DungeonSettings.RoomSettings.easyEnemies);
+                    enemies = generateMobs(GameVariables.GameSettings.DungeonSettings.easyMobs);
+                    break;
                 case "Medium":
-                    return generateZombies(GameVariables.GameSettings.DungeonSettings.RoomSettings.mediumEnemies);
+                    enemies = generateMobs(GameVariables.GameSettings.DungeonSettings.mediumMobs);
+                    break;
                 case "Hard":
-                    return generateZombies(GameVariables.GameSettings.DungeonSettings.RoomSettings.hardEnemies);
+                    enemies = generateMobs(GameVariables.GameSettings.DungeonSettings.hardMobs);
+                    break;
+                default:
+                    enemies = generateMobs(1);
+                    break;
             }
-
-            return generateZombies(1);
+            return enemies;
         }
 
         // Generate a number of zombies
-        public static Zombie.Zombie[] generateZombies(int count) {
-            Zombie.Zombie[] zombies = new Zombie.Zombie[count];
+        public static Enemy[] generateMobs(int count) {
+            Enemy[] enemies = new Enemy[count];
+            string[] enemytypes = GameVariables.GameSettings.DungeonSettings.enemyTypes;
+            Random random = new Random();
+            int index = random.Next(enemytypes.Length);
 
+            string enemyType = enemytypes[index];
+            
             for (int i = 0; i < count; i++)
             {
-                zombies[i] = new Zombie.Zombie("Zombie", attack: GameVariables.GameSettings.maxZombieAttack, strength: GameVariables.GameSettings.maxZombieStrength, armor: GameVariables.GameSettings.maxZombieArmor, health: GameVariables.GameSettings.maxZombieHealth, experienceOnDefeat: GameVariables.GameSettings.maxZombieExperience);
-            }            
+                switch (enemyType) {
+                    case "Spider":
+                        enemies[i] = new _Spider.Spider(enemytypes[index], attack: 100, strength: 1.0, armor: 5, health: 100, experienceOnDefeat: 25);
+                        break;
+                    case "Zombie":
+                        enemies[i] = new Zombie.Zombie(enemytypes[index], attack: 50, strength: 1.0, armor: 5, health: 50, experienceOnDefeat: 15);
+                        break;
+                }
+            }
 
-            return zombies;
+            return enemies;
         }
     }
 }

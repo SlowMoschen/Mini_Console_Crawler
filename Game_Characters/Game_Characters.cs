@@ -20,10 +20,8 @@ namespace Game_Characters
         public double health;
 
         public bool isDefending = false;
+        public bool isPoisoned = false;
         
-        // Count the number of options for the user - expamlpe: Attack, Defend - is used to get Random Choice for enemy
-        public static int optionsCount = 2;
-
         public Character (string name, int attack, double strength, int armor, double health) {
             this.name = name;
             this.attack = attack;
@@ -73,7 +71,9 @@ namespace Game_Characters
     {
 
         public int experienceOnDefeat;
-        public static int attackCount;
+        public int specialAttackCount { get; set; }
+        public int battleOptionCount { get; set; } = 2;
+        public static string[] attackNames { get; set; }
 
         public Enemy(string name, int attack, double strength, int armor, double health, int experienceOnDefeat)
             : base(name, attack, strength, armor, health)
@@ -82,9 +82,9 @@ namespace Game_Characters
         }
     
     // fucntion to get a random choice for the enemy
-        public static int getRandomAttack() {
+        public int getRandomAttack() {
             Random random = new Random();
-            int choice = random.Next(1, attackCount + optionsCount + 1);
+            int choice = random.Next(1, (this.specialAttackCount + this.battleOptionCount + 1));
             return choice;
         }
 
@@ -92,6 +92,11 @@ namespace Game_Characters
             Console.WriteLine(" Enemy: " + this.name);
             Console.WriteLine(" Health: " + this.health);
             Console.WriteLine(" Armor: " + this.armor);
+        }
+
+        // Function gets overriden in child classes
+        public virtual string executeMove(Character target) {
+            return "";
         }
     }
 
@@ -295,4 +300,5 @@ namespace Game_Characters
     }
 
 }
-}
+    
+    }

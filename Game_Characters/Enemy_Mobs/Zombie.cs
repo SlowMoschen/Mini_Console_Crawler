@@ -7,7 +7,7 @@ namespace Zombie
         public Zombie(string name, int attack, double strength, int armor, double health, int experienceOnDefeat)
             : base(name, attack, strength, armor, health, experienceOnDefeat)
         {
-            attackCount = 2;
+            this.specialAttackCount = 2;
         }
 
         // Bite Attack - heals zombie for half the damage dealt
@@ -33,7 +33,7 @@ namespace Zombie
         }
 
         // Function to execute a random attack based on the attack count
-        public string executeMove(Character target)
+        public override string executeMove(Character target)
         {
             string move = "";
             switch (getRandomAttack())

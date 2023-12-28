@@ -8,20 +8,7 @@ using System;
 using System.Linq;
 
 class Program
-{
-
-    // Method to get a chance for something
-    // Example: getChance(50) - will return true 50% of the time
-    public static bool getChance(int chance) {
-        Random random = new Random();
-        int randomNumber = random.Next(1, 100);
-        if(randomNumber <= chance) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-    
+{   
     static void Main(string[] args)
     {
         DisplayManager DisplayManager = new DisplayManager();
@@ -66,26 +53,26 @@ class Program
                     Room[] dungeon = DungeonGenerator.generateDungeon(fightChoice);
                     
                     DisplayManager.displayEnteredDungeon(fightChoice);
+                    int totalMobsInDungeon = dungeon.Sum(room => room.roomEnemies.Length);
                     DisplayManager.waitForInput();
                     
                     foreach (Room room in dungeon)
                     {
-                        int totalZombiesInDungeon = dungeon.Sum(room => room.zombies.Length);
-                        DisplayManager.displayEnteredRoom(room.roomNumber, dungeon.Length, room.zombies.Length, totalZombiesInDungeon);
+                        DisplayManager.displayEnteredRoom(room.roomID, dungeon.Length, room.roomEnemies.Length, totalMobsInDungeon);
                         DisplayManager.waitForInput();
-                        foreach (Zombie zombie in room.zombies)
+                        foreach (Enemy enemy in room.roomEnemies)
                         {
                             if(GameVariables.GameLoopBooleans.isInFight) {
-                                DisplayManager.displayBattleWith(player, zombie, GameVariables.GameSettings.Options.battleOptions, GameVariables.GameSettings.Options.attackOptions);
+                                DisplayManager.displayBattleWith(player, enemy, GameVariables.GameSettings.Options.battleOptions, GameVariables.GameSettings.Options.attackOptions);
                             }
                         }
-                        bool allZombiesDefeated = room.zombies.All(zombie => zombie.health <= 0);
-                        if(allZombiesDefeated) {
+                        bool allMobsDefeated = room.roomEnemies.All(enemy => enemy.health <= 0);
+                        if(allMobsDefeated) {
                             DisplayManager.displayRoomVictory();
                             GameVariables.GameStats.surviedRooms++;
                         }
                         
-                        bool allRoomsDefeated = dungeon.All(room => room.zombies.All(zombie => zombie.health <= 0));
+                        bool allRoomsDefeated = dungeon.All(room => room.roomEnemies.All(zombie => zombie.health <= 0));
                         if(allRoomsDefeated) {
                             GameVariables.GameLoopBooleans.isDungeonCleared = true;
                             break;
