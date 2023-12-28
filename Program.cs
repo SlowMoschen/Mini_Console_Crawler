@@ -6,11 +6,29 @@ using Weapons;
 using Dungeon_Generator;
 using System;
 using System.Linq;
+using System.Diagnostics;
 
 class Program
 {   
     static void Main(string[] args)
     {
+
+        // Initzilaize new CMD window
+        if(args.Length > 0 && args[0] == "start") 
+        {
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+            startInfo.FileName = "cmd.exe";
+            startInfo.Arguments = "/c dotnet run";
+            startInfo.CreateNoWindow = true; // Set CreateNoWindow to true
+            startInfo.UseShellExecute = true;
+            Process process = new Process();
+            process.StartInfo = startInfo;
+            process.Start();
+            process.WaitForExit();
+        }
+
+        // Initialize Game
+
         DisplayManager DisplayManager = new DisplayManager();
         
         DisplayManager.displayGreetings();
