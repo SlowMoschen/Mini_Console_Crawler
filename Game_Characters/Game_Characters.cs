@@ -1,6 +1,7 @@
 using Weapons;
 using System.Collections;
 using Game_Essentials;
+using Console_Output;
 
 namespace Game_Characters
 {
@@ -18,9 +19,10 @@ namespace Game_Characters
         public double strength;
         public int armor;
         public double health;
-
+        public bool isStunned = false;
         public bool isDefending = false;
         public bool isPoisoned = false;
+        public int poisonedTurns = 0;
         public bool strengthBuffed = false;
         
         public Character (string name, int attack, double strength, int armor, double health) {
@@ -48,10 +50,14 @@ namespace Game_Characters
 
         public void applyOverTimeEffects()
         {
-            if (this.isPoisoned)
+            if (this.poisonedTurns > 0)
             {
-                this.health -= GameVariables.GameSettings.poisonDamage;
-                Console.WriteLine(" You took " + GameVariables.GameSettings.poisonDamage + " damage from poison!");
+                this.poisonedTurns--;
+                this.health -= GameVariables.EnemyStats.Spider.poisonDamage;
+            }
+
+            if(this.poisonedTurns == 0) {
+                this.isPoisoned = false;
             }
         }
 
@@ -107,7 +113,7 @@ namespace Game_Characters
         }
 
         // Function gets overriden in child classes
-        public virtual string executeMove(Character target) {
+        public virtual string executeMove(Player target) {
             return "";
         }
     }
@@ -121,7 +127,7 @@ namespace Game_Characters
     public class Player : Character {
 
     DisplayManager DisplayManager = new DisplayManager();
-    public Weapon currentWeapon { get; set; } = new Weapon("Fists", 5, 0);
+    public Weapon currentWeapon { get; set; } = new Weapon("Fists", 5, 0, 0);
     public int level;
     public int experience;
     public int experienceToLevelUp;
@@ -206,7 +212,9 @@ namespace Game_Characters
     new public void Attack (Character target) {
 
         if(this.endurance >= this.currentWeapon.enduranceCost) {
+            GameVariables.GameLoopBooleans.wasPlayerAttackMade = true;
             if(target.isDefending) {
+                this.endurance -= this.currentWeapon.enduranceCost;
                 return;
             } else {
                 target.health -= this.currentWeapon.attack * this.strength / target.armor;
@@ -220,7 +228,9 @@ namespace Game_Characters
     public void kickAttack (Character target) {
 
         if(this.endurance > 6) {
+            GameVariables.GameLoopBooleans.wasPlayerAttackMade = true;
             if(target.isDefending) {
+                this.endurance -= 6;
                 return;
             } else {
                 target.health -= (this.attack + kickAttackStrength) * this.strength / target.armor ;
@@ -233,13 +243,15 @@ namespace Game_Characters
 
     public void useSpecialAttack(Character target) {
 
-        if(this.endurance >= this.currentWeapon.enduranceCost) {
+        if(this.endurance >= this.currentWeapon.specialAttackEnduranceCost) {
+            GameVariables.GameLoopBooleans.wasPlayerAttackMade = true;
             if(target.isDefending) {
+                this.endurance -= this.currentWeapon.specialAttackEnduranceCost;
                 return;
             } else {
                 if(this.currentWeapon != null) {
                     this.currentWeapon.specialAttack(target, this);
-                    this.endurance -= this.currentWeapon.enduranceCost;
+                    this.endurance -= this.currentWeapon.specialAttackEnduranceCost ;
                 }
             }
         } 
@@ -308,9 +320,31 @@ namespace Game_Characters
         GameVariables.GameStats.totalGold += gold;
     }
 
+    // Function to lose gold - if ran away, lose half of gold
+    public void loseGold (int gold) {
+
+        if(GameVariables.GameLoopBooleans.ranAway) {
+            this.inventory.gold = this.inventory.gold / 2;
+            return;
+        }
+
+        if(this.inventory.gold >= gold) {
+            this.inventory.gold -= gold;
+        } else {
+            this.inventory.gold = 0;
+        }
+    }
+
     public void printInventory () {
-        Console.WriteLine(" Current Weapon: " + this.currentWeapon.name);
+        Console.WriteLine(" Current Weapon: ");
+        this.currentWeapon.printWeaponStats();
         Console.WriteLine(" Gold: " + this.inventory.gold + "G");
+        Console.WriteLine(" Heal Potions: " + this.inventory.healPotions);
+        Console.WriteLine(" Strength Potions: " + this.inventory.strengthPotions);
+        Console.WriteLine(" Endurance Potions: " + this.inventory.endurancePotions);
+    }
+
+    public void printPotionsInventory () {
         Console.WriteLine(" Heal Potions: " + this.inventory.healPotions);
         Console.WriteLine(" Strength Potions: " + this.inventory.strengthPotions);
         Console.WriteLine(" Endurance Potions: " + this.inventory.endurancePotions);
@@ -327,8 +361,13 @@ namespace Game_Characters
     new public void printBattleStats () {
         base.printBattleStats();
         Console.WriteLine(" Endurance: " + this.endurance);
+
         if(this.strengthBuffed) {
             Console.WriteLine($" Strength is buffed for {this.strengthBuffTurns} turns.");
+        }
+
+        if(this.isPoisoned) {
+            Console.WriteLine($" Poisoned for {this.poisonedTurns} turns.");
         }
     }
 

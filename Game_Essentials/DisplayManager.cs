@@ -1,89 +1,13 @@
-using UserInput;
-using Console_RPG;
+using Game_Essentials;
 using Game_Characters;
+using System;
+using System.Linq;
+using System.Diagnostics;
+using UserInput;
 using Dungeon_Generator;
 
-namespace Game_Essentials {
-
-    public class GameVariables {
-
-    // Method to get a chance for something
-    // Example: getChance(50) - will return true 50% of the time
-    public static bool getChance(int chance) {
-        Random random = new Random();
-        int randomNumber = random.Next(1, 100);
-        if(randomNumber <= chance) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-        public class GameStats {
-            public static string version { get; } = "0.1.1";
-            public static int surviedRooms { get; set;} = 0;
-            public static int survivedDungeons { get; set;} = 0;
-            public static int killedEnemies { get; set;} = 0;
-            public static int totalExperience { get; set;} = 0;
-            public static int totalGold { get; set;} = 0;
-        }
-
-        public class GameSettings {
-            
-            public static string playerName { get; set;} = "Player";
-            public static int healPotionHealRating { get; } = 20;
-            public static double strengthPotionStrengthRating { get; } = 2.0;
-            public static int endurancePotionEnduranceRating { get; } = 50;
-            public static int enduranceRegeneration { get; } = 7;
-            public static int poisonDamage { get; } = 5;
-            
-            public class EffectDurations {
-                public static int poisonDuration { get; } = 3;
-                public static int strengthDuration { get; } = 7;
-            }
-            
-            public class Options {
-                public static string[] difficultyOptions { get; } = new string[] { "Easy", "Medium", "Hard" };
-                public static string[] battleOptions { get; } = new string[] { "Attack", "Rest", "Use Potion", "Defend", "Run" };
-                public static string[]? attackOptions { get; set; }
-                public static string[] mainMenuOptions { get; } = new string[] { "Enter Dungeon", "View Stats", "View Inventory", "Shop" };
-                public static string[] shopMenuOptions { get; } = new string[] { "Buy", "Exit" }; 
-                public static string[] shopItems { get; } = new string[] { "Heal Potion", "Strength Potion", "Endurance Potion" };
-            }
-
-        public class DungeonSettings {
-                public static string[] enemyTypes { get; } = new string[] { "Zombie", "Spider" };
-                public static int easyRooms { get; } = 1;
-                public static int mediumRooms { get; } = 2;
-                public static int hardRooms { get; } = 3;
-                public static int easyMobs { get; } = 1;
-                public static int mediumMobs { get; } = 3;
-                public static int hardMobs { get; } = 5;
-            }
-        }
-
-        public class GameLoopBooleans {
-            public static bool isInMenu { get; set;} = true;
-            public static bool isInShop { get; set;} = false;
-            public static bool isInFight { get; set;} = false;
-            public static bool isDead { get; set;} = false;
-            public static bool isDungeonCleared { get; set;} = false;
-        }
-
-        // Class will be initialized in a Player instance
-        public class PlayerInventory {
-            public int maxHealPotions { get; } = 5;
-            public int maxEndurancePotions { get; } = 5;
-            public int maxStrengthPotions { get; } = 5;
-
-            public int healPotions { get; set;} = 0;
-            public int endurancePotions { get; set;} = 0;
-            public int strengthPotions { get; set;} = 1;
-            public int gold { get; set;} = 0;
-        }
-
-    }
-
+namespace Console_Output 
+{
     public class DisplayManager {
 
         InputHandler InputHandler = new InputHandler();
@@ -112,7 +36,8 @@ namespace Game_Essentials {
             Console.Clear();
             this.displayGameLogo();
             Console.WriteLine(" Welcome to Console_RPG!");
-            Console.WriteLine(" The goal of this game is to defeat all the enemies in the hardest Dungeon.");
+            // Console.WriteLine(" The goal of this game is to defeat all the enemies in the hardest Dungeon.");
+            Console.WriteLine(" There is no Goal yet, but you can defeat enemies in Dungeons.");
             this.waitForInput();
             Console.Clear();
         }
@@ -159,6 +84,12 @@ namespace Game_Essentials {
             Console.Clear();
             this.displayHeader("Shop");
             Console.WriteLine(" You have " + player.inventory.gold + " gold");
+            Console.WriteLine();
+            Console.WriteLine(" Inventory:");
+            player.printPotionsInventory();
+            Console.WriteLine();
+            Console.WriteLine(" You can carry a maximum of " + player.inventory.maxStrengthPotions + " Strength Potions");
+            Console.WriteLine(" You can carry a maximum of " + player.inventory.maxHealPotions + " Heal and Endurance Potions");
             string menuChoice = this.displayOptionMenu(" What would you like to do?", GameVariables.GameSettings.Options.shopMenuOptions);
             
             switch (menuChoice) {
@@ -167,7 +98,7 @@ namespace Game_Essentials {
                     switch (itemChoice) {
                         case "Heal Potion":
                             if(player.inventory.healPotions < player.inventory.maxHealPotions) {
-                                if(player.inventory.gold >= 10) {
+                                if(player.inventory.gold >= GameVariables.GameSettings.ItemPrices.healPotionPrice) {
                                     player.inventory.healPotions++;
                                     player.inventory.gold -= 10;
                                     Console.WriteLine(" You bought a Heal Potion");
@@ -180,7 +111,7 @@ namespace Game_Essentials {
                             break;
                         case "Strength Potion":
                             if(player.inventory.strengthPotions < player.inventory.maxStrengthPotions) {
-                                if(player.inventory.gold >= 20) {
+                                if(player.inventory.gold >= GameVariables.GameSettings.ItemPrices.strengthPotionPrice) {
                                     player.inventory.strengthPotions++;
                                     player.inventory.gold -= 20;
                                     Console.WriteLine(" You bought a Strength Potion");
@@ -193,7 +124,7 @@ namespace Game_Essentials {
                             break;
                         case "Endurance Potion":
                             if(player.inventory.endurancePotions < player.inventory.maxEndurancePotions) {
-                                if(player.inventory.gold >= 30) {
+                                if(player.inventory.gold >= GameVariables.GameSettings.ItemPrices.endurancePotionPrice) {
                                     player.inventory.endurancePotions++;
                                     player.inventory.gold -= 30;
                                     Console.WriteLine(" You bought a Endurance Potion");
@@ -273,8 +204,10 @@ namespace Game_Essentials {
         public void displayGameStats() {
             this.displayHeader("Game Stats");
             Console.WriteLine(" Survived Rooms: " + GameVariables.GameStats.surviedRooms);
+            Console.WriteLine(" Cleared Dungeons: " + GameVariables.GameStats.survivedDungeons);
             Console.WriteLine(" Killed Enemies: " + GameVariables.GameStats.killedEnemies);
             Console.WriteLine(" Total Experience gained: " + GameVariables.GameStats.totalExperience);
+            Console.WriteLine(" Total Gold gained: " + GameVariables.GameStats.totalGold);
             Console.WriteLine();
         }
 
@@ -288,8 +221,8 @@ namespace Game_Essentials {
         public void displayEnteredRoom( int roomID, int roomCount,int enemiesCount, int totalEnemiesCount) {
             this.displayHeader("New Room");
             Console.WriteLine(" You entered Room " + roomID + " of " + roomCount + " in this Dungeon");
-            string ZombieOrZombies = enemiesCount > 1 ? "Zombies" : "Zombie";
-            Console.WriteLine(" You have to defeat " + totalEnemiesCount + " " + ZombieOrZombies + " to get to the end of the Dungeon");
+            string EnemySingularOrPlural = enemiesCount > 1 ? "Enemies" : "Enemy";
+            Console.WriteLine(" You have to defeat " + totalEnemiesCount + " " + EnemySingularOrPlural + " to get to the end of the Dungeon");
         }
 
         public void displayEnteredDungeon(string difficulty) {
@@ -311,7 +244,7 @@ namespace Game_Essentials {
                 {
                     case "Attack":     
                         if(!enemy.isDefending) {
-                            if(player.endurance >= player.currentWeapon.enduranceCost) {
+                            if(GameVariables.GameLoopBooleans.wasPlayerAttackMade) {
                                 if(attackChoice == "Normal Attack") {
                                     Console.WriteLine($" You attacked the enemy for {playerDamage} damage");
                                 } else if(attackChoice == "Kick Attack") {
@@ -319,6 +252,7 @@ namespace Game_Essentials {
                                 } else if(attackChoice == player.currentWeapon.specialAttackName) {
                                     Console.WriteLine($" You used {player.currentWeapon.specialAttackName} for {playerSpecialAttackDamage} damage");
                                 }
+                                GameVariables.GameLoopBooleans.wasPlayerAttackMade = false;
                             } else {
                                 Console.WriteLine(" You don't have enough endurance to attack");
                                 break;
@@ -345,6 +279,8 @@ namespace Game_Essentials {
                         break;
                     case "Run":
                         Console.WriteLine(" You ran away");
+                        break;
+                    case "Stunned":
                         break;
                 }
             
@@ -373,16 +309,74 @@ namespace Game_Essentials {
                 switch (enemyChoice)
                 {
                     case "spit":
-                        Console.WriteLine($" The spider spit at you for {enemyDamage} damage");
                         if(player.isPoisoned) {
-                            Console.WriteLine(" The spider poisoned you, you will take damage over time");
+                            Console.WriteLine($" The spider spit at you for {enemyDamage} damage and poisoned you");
+                            Console.WriteLine($" You took {GameVariables.EnemyStats.Spider.poisonDamage} damage from the poison");
+                            Console.WriteLine($" You are poisoned for {GameVariables.GameSettings.EffectDurations.poisonDuration - 1} more turns");
+                        } else {
+                            Console.WriteLine($" The spider spit at you for {enemyDamage} damage");
                         }
                         break;
                     case "attack":
                         Console.WriteLine($" The spider attacked you for {enemyDamage} damage");
                         break;
-                    case "defend":
+                case "defend":
                         Console.WriteLine(" The spider defended the attack");
+                        break;
+                }
+
+                if(player.isPoisoned && enemyChoice != "spit") {
+                    Console.WriteLine($" You took {GameVariables.EnemyStats.Spider.poisonDamage} damage from the poison");
+                    Console.WriteLine($" You are poisoned for {player.poisonedTurns} more turns");
+                }
+            }
+
+            if(enemy is _Goblin.Goblin && !player.isDefending) {
+                switch (enemyChoice)
+                {
+                    case "attack":
+                        Console.WriteLine($" The goblin attacked you for {enemyDamage} damage");
+                        break;
+                    case "steal":
+                        Console.WriteLine($" The goblin stole {GameVariables.EnemyStats.Goblin.stealAmount} gold from you");
+                        
+                        if(GameVariables.GameLoopBooleans.wasEnemyAttackMade) {
+                            Console.WriteLine($" The goblin attacked you for {enemyDamage} damage");
+                        }
+                        break;
+                    case "defend":
+                        Console.WriteLine(" The goblin defended the attack");
+                        break;
+                }
+            }
+
+            if(enemy is _Assassin.Assassin && !player.isDefending) {
+                switch (enemyChoice)
+                {
+                    case "attack":
+                        Console.WriteLine($" The assassin attacked you for {enemyDamage} damage");
+                        break;
+                    case "backstab":
+                        double backstabDamage = enemyDamage * 2;
+                        Console.WriteLine($" The assassin backstabbed you for {backstabDamage} damage");
+                        break;
+                    case "defend":
+                        Console.WriteLine(" The assassin defended the attack");
+                        break;
+                }
+            }
+
+            if(enemy is _StoneGolem.StoneGolem && !player.isDefending) {
+                switch (enemyChoice)
+                {
+                    case "attack":
+                        Console.WriteLine($" The stone golem attacked you for {enemyDamage} damage");
+                        break;
+                    case "slam":
+                        Console.WriteLine($" The stone golem slammed you for {enemyDamage} damage");
+                        if(player.isStunned) {
+                            Console.WriteLine(" You are stunned for the next turn");
+                        }
                         break;
                 }
             }
@@ -398,40 +392,53 @@ namespace Game_Essentials {
 
                             this.displayBattleStats(player, enemy);
 
-                            string enemyChoice = enemy.executeMove(player);
-                            string playerChoice = this.displayOptionMenu(" What will you do?", options);
+                            string playerChoice = "";
                             string attackChoice = "";
-                            player.decrementBuffs();
-                            
-                            switch (playerChoice)
-                            {
-                                case "Attack":
-                                    attackChoice = player.chooseAttack(enemy);
-                                    break;
-                                case "Rest":
-                                    player.Rest();
-                                    break;
-                                case "Use Potion":
-                                    attackChoice = this.displayOptionMenu(" What item do you want to use?", GameVariables.GameSettings.Options.shopItems);
-                                    player.usePotion(attackChoice);
-                                    break;
-                                case "Defend":
-                                    player.Defend(enemy);
-                                    break;
-                                case "Run":
-                                    string isRunning = this.displayOptionMenu(" Are you sure you want to run?", new string[] { "Yes", "No" });
-                                    if (isRunning == "Yes")
-                                    {
-                                        Console.WriteLine(" You ran away");
-                                        GameVariables.GameLoopBooleans.isInMenu = true;
-                                        GameVariables.GameLoopBooleans.isInFight = false;
+
+                            if(!player.isStunned) {
+                                playerChoice = this.displayOptionMenu(" What will you do?", options);
+
+                                switch (playerChoice)
+                                {
+                                    case "Attack":
+                                        attackChoice = player.chooseAttack(enemy);
                                         break;
-                                    }
-                                    else
-                                    {
-                                        continue;
-                                    }
+                                    case "Rest":
+                                        player.Rest();
+                                        break;
+                                    case "Use Potion":
+                                        attackChoice = this.displayOptionMenu(" What item do you want to use?", GameVariables.GameSettings.Options.shopItems);
+                                        player.usePotion(attackChoice);
+                                        break;
+                                    case "Defend":
+                                        player.Defend(enemy);
+                                        break;
+                                    case "Run":
+                                        Console.WriteLine(" Runnig away will end the fight, but you get no reward and you lose half of your Gold.");
+                                        string isRunning = this.displayOptionMenu(" Are you sure you want to run?", new string[] { "Yes", "No" });
+                                        if (isRunning == "Yes")
+                                        {
+                                            GameVariables.GameLoopBooleans.ranAway = true;
+                                            Console.WriteLine(" You ran away");
+                                            // player.loseGold(0);
+                                            GameVariables.GameLoopBooleans.isInMenu = true;
+                                            GameVariables.GameLoopBooleans.isInFight = false;
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            continue;
+                                        }
+                                }
+                            } else {
+                                Console.WriteLine(" You are stunned and can't do anything");
+                                player.isStunned = false;
+                                playerChoice = "Stunned";
                             }
+
+                            string enemyChoice = enemy.executeMove(player);
+                            player.decrementBuffs();
+                            player.applyOverTimeEffects();
 
                             if (!GameVariables.GameLoopBooleans.isInFight)
                             {
@@ -489,6 +496,10 @@ namespace Game_Essentials {
                     
                     foreach (Room room in dungeon)
                     {
+                        if(GameVariables.GameLoopBooleans.isInMenu) {
+                            break;
+                        }
+
                         this.displayEnteredRoom(room.roomID, dungeon.Length, room.roomEnemies.Length, totalMobsInDungeon);
                         this.waitForInput();
                         foreach (Enemy enemy in room.roomEnemies)

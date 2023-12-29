@@ -67,22 +67,73 @@ namespace Dungeon_Generator {
         }
 
         // Generate a number of zombies
-        public static Enemy[] generateMobs(int count) {
+        public static Enemy[] generateMobs(int count)
+        {
             Enemy[] enemies = new Enemy[count];
             string[] enemytypes = GameVariables.GameSettings.DungeonSettings.enemyTypes;
             Random random = new Random();
             int index = random.Next(enemytypes.Length);
 
             string enemyType = enemytypes[index];
-            
+
             for (int i = 0; i < count; i++)
             {
-                switch (enemyType) {
+                switch (enemyType)
+                {
                     case "Spider":
-                        enemies[i] = new _Spider.Spider(enemytypes[index], attack: 100, strength: 1.0, armor: 5, health: 100, experienceOnDefeat: 25, goldOnDefeat: 25);
+                        enemies[i] = new _Spider.Spider(
+                            enemytypes[index],
+                            attack: GameVariables.EnemyStats.Spider.attack,
+                            strength: GameVariables.EnemyStats.Spider.strength,
+                            armor: GameVariables.EnemyStats.Spider.armor,
+                            health: GameVariables.EnemyStats.Spider.health,
+                            experienceOnDefeat: GameVariables.EnemyStats.Spider.experienceOnDefeat,
+                            goldOnDefeat: GameVariables.EnemyStats.Spider.goldOnDefeat
+                        );
                         break;
                     case "Zombie":
-                        enemies[i] = new Zombie.Zombie(enemytypes[index], attack: 50, strength: 1.0, armor: 5, health: 50, experienceOnDefeat: 15, goldOnDefeat: 15);
+                        enemies[i] = new Zombie.Zombie(
+                            enemytypes[index],
+                            attack: GameVariables.EnemyStats.Spider.attack,
+                            strength: GameVariables.EnemyStats.Spider.strength,
+                            armor: GameVariables.EnemyStats.Spider.armor,
+                            health: GameVariables.EnemyStats.Spider.health,
+                            experienceOnDefeat: GameVariables.EnemyStats.Spider.experienceOnDefeat,
+                            goldOnDefeat: GameVariables.EnemyStats.Spider.goldOnDefeat
+                        );
+                        break;
+                    case "Goblin":
+                        enemies[i] = new _Goblin.Goblin(
+                            enemytypes[index],
+                            attack: GameVariables.EnemyStats.Goblin.attack,
+                            strength: GameVariables.EnemyStats.Goblin.strength,
+                            armor: GameVariables.EnemyStats.Goblin.armor,
+                            health: GameVariables.EnemyStats.Goblin.health,
+                            experienceOnDefeat: GameVariables.EnemyStats.Goblin.experienceOnDefeat,
+                            goldOnDefeat: GameVariables.EnemyStats.Goblin.goldOnDefeat
+                        );
+                        break;
+                    case "Assassin":
+                        enemies[i] = new _Assassin.Assassin(
+                            enemytypes[index],
+                            attack: GameVariables.EnemyStats.Assassin.attack,
+                            strength: GameVariables.EnemyStats.Assassin.strength,
+                            armor: GameVariables.EnemyStats.Assassin.armor,
+                            health: GameVariables.EnemyStats.Assassin.health,
+                            experienceOnDefeat: GameVariables.EnemyStats.Assassin.experienceOnDefeat,
+                            goldOnDefeat: GameVariables.EnemyStats.Assassin.goldOnDefeat
+                        );
+                        break;
+                    case "Stone Golem":
+                        enemies[i] = new _StoneGolem.StoneGolem(
+                            enemytypes[index],
+                            attack: GameVariables.EnemyStats.StoneGolem.attack,
+                            strength: GameVariables.EnemyStats.StoneGolem.strength,
+                            armor: GameVariables.EnemyStats.StoneGolem.armor,
+                            health: GameVariables.EnemyStats.StoneGolem.health,
+                            experienceOnDefeat: GameVariables.EnemyStats.StoneGolem.experienceOnDefeat,
+                            goldOnDefeat: GameVariables.EnemyStats.StoneGolem.goldOnDefeat
+                        );
                         break;
                 }
             }

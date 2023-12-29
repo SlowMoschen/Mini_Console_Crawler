@@ -1,4 +1,5 @@
 ﻿namespace Console_RPG;
+using Console_Output;
 using Game_Characters;
 using Game_Essentials;
 using Zombie;
@@ -37,13 +38,13 @@ class Program
 
         switch (playerWeaponChoice) {
             case "Sword":
-                player.currentWeapon = new Sword(name: "Sword", attack: 12, enduranceCost: 10);
+                player.currentWeapon = new Sword(name: "Sword", attack: GameVariables.WeaponStats.Sword.attack, enduranceCost: GameVariables.WeaponStats.Sword.enduranceCost , specialAttackEnduranceCost: GameVariables.WeaponStats.Sword.specialAttackEnduranceCost);
                 break;
             case "Axe":
-                player.currentWeapon = new Axe(name: "Axe", attack: 25, enduranceCost: 20);
+                player.currentWeapon = new Axe(name: "Axe", attack: GameVariables.WeaponStats.Axe.attack, enduranceCost: GameVariables.WeaponStats.Axe.enduranceCost, specialAttackEnduranceCost: GameVariables.WeaponStats.Axe.specialAttackEnduranceCost);
                 break;
             case "Mace":
-                player.currentWeapon = new Mace(name: "Mace", attack: 20, enduranceCost: 15);
+                player.currentWeapon = new Mace(name: "Mace", attack: GameVariables.WeaponStats.Mace.attack, enduranceCost: GameVariables.WeaponStats.Mace.enduranceCost, specialAttackEnduranceCost: GameVariables.WeaponStats.Mace.specialAttackEnduranceCost);
                 break;
         }
         player.setAttackOptions();

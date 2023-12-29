@@ -2,35 +2,31 @@ using Game_Characters;
 using Game_Essentials;
 
 /**
-    Class for the Spider enemy
-    Has moderate stats 
-    Can use a special attack to poison the player
+    Class for the Goblin enemy
+    Has low stats in general
+    Can use a special attack to steal gold from the player
  */
 
-
-namespace _Spider 
+namespace _Goblin 
 {
-    public class Spider : Enemy {
-        public Spider(string name, int attack, double strength, int armor, double health, int experienceOnDefeat, int goldOnDefeat)
+    public class Goblin : Enemy {
+
+        public Goblin(string name, int attack, double strength, int armor, double health, int experienceOnDefeat, int goldOnDefeat)
             : base(name, attack, strength, armor, health, experienceOnDefeat, goldOnDefeat)
         {
             this.specialAttackCount = 1;
         }
 
-        // spit Attack - deals small amount if initial damage and poisons target
-        public void spit(Character target)
+        public void steal(Player target)
         {
             if(target.isDefending) {
                 target.isDefending = false;
+                target.loseGold(GameVariables.EnemyStats.Goblin.stealAmount);
                 return;
             } else {
+                GameVariables.GameLoopBooleans.wasEnemyAttackMade = true;
                 target.health -= this.attack * this.strength / target.armor;
-
-                // 25% chance to poison target
-                if(GameVariables.getChance(GameVariables.EnemyStats.Spider.poisonChance)) {
-                    target.isPoisoned = true;
-                    target.poisonedTurns = GameVariables.GameSettings.EffectDurations.poisonDuration;
-                }
+                target.loseGold(GameVariables.EnemyStats.Goblin.stealAmount);
             }
         }
 
@@ -41,8 +37,8 @@ namespace _Spider
             switch (getRandomAttack())
             {
                 case 1:
-                    this.spit(target);
-                    move = "spit";
+                    this.steal(target);
+                    move = "steal";
                     break;
                 case 2:
                     this.Attack(target);
@@ -55,5 +51,6 @@ namespace _Spider
             }
             return move;
         }
+
     }
 }
