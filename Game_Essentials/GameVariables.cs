@@ -37,7 +37,7 @@ namespace Game_Essentials {
             }
 
             public class Axe {
-                public static int attack { get; } = 25;
+                public static int attack { get; } = 60;
                 public static int enduranceCost { get; } = 20;
                 public static int specialAttackEnduranceCost { get; } = 30;
                 public static int specialAttackStrength { get; } = 30;
@@ -49,6 +49,18 @@ namespace Game_Essentials {
                 public static int specialAttackEnduranceCost { get; } = 25;
                 public static int specialAttackStrength { get; } = 23;
             }
+        }
+
+        public class PlayerStats {
+            public static string playerName { get; set;} = "Player";
+            public static int attack { get; set; } = 50;
+            public static double strength { get; set; } = 1.0;
+            public static int armor { get; set; } = 50;
+            public static double health { get; set; } = 1000;
+            public static int maxHealth { get; set; } = 1000;
+            public static int experience { get; set;} = 0;
+            public static int experienceToLevelUp { get; set;} = 100;
+            public static int level { get; set;} = 1;
         }
 
         public class EnemyStats {
@@ -102,12 +114,25 @@ namespace Game_Essentials {
             public static int goldOnDefeat { get; } = 20;
             public static int stunChance { get; } = 15;
         }
+
+        public class Dragon {
+            public static int attack { get; } = 50;
+            public static double strength { get; } = 1.5;
+            public static int armor { get; } = 35;
+            public static double health { get; } = 250;
+            public static int experienceOnDefeat { get; } = 1200;
+            public static int goldOnDefeat { get; } = 350;
+            public static int fireBreathDamage { get; } = 10;
+            public static int burnChance { get; } = 33;
+            public static int burningDamage { get; } = 12;
+            public static int throwRockDamage { get; } = 20;
+            public static int stunChance { get; } = 25;
+            public static int tailStrikeDamage { get; } = 30;
+        }
     }
 
 
-        public class GameSettings {
-            
-            public static string playerName { get; set;} = "Player";
+        public class GameSettings {            
             public static int healPotionHealRating { get; } = 20;
             public static int strengthPotionStrengthRating { get; } = 2;
             public static int endurancePotionEnduranceRating { get; } = 50;
@@ -122,16 +147,18 @@ namespace Game_Essentials {
                 public static int healPotionPrice { get; } = 15;
                 public static int strengthPotionPrice { get; } = 35;
                 public static int endurancePotionPrice { get; } = 25;
+                public static string[] allItemPrices { get; } = new string[] { healPotionPrice.ToString(), strengthPotionPrice.ToString(), endurancePotionPrice.ToString() };
             }
             
             public class EffectDurations {
                 public static int poisonDuration { get; } = 3;
+                public static int burnDuration { get; } = 3;
                 public static int strengthDuration { get; } = 7;
                 public static int stunDuration { get; } = 1;
             }
             
             public class Options {
-                public static string[] difficultyOptions { get; } = new string[] { "Easy", "Medium", "Hard" };
+                public static string[] difficultyOptions { get; } = new string[] { "Easy", "Medium", "Hard", "Boss", "Dev" };
                 public static string[] battleOptions { get; } = new string[] { "Attack", "Rest", "Use Potion", "Defend", "Run" };
                 public static string[]? attackOptions { get; set; }
                 public static string[] mainMenuOptions { get; } = new string[] { "Enter Dungeon", "View Stats", "View Inventory", "Shop" };
@@ -145,6 +172,7 @@ namespace Game_Essentials {
                 public static int easyRooms { get; } = 1;
                 public static int mediumRooms { get; } = 2;
                 public static int hardRooms { get; } = 3;
+                public static int bossRooms { get; } = 5;
                 
                 /**
                 * Generate a random number of mobs based on the difficulty
@@ -155,9 +183,11 @@ namespace Game_Essentials {
                 public static int easyMobs => random.Next(1, 4);
                 public static int mediumMobs => random.Next(3, 6);
                 public static int hardMobs => random.Next(5, 11);
+                public static int bossMobs => random.Next(10, 21);
                 public static int easyGold => random.Next(5, 11);
                 public static int mediumGold => random.Next(10, 21);
                 public static int hardGold => random.Next(20, 31);
+                public static int bossGold => random.Next(40, 81);
                 public static int getChestItemsCount(string difficulty) {
                     switch (difficulty)
                     {
@@ -170,6 +200,8 @@ namespace Game_Essentials {
                         // Hard - 3 - 5 items
                         case "Hard":
                             return random.Next(3, 5);
+                        case "Boss":
+                            return 5;
                         default:
                             return 0;
                     }

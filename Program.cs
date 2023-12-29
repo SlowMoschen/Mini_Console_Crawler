@@ -32,8 +32,17 @@ class Program
         
         DisplayManager.displayGreetings();
         // DisplayManager.getPlayerName();
-        Player player = new Player(GameVariables.GameSettings.playerName, attack: 50, strength: 1.0, armor: 10, health: 100, maxHealth: 100, level: 1, experience: 0, experienceToLevelUp: 100);
-
+        Player player = new Player(
+            name: GameVariables.PlayerStats.playerName,
+            attack: GameVariables.PlayerStats.attack,
+            strength: GameVariables.PlayerStats.strength,
+            armor: GameVariables.PlayerStats.armor,
+            health: GameVariables.PlayerStats.health,
+            maxHealth: GameVariables.PlayerStats.maxHealth,
+            level: GameVariables.PlayerStats.level,
+            experience: GameVariables.PlayerStats.experience,
+            experienceToLevelUp: GameVariables.PlayerStats.experienceToLevelUp
+        );
         string playerWeaponChoice = DisplayManager.getPlayerWeapon();
 
         switch (playerWeaponChoice) {

@@ -49,7 +49,7 @@ namespace Console_Output
             this.displayGameLogo();
             Console.WriteLine(" What is the Name of your Hero?");
             string playerName = Console.ReadLine();
-            GameVariables.GameSettings.playerName = playerName;
+            GameVariables.PlayerStats.playerName = playerName;
             Console.WriteLine();
             Console.WriteLine(" Your Hero is called " + playerName);
             this.waitForInput();
@@ -95,7 +95,7 @@ namespace Console_Output
             
             switch (menuChoice) {
                 case "Buy":
-                    string itemChoice = this.displayOptionMenu(" What would you like to buy?", GameVariables.GameSettings.Options.shopItems);
+                    string itemChoice = this.displayOptionMenu(" What would you like to buy?", GameVariables.GameSettings.Options.shopItems, GameVariables.GameSettings.ItemPrices.allItemPrices);
                     if(itemChoice == "Heal Potion") 
                     {
                         
@@ -204,9 +204,9 @@ namespace Console_Output
         }
 
         // Method to display a menu with a message and options
-        public string displayOptionMenu(string message ,string[] options) {
+        public string displayOptionMenu(string message ,string[] options, string[] prices = null) {
             Console.WriteLine();
-            string playerChoice = InputHandler.getChoice(message, options);
+            string playerChoice = InputHandler.getChoice(message, options, prices);
             Console.WriteLine();
             return playerChoice;
         }
@@ -399,6 +399,37 @@ namespace Console_Output
                             Console.WriteLine(" You are stunned for the next turn");
                         }
                         break;
+                }
+            }
+
+            if(enemy is Boss_Dragon.Dragon && !player.isDefending) {
+                switch (enemyChoice)
+                {
+                    case "attack":
+                        Console.WriteLine($" The dragon attacked you for {enemyDamage} damage");
+                        break;
+                    case "fire breath":
+                        Console.WriteLine($" The dragon used fire breath on you for {enemyDamage} damage");
+                        if(player.isBurning) {
+                            Console.WriteLine($" You took {GameVariables.EnemyStats.Dragon.burningDamage} damage from the fire");
+                            Console.WriteLine($" You are burning for {player.burningTurns} more turns");
+                        }
+                        break;
+                    case "rock throw":
+                        Console.WriteLine($" The dragon threw a rock at you for {enemyDamage} damage");
+                        if(player.isStunned) {
+                            Console.WriteLine(" You are stunned for the next turn");
+                        }
+                        break;
+                    case "tail strike":
+                        double tailStrikeDamage = (enemy.attack + GameVariables.EnemyStats.Dragon.tailStrikeDamage) * enemy.strength;
+                        Console.WriteLine($" The dragon used tail strike on you for {tailStrikeDamage} damage");
+                        break;
+                }
+
+                if(player.isBurning && enemyChoice != "fire breath") {
+                    Console.WriteLine($" You took {GameVariables.EnemyStats.Dragon.burningDamage} damage from the fire");
+                    Console.WriteLine($" You are burning for {player.burningTurns} more turns");
                 }
             }
         }

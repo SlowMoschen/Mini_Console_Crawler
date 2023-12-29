@@ -24,6 +24,8 @@ namespace Game_Characters
         public bool isStunned = false;
         public bool isDefending = false;
         public bool isPoisoned = false;
+        public bool isBurning = false;
+        public int burningTurns = 0;
         public int poisonedTurns = 0;
         public bool strengthBuffed = false;
         
@@ -60,6 +62,16 @@ namespace Game_Characters
 
             if(this.poisonedTurns == 0) {
                 this.isPoisoned = false;
+            }
+
+            if (this.burningTurns > 0)
+            {
+                this.burningTurns--;
+                this.health -= GameVariables.EnemyStats.Dragon.burningDamage;
+            }
+
+            if(this.burningTurns == 0) {
+                this.isBurning = false;
             }
         }
 
@@ -400,6 +412,10 @@ namespace Game_Characters
 
         if(this.isPoisoned) {
             Console.WriteLine($" Poisoned for {this.poisonedTurns} turns.");
+        }
+
+        if(this.isBurning) {
+            Console.WriteLine($" Burning for {this.burningTurns} turns.");
         }
     }
 

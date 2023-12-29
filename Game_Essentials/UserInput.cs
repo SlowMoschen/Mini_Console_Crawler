@@ -2,7 +2,7 @@ namespace UserInput
 {
     public class InputHandler {
 
-        public static string getChoice(string message, string[] options)
+        public static string getChoice(string message, string[] options, string[] prices = null)
         {
             // Print Message or Question
             Console.WriteLine();
@@ -12,7 +12,7 @@ namespace UserInput
             for (int i = 0; i < options.Length; i++)
             {
                 int number = i + 1;
-                Console.WriteLine(" " + number + ". " + options[i]);
+                Console.WriteLine(" " + number + ". " + options[i] + (prices != null ? " - " + prices[i] + "G" : ""));
             }
 
             Console.WriteLine();

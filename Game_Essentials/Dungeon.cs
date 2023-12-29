@@ -1,4 +1,4 @@
-using Zombie;
+using Boss_Dragon;
 using Game_Essentials;
 using Game_Characters;
 using _Items;
@@ -31,6 +31,12 @@ namespace Dungeon_Generator {
                     case "Hard":
                         rooms = GameVariables.GameSettings.DungeonSettings.hardRooms;
                         break;
+                    case "Boss":
+                        rooms = GameVariables.GameSettings.DungeonSettings.bossRooms;
+                        break;
+                    case "Dev":
+                        rooms = 1;
+                        break;
                     default:
                         rooms = 1;
                         break;
@@ -47,7 +53,7 @@ namespace Dungeon_Generator {
 
         public void openChest(Player player) {
             if(this.chest.items.Length > 0) {
-                Console.WriteLine(" You found a chest!");
+                Console.WriteLine(" You found a chest with Items!");
                 Console.WriteLine(" You found " + this.chest.gold + " gold!");
                 player.InventoryManager.gold += this.chest.gold;
                 Console.WriteLine(" You found " + this.chest.items.Length + " items!");
@@ -61,9 +67,6 @@ namespace Dungeon_Generator {
                 Console.WriteLine(" You found " + this.chest.gold + " gold!");
                 player.InventoryManager.gold += this.chest.gold;
                 GameVariables.GameStats.totalGold += this.chest.gold;
-                // GameVariables.GameLoopBooleans.isInMenu = true;
-                // GameVariables.GameLoopBooleans.isInFight = false;
-                // GameVariables.GameLoopBooleans.isDungeonCleared = true;
             }
         }
     }
@@ -92,6 +95,12 @@ namespace Dungeon_Generator {
                 case "Hard":
                     enemies = generateMobs(GameVariables.GameSettings.DungeonSettings.hardMobs);
                     break;
+                case "Boss":
+                    enemies = generateMobs(GameVariables.GameSettings.DungeonSettings.bossMobs, true);
+                    break;
+                case "Dev":
+                    enemies = generateMobs(2, true);
+                    break;
                 default:
                     enemies = generateMobs(1);
                     break;
@@ -100,7 +109,7 @@ namespace Dungeon_Generator {
         }
 
         // Generate a number of zombies
-        public static Enemy[] generateMobs(int count)
+        public static Enemy[] generateMobs(int count, bool isBossDungeon = false)
         {
             Enemy[] enemies = new Enemy[count];
             string[] enemytypes = GameVariables.GameSettings.DungeonSettings.enemyTypes;
@@ -111,6 +120,29 @@ namespace Dungeon_Generator {
 
             for (int i = 0; i < count; i++)
             {
+
+                if(isBossDungeon && i == count - 1) {
+                    enemies[i] = new Dragon(
+                        "Dragon Boss",
+                        attack: GameVariables.EnemyStats.Dragon.attack,
+                        strength: GameVariables.EnemyStats.Dragon.strength,
+                        armor: GameVariables.EnemyStats.Dragon.armor,
+                        health: GameVariables.EnemyStats.Dragon.health,
+                        experienceOnDefeat: GameVariables.EnemyStats.Dragon.experienceOnDefeat,
+                        goldOnDefeat: GameVariables.EnemyStats.Dragon.goldOnDefeat
+                    );
+                    // enemies[i] = new _StoneGolem.StoneGolem(
+                    //     "Stone Golem Boss",
+                    //     attack: GameVariables.EnemyStats.StoneGolem.attack,
+                    //     strength: GameVariables.EnemyStats.StoneGolem.strength,
+                    //     armor: GameVariables.EnemyStats.StoneGolem.armor,
+                    //     health: GameVariables.EnemyStats.StoneGolem.health,
+                    //     experienceOnDefeat: GameVariables.EnemyStats.StoneGolem.experienceOnDefeat,
+                    //     goldOnDefeat: GameVariables.EnemyStats.StoneGolem.goldOnDefeat
+                    // );
+                    continue;
+                }
+
                 switch (enemyType)
                 {
                     case "Spider":
@@ -197,6 +229,12 @@ namespace Dungeon_Generator {
                 case "Hard":
                     gold = GameVariables.GameSettings.DungeonSettings.hardGold;
                     break;
+                case "Boss":
+                    gold = GameVariables.GameSettings.DungeonSettings.bossGold;
+                    break;
+                case "Dev":
+                    gold = 1000;
+                    break;
                 default:
                     gold = 0;
                     break;
@@ -207,9 +245,21 @@ namespace Dungeon_Generator {
         // genrates the Items based on
         public static Item[] generateItems(string difficulty) {
             int length = GameVariables.GameSettings.DungeonSettings.getChestItemsCount(difficulty);
+            if(difficulty == "Dev") {
+                length = 5;
+            }
             Item[] items = new Item[length];
 
-            //25% Chance to generate Items
+            if(difficulty == "Boss" || difficulty == "Hard") {
+                for (int i = 0; i < length; i++)
+                {
+                    items[i] = generateItem(difficulty);
+                }
+
+                return items;
+            }
+
+            //25% Chance to generate Items for Easy and Medium Dungeons
             if(GameVariables.getChance(25)) {
                 for (int i = 0; i < length; i++)
                 {
