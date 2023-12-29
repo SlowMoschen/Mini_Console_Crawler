@@ -5,6 +5,7 @@ using System.Linq;
 using System.Diagnostics;
 using UserInput;
 using Dungeon_Generator;
+using _Items;
 
 namespace Console_Output 
 {
@@ -83,58 +84,78 @@ namespace Console_Output
         public void displayShop(Player player) {
             Console.Clear();
             this.displayHeader("Shop");
-            Console.WriteLine(" You have " + player.inventory.gold + " gold");
+            Console.WriteLine(" You have " + player.InventoryManager.gold + " gold");
             Console.WriteLine();
             Console.WriteLine(" Inventory:");
             player.printPotionsInventory();
             Console.WriteLine();
-            Console.WriteLine(" You can carry a maximum of " + player.inventory.maxStrengthPotions + " Strength Potions");
-            Console.WriteLine(" You can carry a maximum of " + player.inventory.maxHealPotions + " Heal and Endurance Potions");
+            Console.WriteLine(" You can carry a maximum of " + GameVariables.GameSettings.ItemMaxQuantity.strengthPotionMaxQuantity + " Strength Potions");
+            Console.WriteLine(" You can carry a maximum of " + GameVariables.GameSettings.ItemMaxQuantity.healPotionMaxQuantity + " Heal and Endurance Potions");
             string menuChoice = this.displayOptionMenu(" What would you like to do?", GameVariables.GameSettings.Options.shopMenuOptions);
             
             switch (menuChoice) {
                 case "Buy":
                     string itemChoice = this.displayOptionMenu(" What would you like to buy?", GameVariables.GameSettings.Options.shopItems);
-                    switch (itemChoice) {
-                        case "Heal Potion":
-                            if(player.inventory.healPotions < player.inventory.maxHealPotions) {
-                                if(player.inventory.gold >= GameVariables.GameSettings.ItemPrices.healPotionPrice) {
-                                    player.inventory.healPotions++;
-                                    player.inventory.gold -= 10;
-                                    Console.WriteLine(" You bought a Heal Potion");
-                                } else {
-                                    Console.WriteLine(" You don't have enough gold to buy a Heal Potion");
-                                }
-                            } else {
-                                Console.WriteLine(" You can't carry any more Heal Potions");
-                            }
-                            break;
-                        case "Strength Potion":
-                            if(player.inventory.strengthPotions < player.inventory.maxStrengthPotions) {
-                                if(player.inventory.gold >= GameVariables.GameSettings.ItemPrices.strengthPotionPrice) {
-                                    player.inventory.strengthPotions++;
-                                    player.inventory.gold -= 20;
-                                    Console.WriteLine(" You bought a Strength Potion");
-                                } else {
-                                    Console.WriteLine(" You don't have enough gold to buy a Strength Potion");
-                                }
-                            } else {
-                                Console.WriteLine(" You can't carry any more Strength Potions");
-                            }
-                            break;
-                        case "Endurance Potion":
-                            if(player.inventory.endurancePotions < player.inventory.maxEndurancePotions) {
-                                if(player.inventory.gold >= GameVariables.GameSettings.ItemPrices.endurancePotionPrice) {
-                                    player.inventory.endurancePotions++;
-                                    player.inventory.gold -= 30;
-                                    Console.WriteLine(" You bought a Endurance Potion");
-                                } else {
-                                    Console.WriteLine(" You don't have enough gold to buy a Endurance Potion");
-                                }
-                            } else {
-                                Console.WriteLine(" You can't carry any more Endurance Potions");
-                            }
-                            break;
+                    if(itemChoice == "Heal Potion") 
+                    {
+                        
+                        Potion healPotion = new _Items.Potion(
+                            name: "Heal Potion", 
+                            type: "Health Potion", 
+                            description: "Heals the Player for " + GameVariables.GameSettings.healPotionHealRating + " health", 
+                            price: GameVariables.GameSettings.ItemPrices.healPotionPrice, 
+                            maxQuantity: GameVariables.GameSettings.ItemMaxQuantity.healPotionMaxQuantity, 
+                            effectValue: GameVariables.GameSettings.healPotionHealRating
+                        );
+
+                        string quantityChoice = this.displayOptionMenu(" How many do you want to buy?", new string[] { "1", "2", "3", "Maximum" });
+                        if(quantityChoice == "Maximum") {
+                            quantityChoice = player.calculateMaxPotionsPurchase(healPotion);
+                        }
+
+                        for(int i = 0; i < int.Parse(quantityChoice); i++) {
+                            player.buyItem(healPotion);
+                        }
+                    }
+                    else if (itemChoice == "Strength Potion")
+                    {
+                        Potion strengthPotion = new _Items.Potion(
+                            name: "Strength Potion",
+                            type: "Strength Potion",
+                            description: "Increases the Player's strength by " + GameVariables.GameSettings.strengthPotionStrengthRating + " for " + GameVariables.GameSettings.EffectDurations.strengthDuration + " turns",
+                            price: GameVariables.GameSettings.ItemPrices.strengthPotionPrice,
+                            maxQuantity: GameVariables.GameSettings.ItemMaxQuantity.strengthPotionMaxQuantity,
+                            effectValue: GameVariables.GameSettings.strengthPotionStrengthRating
+                        );
+
+                        string quantityChoice = this.displayOptionMenu(" How many do you want to buy?", new string[] { "1", "2", "3", "Maximum" });
+                        if(quantityChoice == "Maximum") {
+                            quantityChoice = player.calculateMaxPotionsPurchase(strengthPotion);
+                        }
+
+                        for(int i = 0; i < int.Parse(quantityChoice); i++) {
+                            player.buyItem(strengthPotion);
+                        }
+                    }
+                    else if (itemChoice == "Endurance Potion")
+                    {
+                        Potion endurancePotion = new _Items.Potion(
+                            name: "Endurance Potion",
+                            type: "Endurance Potion",
+                            description: "Increases the Player's endurance by " + GameVariables.GameSettings.endurancePotionEnduranceRating + " for " + GameVariables.GameSettings.EffectDurations.strengthDuration + " turns",
+                            price: GameVariables.GameSettings.ItemPrices.endurancePotionPrice,
+                            maxQuantity: GameVariables.GameSettings.ItemMaxQuantity.endurancePotionMaxQuantity,
+                            effectValue: GameVariables.GameSettings.endurancePotionEnduranceRating
+                        );
+
+                        string quantityChoice = this.displayOptionMenu(" How many do you want to buy?", new string[] { "1", "2", "3", "Maximum" });
+                        if(quantityChoice == "Maximum") {
+                            quantityChoice = player.calculateMaxPotionsPurchase(endurancePotion);
+                        }
+
+                        for(int i = 0; i < int.Parse(quantityChoice); i++) {
+                            player.buyItem(endurancePotion);
+                        }
                     }
                     break;
                 case "Exit":

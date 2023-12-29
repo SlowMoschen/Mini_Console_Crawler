@@ -109,10 +109,15 @@ namespace Game_Essentials {
             
             public static string playerName { get; set;} = "Player";
             public static int healPotionHealRating { get; } = 20;
-            public static double strengthPotionStrengthRating { get; } = 2.0;
+            public static int strengthPotionStrengthRating { get; } = 2;
             public static int endurancePotionEnduranceRating { get; } = 50;
             public static int enduranceRegeneration { get; } = 7;
 
+            public class ItemMaxQuantity {
+                public static int healPotionMaxQuantity { get; } = 5;
+                public static int strengthPotionMaxQuantity { get; } = 3;
+                public static int endurancePotionMaxQuantity { get; } = 5;
+            }
             public class ItemPrices {
                 public static int healPotionPrice { get; } = 15;
                 public static int strengthPotionPrice { get; } = 35;
@@ -162,18 +167,6 @@ namespace Game_Essentials {
             public static bool isDungeonCleared { get; set;} = false;
             public static bool wasPlayerAttackMade { get; set;} = false;
             public static bool wasEnemyAttackMade { get; set;} = false;
-        }
-
-        // Class will be initialized in a Player instance
-        public class PlayerInventory {
-            public int maxHealPotions { get; } = 5;
-            public int maxEndurancePotions { get; } = 5;
-            public int maxStrengthPotions { get; } = 3;
-
-            public int healPotions { get; set;} = 0;
-            public int endurancePotions { get; set;} = 0;
-            public int strengthPotions { get; set;} = 1;
-            public int gold { get; set;} = 0;
         }
 
     }

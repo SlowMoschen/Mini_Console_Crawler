@@ -2,6 +2,8 @@ using Weapons;
 using System.Collections;
 using Game_Essentials;
 using Console_Output;
+using _Inventory;
+using _Items;
 
 namespace Game_Characters
 {
@@ -136,7 +138,7 @@ namespace Game_Characters
     public int endurance = 100;
     public int maxEndurance = 100;
     public int kickAttackStrength = 5;
-    public GameVariables.PlayerInventory inventory { get; set;} = new GameVariables.PlayerInventory();
+    public InventoryManager InventoryManager { get; set; } = new InventoryManager();
     public int strengthBuffTurns { get; set; }
 
     public Player (string name, int attack, double strength, int armor, double health, int maxHealth, int level, int experience, int experienceToLevelUp) 
@@ -149,43 +151,30 @@ namespace Game_Characters
     }
 
     public void usePotion(string potionType) {
-        switch (potionType)
-        {
-            case "Heal Potion":
-                if(this.inventory.healPotions > 0) {
-                    this.health += GameVariables.GameSettings.healPotionHealRating;
-                    this.inventory.healPotions--;
-                    if(this.health > this.maxHealth) {
-                        this.health = this.maxHealth;
-                    }
-                } else {
-                    Console.WriteLine(" You don't have any heal potions!");
-                }
-                break;
-            case "Strength Potion":
-                if(this.inventory.strengthPotions > 0) {
-                    this.strengthBuffed = true;
-                    this.strength = GameVariables.GameSettings.strengthPotionStrengthRating;
-                    this.inventory.strengthPotions--;
-                    this.strengthBuffTurns = GameVariables.GameSettings.EffectDurations.strengthDuration;
-                } else {
-                    Console.WriteLine(" You don't have any strength potions!");
-                }
-                break;
-            case "Endurance Potion":
-                if(this.inventory.endurancePotions > 0) {
-                    this.endurance += GameVariables.GameSettings.endurancePotionEnduranceRating;
-                    this.inventory.endurancePotions--;
-                    if(this.endurance > this.maxEndurance) {
-                        this.endurance = this.maxEndurance;
-                    }
-                } else {
-                    Console.WriteLine(" You don't have any endurance potions!");
-                }
-                break;
-            default:
-                break;
-        }
+       Item item = this.InventoryManager.getExistingItem(potionType);
+       if(item is Potion) {
+            Potion potion = (Potion)item;
+         if(potion != null) {
+              switch (potion.type) {
+                case "Health Potion":
+                     this.health += potion.effectValue;
+                     if(this.health > this.maxHealth) {
+                          this.health = this.maxHealth;
+                     }
+                     break;
+                case "Strength Potion":
+                     this.strength += potion.effectValue;
+                     break;
+                case "Endurance Potion":
+                     this.endurance += potion.effectValue;
+                     if(this.endurance > this.maxEndurance) {
+                          this.endurance = this.maxEndurance;
+                     }
+                     break;
+              }
+              this.InventoryManager.removeItem(potion);
+         }
+       }
     }
 
     public void decrementBuffs() {
@@ -315,39 +304,82 @@ namespace Game_Characters
         }
     }
 
+    public void buyItem (Item item) {
+        Item exitingItem = this.InventoryManager.getExistingItem(item.type);
+
+        if(exitingItem != null) {
+            if(exitingItem.quantity < exitingItem.maxQuantity) {
+                if(this.InventoryManager.gold >= item.price) {
+                    this.InventoryManager.gold -= item.price;
+                    InventoryManager.addItem(item);
+                    Console.WriteLine(" You bought a " + item.type + " for " + item.price + "G.");
+                    return;
+                } else {
+                    Console.WriteLine(" You don't have enough gold.");
+                    return;
+                }
+            } else {
+                Console.WriteLine(" You already have the maximum amount of this item.");
+                return;
+            }
+        }
+
+        if(exitingItem == null) {
+            if(this.InventoryManager.gold >= item.price) {
+                this.InventoryManager.gold -= item.price;
+                InventoryManager.addItem(item);
+                Console.WriteLine(" You bought a " + item.type + " for " + item.price + "G.");
+                return;
+            } else {
+                Console.WriteLine(" You don't have enough gold.");
+                return;
+            }
+        }
+    }
+
+    public string calculateMaxPotionsPurchase (Potion potion) {
+        int maxPotions = 0;
+        if(this.InventoryManager.gold >= potion.price) {
+            maxPotions = this.InventoryManager.gold / potion.price;
+        }
+        if(maxPotions > potion.maxQuantity) {
+            maxPotions = potion.maxQuantity;
+        }
+        return maxPotions.ToString();
+    }
+
     public void gainGold (int gold) {
-        this.inventory.gold += gold;
+        this.InventoryManager.gold += gold;
         GameVariables.GameStats.totalGold += gold;
     }
 
-    // Function to lose gold - if ran away, lose half of gold
+    // Function to lose gold - if player ran away, lose half of gold
     public void loseGold (int gold) {
 
         if(GameVariables.GameLoopBooleans.ranAway) {
-            this.inventory.gold = this.inventory.gold / 2;
+            this.InventoryManager.gold = this.InventoryManager.gold / 2;
             return;
         }
 
-        if(this.inventory.gold >= gold) {
-            this.inventory.gold -= gold;
+        if(this.InventoryManager.gold >= gold) {
+            this.InventoryManager.gold -= gold;
         } else {
-            this.inventory.gold = 0;
+            this.InventoryManager.gold = 0;
         }
     }
 
     public void printInventory () {
         Console.WriteLine(" Current Weapon: ");
         this.currentWeapon.printWeaponStats();
-        Console.WriteLine(" Gold: " + this.inventory.gold + "G");
-        Console.WriteLine(" Heal Potions: " + this.inventory.healPotions);
-        Console.WriteLine(" Strength Potions: " + this.inventory.strengthPotions);
-        Console.WriteLine(" Endurance Potions: " + this.inventory.endurancePotions);
+        Console.WriteLine(" Gold: " + this.InventoryManager.gold);
+        Console.WriteLine(" Potions: ");
+        this.printPotionsInventory();
     }
 
     public void printPotionsInventory () {
-        Console.WriteLine(" Heal Potions: " + this.inventory.healPotions);
-        Console.WriteLine(" Strength Potions: " + this.inventory.strengthPotions);
-        Console.WriteLine(" Endurance Potions: " + this.inventory.endurancePotions);
+        Console.WriteLine("     Heal Potions: " + this.InventoryManager.getItemQuantity("Health Potion"));
+        Console.WriteLine("     Strength Potions: " + this.InventoryManager.getItemQuantity("Strength Potion"));
+        Console.WriteLine("     Endurance Potions: " + this.InventoryManager.getItemQuantity("Endurance Potion"));
     }
 
     public new void printStats () {
