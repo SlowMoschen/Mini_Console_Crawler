@@ -11,7 +11,7 @@ namespace _Inventory
 
         public InventoryManager() {
             this.items = new List<Item>();
-            this.gold = 100;
+            this.gold = 0;
         }
 
         public Item getExistingItem(string itemType) {

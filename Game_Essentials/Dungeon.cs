@@ -1,10 +1,21 @@
 using Zombie;
 using Game_Essentials;
 using Game_Characters;
+using _Items;
 
 namespace Dungeon_Generator {
 
-    public class DungeonGenerator {
+    public class Dungeon {
+
+        public Room[] rooms { get; set; }
+        public int totlaRooms { get; set; }
+        public Chest chest { get; set; }
+
+        public Dungeon(string difficulty) {
+            this.rooms = generateDungeon(difficulty);
+            this.totlaRooms = this.rooms.Length;
+            this.chest = new Chest(difficulty);
+        }
             
             public static Room[] generateDungeon(string difficulty) {
 
@@ -33,6 +44,28 @@ namespace Dungeon_Generator {
     
                 return dungeon;
             }
+
+        public void openChest(Player player) {
+            if(this.chest.items.Length > 0) {
+                Console.WriteLine(" You found a chest!");
+                Console.WriteLine(" You found " + this.chest.gold + " gold!");
+                player.InventoryManager.gold += this.chest.gold;
+                Console.WriteLine(" You found " + this.chest.items.Length + " items!");
+                foreach (Item item in this.chest.items)
+                {
+                    Console.WriteLine(" You found " + item.type + "!");
+                    player.InventoryManager.addItem(item);
+                }
+            } else {
+                Console.WriteLine(" You found a chest!");
+                Console.WriteLine(" You found " + this.chest.gold + " gold!");
+                player.InventoryManager.gold += this.chest.gold;
+                GameVariables.GameStats.totalGold += this.chest.gold;
+                // GameVariables.GameLoopBooleans.isInMenu = true;
+                // GameVariables.GameLoopBooleans.isInFight = false;
+                // GameVariables.GameLoopBooleans.isDungeonCleared = true;
+            }
+        }
     }
 
     public class Room {
@@ -139,6 +172,103 @@ namespace Dungeon_Generator {
             }
 
             return enemies;
+        }
+    }
+
+    public class Chest {
+        public Item[] items { get; set; }
+        public int gold { get; set; }
+
+        public Chest(string difficulty) {
+            this.items = generateItems(difficulty);
+            this.gold = generateGold(difficulty);
+        }
+
+        public static int generateGold(string difficulty) {
+            int gold = 0;
+            switch (difficulty)
+            {
+                case "Easy":
+                    gold = GameVariables.GameSettings.DungeonSettings.easyGold;
+                    break;
+                case "Medium":
+                    gold = GameVariables.GameSettings.DungeonSettings.mediumGold;
+                    break;
+                case "Hard":
+                    gold = GameVariables.GameSettings.DungeonSettings.hardGold;
+                    break;
+                default:
+                    gold = 0;
+                    break;
+            }
+            return gold;
+        }
+
+        // genrates the Items based on
+        public static Item[] generateItems(string difficulty) {
+            int length = GameVariables.GameSettings.DungeonSettings.getChestItemsCount(difficulty);
+            Item[] items = new Item[length];
+
+            //25% Chance to generate Items
+            if(GameVariables.getChance(25)) {
+                for (int i = 0; i < length; i++)
+                {
+                    items[i] = generateItem(difficulty);
+                }
+
+                return items;
+            }
+
+            // If chance fails, return empty array
+            return [];
+        }
+
+        public static Item generateItem(string difficulty) {
+            string[] itemTypes = GameVariables.GameSettings.DungeonSettings.chestItems;
+            Random random = new Random();
+            int index = random.Next(itemTypes.Length);
+
+            string itemType = itemTypes[index];
+
+            switch (itemType)
+            {
+                case "Health Potion":
+                    return new Potion(
+                            name: "Endurance Potion",
+                            type: "Endurance Potion",
+                            description: "Increases the Player's endurance by " + GameVariables.GameSettings.endurancePotionEnduranceRating + " for " + GameVariables.GameSettings.EffectDurations.strengthDuration + " turns",
+                            price: GameVariables.GameSettings.ItemPrices.endurancePotionPrice,
+                            maxQuantity: GameVariables.GameSettings.ItemMaxQuantity.endurancePotionMaxQuantity,
+                            effectValue: GameVariables.GameSettings.endurancePotionEnduranceRating
+                        );
+                case "Endurance Potion":
+                    return new Potion(
+                            name: "Heal Potion", 
+                            type: "Health Potion", 
+                            description: "Heals the Player for " + GameVariables.GameSettings.healPotionHealRating + " health", 
+                            price: GameVariables.GameSettings.ItemPrices.healPotionPrice, 
+                            maxQuantity: GameVariables.GameSettings.ItemMaxQuantity.healPotionMaxQuantity, 
+                            effectValue: GameVariables.GameSettings.healPotionHealRating
+                        );
+                case "Strength Potion":
+                    return new Potion(
+                            name: "Strength Potion",
+                            type: "Strength Potion",
+                            description: "Increases the Player's strength by " + GameVariables.GameSettings.strengthPotionStrengthRating + " for " + GameVariables.GameSettings.EffectDurations.strengthDuration + " turns",
+                            price: GameVariables.GameSettings.ItemPrices.strengthPotionPrice,
+                            maxQuantity: GameVariables.GameSettings.ItemMaxQuantity.strengthPotionMaxQuantity,
+                            effectValue: GameVariables.GameSettings.strengthPotionStrengthRating
+                        );
+                default:
+                    return new Potion(
+                            name: "Endurance Potion",
+                            type: "Endurance Potion",
+                            description: "Increases the Player's endurance by " + GameVariables.GameSettings.endurancePotionEnduranceRating + " for " + GameVariables.GameSettings.EffectDurations.strengthDuration + " turns",
+                            price: GameVariables.GameSettings.ItemPrices.endurancePotionPrice,
+                            maxQuantity: GameVariables.GameSettings.ItemMaxQuantity.endurancePotionMaxQuantity,
+                            effectValue: GameVariables.GameSettings.endurancePotionEnduranceRating
+                        );
+            }
         }
     }
 }

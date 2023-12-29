@@ -19,7 +19,7 @@ namespace Game_Essentials {
         }
     }
         public class GameStats {
-            public static string version { get; } = "0.6.3";
+            public static string version { get; } = "0.6.6";
             public static int surviedRooms { get; set;} = 0;
             public static int survivedDungeons { get; set;} = 0;
             public static int killedEnemies { get; set;} = 0;
@@ -155,6 +155,26 @@ namespace Game_Essentials {
                 public static int easyMobs => random.Next(1, 4);
                 public static int mediumMobs => random.Next(3, 6);
                 public static int hardMobs => random.Next(5, 11);
+                public static int easyGold => random.Next(5, 11);
+                public static int mediumGold => random.Next(10, 21);
+                public static int hardGold => random.Next(20, 31);
+                public static int getChestItemsCount(string difficulty) {
+                    switch (difficulty)
+                    {
+                        // Easy - 1 item
+                        case "Easy":
+                            return 1;
+                        // Medium - 2 - 3 items
+                        case "Medium":
+                            return random.Next(2, 4);
+                        // Hard - 3 - 5 items
+                        case "Hard":
+                            return random.Next(3, 5);
+                        default:
+                            return 0;
+                    }
+                }
+                public static string[] chestItems { get; } = new string[] { "Heal Potion", "Strength Potion", "Endurance Potion" };
             }
         }
 

@@ -509,19 +509,19 @@ namespace Console_Output
         public void enterDungeon(Player player) {
             string fightChoice = this.displayOptionMenu(" In wich Dungeon do you want to go?", GameVariables.GameSettings.Options.difficultyOptions);
 
-                    Room[] dungeon = DungeonGenerator.generateDungeon(fightChoice);
-                    
+                    Dungeon dungeon = new Dungeon(fightChoice);
+
                     this.displayEnteredDungeon(fightChoice);
-                    int totalMobsInDungeon = dungeon.Sum(room => room.roomEnemies.Length);
+                    int totalMobsInDungeon = dungeon.rooms.Sum(room => room.roomEnemies.Length);
                     this.waitForInput();
                     
-                    foreach (Room room in dungeon)
+                    foreach (Room room in dungeon.rooms)
                     {
                         if(GameVariables.GameLoopBooleans.isInMenu) {
                             break;
                         }
 
-                        this.displayEnteredRoom(room.roomID, dungeon.Length, room.roomEnemies.Length, totalMobsInDungeon);
+                        this.displayEnteredRoom(room.roomID, dungeon.rooms.Length, room.roomEnemies.Length, totalMobsInDungeon);
                         this.waitForInput();
                         foreach (Enemy enemy in room.roomEnemies)
                         {
@@ -535,7 +535,7 @@ namespace Console_Output
                             GameVariables.GameStats.surviedRooms++;
                         }
                         
-                        bool allRoomsDefeated = dungeon.All(room => room.roomEnemies.All(zombie => zombie.health <= 0));
+                        bool allRoomsDefeated = dungeon.rooms.All(room => room.roomEnemies.All(zombie => zombie.health <= 0));
                         if(allRoomsDefeated) {
                             GameVariables.GameLoopBooleans.isDungeonCleared = true;
                             break;
@@ -545,7 +545,7 @@ namespace Console_Output
                     
 
                     if(GameVariables.GameLoopBooleans.isDungeonCleared) {
-                        this.displayDungeonVictory();
+                        this.displayDungeonVictory(dungeon, player);
                         GameVariables.GameLoopBooleans.isInMenu = true;
                         GameVariables.GameLoopBooleans.isInFight = false;
                         GameVariables.GameLoopBooleans.isDungeonCleared = false;
@@ -559,9 +559,12 @@ namespace Console_Output
         /
         */
 
-        public void displayDungeonVictory() {
+        public void displayDungeonVictory(Dungeon dungeon, Player player) {
             this.displayHeader("Dungeon Cleared");
             Console.WriteLine(" You defeated all the Enemies in this Dungeon");
+            Console.WriteLine();
+            this.displayHeader("Rewards");
+            dungeon.openChest(player);
             this.waitForInput(" Press any key to get back to the Main Menu");
         }
 
