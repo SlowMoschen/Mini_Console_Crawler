@@ -48,13 +48,13 @@ class Program
 
         switch (playerWeaponChoice) {
             case "Sword":
-                player.currentWeapon = new Sword(name: "Sword", attack: GameVariables.WeaponStats.Sword.attack, enduranceCost: GameVariables.WeaponStats.Sword.enduranceCost , specialAttackEnduranceCost: GameVariables.WeaponStats.Sword.specialAttackEnduranceCost);
+                player.currentWeapon = new Sword(name: "Sword", attack: GameVariables.WeaponStats.Sword.getAttack(), enduranceCost: GameVariables.WeaponStats.Sword.enduranceCost , specialAttackEnduranceCost: GameVariables.WeaponStats.Sword.specialAttackEnduranceCost);
                 break;
             case "Axe":
-                player.currentWeapon = new Axe(name: "Axe", attack: GameVariables.WeaponStats.Axe.attack, enduranceCost: GameVariables.WeaponStats.Axe.enduranceCost, specialAttackEnduranceCost: GameVariables.WeaponStats.Axe.specialAttackEnduranceCost);
+                player.currentWeapon = new Axe(name: "Axe", attack: GameVariables.WeaponStats.Axe.getAttack(), enduranceCost: GameVariables.WeaponStats.Axe.enduranceCost, specialAttackEnduranceCost: GameVariables.WeaponStats.Axe.specialAttackEnduranceCost);
                 break;
             case "Mace":
-                player.currentWeapon = new Mace(name: "Mace", attack: GameVariables.WeaponStats.Mace.attack, enduranceCost: GameVariables.WeaponStats.Mace.enduranceCost, specialAttackEnduranceCost: GameVariables.WeaponStats.Mace.specialAttackEnduranceCost);
+                player.currentWeapon = new Mace(name: "Mace", attack: GameVariables.WeaponStats.Mace.getAttack(), enduranceCost: GameVariables.WeaponStats.Mace.enduranceCost, specialAttackEnduranceCost: GameVariables.WeaponStats.Mace.specialAttackEnduranceCost);
                 break;
         }
         player.setAttackOptions();
@@ -64,7 +64,7 @@ class Program
             string menuChoice = DisplayManager.displayMainMenu();
 
             if(GameVariables.GameLoopBooleans.isDead) {
-                player.health = player.maxHealth;
+                player.health =GameVariables.PlayerStats.maxHealth;
                 GameVariables.GameLoopBooleans.isDead = false;
                 Console.WriteLine(" You have been revived!");
                 break;
@@ -92,6 +92,16 @@ class Program
                         DisplayManager.displayShop(player);
                         DisplayManager.waitForInput();
                     }
+                    break;
+                case "Game Infos":
+                    GameVariables.GameLoopBooleans.isInMenu = false;
+                    GameVariables.GameLoopBooleans.isInTutorial = true;
+                    while(GameVariables.GameLoopBooleans.isInTutorial) {
+                        DisplayManager.displayTutorialMenu();
+                        DisplayManager.waitForInput();
+                        GameVariables.GameLoopBooleans.isInTutorial = false;
+                    }
+                    GameVariables.GameLoopBooleans.isInMenu = true;
                     break;
             }
         }

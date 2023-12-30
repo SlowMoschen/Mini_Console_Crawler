@@ -2,11 +2,14 @@ using Boss_Dragon;
 using Game_Essentials;
 using Game_Characters;
 using _Items;
+using Weapons;
+using UserInput;
 
 namespace Dungeon_Generator {
 
     public class Dungeon {
 
+        InputHandler InputHandler = new InputHandler();
         public Room[] rooms { get; set; }
         public int totlaRooms { get; set; }
         public bool isBossDungeon { get; set; }
@@ -54,7 +57,57 @@ namespace Dungeon_Generator {
             }
 
         public void openChest(Player player) {
-            if(this.chest.items.Length > 0) {
+            // If chest has no items or weapons, only gold
+            if(this.chest.items.Length == 0 && this.chest.weapon == null) 
+            {
+                Console.WriteLine(" You found a chest with Items!");
+                Console.WriteLine(" You found " + this.chest.gold + " gold!");
+                player.InventoryManager.gold += this.chest.gold;
+            } 
+
+            // If Chest has a weapon and items
+            if(this.chest.weapon != null && this.chest.items.Length > 0) 
+            {
+                Console.WriteLine(" You found a chest with a weapon and Items!");
+                Console.WriteLine(" You found " + this.chest.gold + " gold!");
+                player.InventoryManager.gold += this.chest.gold;
+                Console.WriteLine(" You found " + this.chest.items.Length + " items!");
+                foreach (Item item in this.chest.items)
+                {
+                    Console.WriteLine(" You found " + item.type + "!");
+                    player.InventoryManager.addItem(item);
+                }
+                Console.WriteLine(" You found " + this.chest.weapon.name + "!");
+                this.chest.weapon.printWeaponStats();
+                string changeWeapon = InputHandler.getChoice(" Would you like to change your weapon?", new string[] {"Yes", "No"});
+                if(changeWeapon == "Yes") {
+                    player.currentWeapon = this.chest.weapon;
+                    player.setAttackOptions();
+                } else {
+                    Console.WriteLine(" You left the weapon in the chest.");
+                }
+            } 
+
+            // If Chest has a weapon and no items
+            if (this.chest.weapon != null && this.chest.items.Length == 0) 
+            {
+                Console.WriteLine(" You found a chest with a weapon!");
+                Console.WriteLine(" You found " + this.chest.gold + " gold!");
+                player.InventoryManager.gold += this.chest.gold;
+                Console.WriteLine(" You found " + this.chest.weapon.name + "!");
+                this.chest.weapon.printWeaponStats();
+                string changeWeapon = InputHandler.getChoice(" Would you like to change your weapon?", new string[] {"Yes", "No"});
+                if(changeWeapon == "Yes") {
+                    player.currentWeapon = this.chest.weapon;
+                    player.setAttackOptions();
+                } else {
+                    Console.WriteLine(" You left the weapon in the chest.");
+                }
+            }
+
+            // If Chest has no weapon but items
+            if(this.chest.weapon == null && this.chest.items.Length > 0) 
+            {
                 Console.WriteLine(" You found a chest with Items!");
                 Console.WriteLine(" You found " + this.chest.gold + " gold!");
                 player.InventoryManager.gold += this.chest.gold;
@@ -64,11 +117,6 @@ namespace Dungeon_Generator {
                     Console.WriteLine(" You found " + item.type + "!");
                     player.InventoryManager.addItem(item);
                 }
-            } else {
-                Console.WriteLine(" You found a chest!");
-                Console.WriteLine(" You found " + this.chest.gold + " gold!");
-                player.InventoryManager.gold += this.chest.gold;
-                GameVariables.GameStats.totalGold += this.chest.gold;
             }
         }
     }
@@ -211,11 +259,60 @@ namespace Dungeon_Generator {
 
     public class Chest {
         public Item[] items { get; set; }
+        public Weapon weapon { get; set; }
         public int gold { get; set; }
 
         public Chest(string difficulty) {
             this.items = generateItems(difficulty);
+            this.weapon = generateWeapon();
             this.gold = generateGold(difficulty);
+        }
+
+        public static Weapon generateWeapon() {
+            string[] weaponTypes = GameVariables.GameSettings.DungeonSettings.chestWeapons;
+
+            //25% Chance to generate a weapon
+            if(GameVariables.getChance(100)) {
+                Random random = new Random();
+                int index = random.Next(weaponTypes.Length);
+
+                string weaponType = weaponTypes[index];
+
+                switch (weaponType)
+                {
+                    case "Sword":
+                        return new Sword(
+                                name: "Sword",
+                                attack: GameVariables.WeaponStats.Sword.getAttack(),
+                                enduranceCost: GameVariables.WeaponStats.Sword.enduranceCost,
+                                specialAttackEnduranceCost: GameVariables.WeaponStats.Sword.specialAttackEnduranceCost
+                            );
+                    case "Axe":
+                        return new Axe(
+                                name: "Axe",
+                                attack: GameVariables.WeaponStats.Axe.getAttack(),
+                                enduranceCost: GameVariables.WeaponStats.Axe.enduranceCost,
+                                specialAttackEnduranceCost: GameVariables.WeaponStats.Axe.specialAttackEnduranceCost
+                            );
+                    case "Mace":
+                        return new Mace(
+                                name: "Mace",
+                                attack: GameVariables.WeaponStats.Mace.getAttack(),
+                                enduranceCost: GameVariables.WeaponStats.Mace.enduranceCost,
+                                specialAttackEnduranceCost: GameVariables.WeaponStats.Mace.specialAttackEnduranceCost
+                            );
+                    default:
+                    return new Sword(
+                            name: "Sword",
+                            attack: GameVariables.WeaponStats.Sword.getAttack(),
+                            enduranceCost: GameVariables.WeaponStats.Sword.enduranceCost,
+                            specialAttackEnduranceCost: GameVariables.WeaponStats.Sword.specialAttackEnduranceCost
+                        );
+                }
+            }
+
+            // If chance fails, return null
+            return null;
         }
 
         public static int generateGold(string difficulty) {

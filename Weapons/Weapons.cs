@@ -23,6 +23,7 @@ namespace Weapons
         public void printWeaponStats () {
             Console.WriteLine("     Name: " + this.name);
             Console.WriteLine("     Attack: " + this.attack);
+            Console.WriteLine("     Special Attack: " + this.specialAttackStrength);
             Console.WriteLine("     Endurance Consumption: " + this.enduranceCost);
         }
         
@@ -31,7 +32,7 @@ namespace Weapons
     public class Sword : Weapon {
         public Sword (string name, int attack, int enduranceCost, int specialAttackEnduranceCost) : base(name, attack, enduranceCost, specialAttackEnduranceCost) {
             this.specialAttack = this.slash;
-            this.specialAttackStrength = GameVariables.WeaponStats.Sword.specialAttackStrength;
+            this.specialAttackStrength = GameVariables.WeaponStats.Sword.getSpecialAttackStrength();
             this.specialAttackName = "Slash";
         }
 
@@ -52,7 +53,7 @@ namespace Weapons
     public class Axe : Weapon {
         public Axe (string name, int attack, int enduranceCost, int specialAttackEnduranceCost) : base(name, attack, enduranceCost, specialAttackEnduranceCost) {
             this.specialAttack = this.chop;
-            this.specialAttackStrength = GameVariables.WeaponStats.Axe.specialAttackStrength;
+            this.specialAttackStrength = GameVariables.WeaponStats.Axe.getSpecialAttackStrength();
             this.specialAttackName = "Chop";
         }
 
@@ -73,7 +74,7 @@ namespace Weapons
     public class Mace : Weapon {
         public Mace (string name, int attack, int enduranceCost, int specialAttackEnduranceCost) : base(name, attack, enduranceCost, specialAttackEnduranceCost) {
             this.specialAttack = this.bash;
-            this.specialAttackStrength = GameVariables.WeaponStats.Mace.specialAttackStrength;
+            this.specialAttackStrength = GameVariables.WeaponStats.Mace.getSpecialAttackStrength();
             this.specialAttackName = "Bash";
         }
 

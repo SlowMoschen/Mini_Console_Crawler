@@ -59,6 +59,9 @@ namespace Console_Output
             this.displayGameLogo();
             Console.WriteLine(" What is the Name of your Hero?");
             string playerName = Console.ReadLine();
+            if(playerName == "") {
+                playerName = "Player";
+            }
             GameVariables.PlayerStats.playerName = playerName;
             Console.WriteLine();
             Console.WriteLine(" Your Hero is called " + playerName);
@@ -635,6 +638,8 @@ namespace Console_Output
 
         public void displayCredits() {
             this.displayHeader("Credits");
+            Console.WriteLine(" Gameversion: " + GameVariables.GameStats.version);
+            Console.WriteLine(" Release: Dezember 2023");
             Console.WriteLine(" This game is made with C# and .NET Core 8.0");
             Console.WriteLine(" Game made by: Philipp Millner");
             Console.WriteLine(" Github: https://github.com/SlowMoschen");
@@ -650,20 +655,30 @@ namespace Console_Output
 
         public void displayTutorial() {
             this.displayHeader("Tutorial");
-
+            
             Console.WriteLine(" Welcome! And thank you for playing my little Console_RPG");
             Console.WriteLine(" This game is a simple Console based RPG where you have to defeat enemies to get to the end of the Dungeon");
             Console.WriteLine();
             this.gamePlayTutorial();
-            this.waitForInput();
-            while(GameVariables.GameLoopBooleans.isInTutorial) {
+            this.waitForInput(" Press any Key to continue to Tutorial Menu");
+            this.displayTutorialMenu(); 
+        }
+
+        public void displayTutorialMenu() {
+            this.displayHeader("Tutorial");
+
+             while(GameVariables.GameLoopBooleans.isInTutorial) {
                 Console.Clear();
                 this.displayHeader("Tutorial");
                 
-                string tutorialChoice = InputHandler.getChoice(" What do you want to know about?", new string[] { "Battle", "Items", "Weapons", "Enemies", "All", "Exit" });
+                string tutorialChoice = InputHandler.getChoice(" What do you want to know about?", new string[] { "Gameplay", "Battle", "Items", "Weapons", "Enemies", "Credits", "All", "Exit" });
 
                 switch (tutorialChoice)
                 {
+                    case "Gameplay":
+                        this.gamePlayTutorial();
+                        this.waitForInput();
+                        break;
                     case "Battle":
                         this.battleTutorial();
                         this.waitForInput();
@@ -680,6 +695,10 @@ namespace Console_Output
                         this.enemyTutorial();
                         this.waitForInput();
                         break;
+                    case "Credits":
+                        this.displayCredits();
+                        this.waitForInput();
+                        break;
                     case "All":
                         this.battleTutorial();
                         this.itemTutorial();
@@ -693,7 +712,6 @@ namespace Console_Output
                         break;
                 }
             }
-            
 
         }
 
@@ -744,6 +762,7 @@ namespace Console_Output
             Console.WriteLine(" You got 3 different weapons to choose at the start of the game");
             Console.WriteLine(" Each weapon has a normal attack and a different special attack");
             Console.WriteLine(" The special attack costs more endurance but deals more damage");
+            Console.WriteLine(" The special attack damage is calculated by the attack damage + the special attack strength");
             Console.WriteLine();
             Console.WriteLine(" New weapons can be found in chests and are based on your current level");
             Console.WriteLine();
@@ -751,26 +770,26 @@ namespace Console_Output
             Console.WriteLine();
             Console.WriteLine("     Sword:");
             Console.WriteLine();
-            Console.WriteLine("         Attack: " + GameVariables.WeaponStats.Sword.attack);
+            Console.WriteLine("         Attack: The attack damage can vary between 10 and 20");
             Console.WriteLine("         Endurance Consumption: " + GameVariables.WeaponStats.Sword.enduranceCost);
             Console.WriteLine("         Special Attack: " + GameVariables.WeaponStats.Sword.specialAttackName);
-            Console.WriteLine("         Special Attack Strength: " + GameVariables.WeaponStats.Sword.attack + " + " + GameVariables.WeaponStats.Sword.specialAttackStrength);
+            Console.WriteLine("         Special Attack Strength: Can vary between 15 and 25");
             Console.WriteLine("         Special Attack Endurance Consumption: " + GameVariables.WeaponStats.Sword.specialAttackEnduranceCost);
             Console.WriteLine();
             Console.WriteLine("     Axe:");
             Console.WriteLine();
-            Console.WriteLine("         Attack: " + GameVariables.WeaponStats.Axe.attack);
+            Console.WriteLine("         Attack: The attack damage can vary between 15 and 25");
             Console.WriteLine("         Endurance Consumption: " + GameVariables.WeaponStats.Axe.enduranceCost);
             Console.WriteLine("         Special Attack: " + GameVariables.WeaponStats.Axe.specialAttackName);
-            Console.WriteLine("         Special Attack Strength: " + GameVariables.WeaponStats.Axe.attack + " + " + GameVariables.WeaponStats.Axe.specialAttackStrength);
+            Console.WriteLine("         Special Attack Strength: Can vary between 20 and 30");
             Console.WriteLine("         Special Attack Endurance Consumption: " + GameVariables.WeaponStats.Axe.specialAttackEnduranceCost);
             Console.WriteLine();
             Console.WriteLine("     Mace:");
             Console.WriteLine();
-            Console.WriteLine("         Attack: " + GameVariables.WeaponStats.Mace.attack);
+            Console.WriteLine("         Attack: The attack damage can vary between 15 and 25");
             Console.WriteLine("         Endurance Consumption: " + GameVariables.WeaponStats.Mace.enduranceCost);
             Console.WriteLine("         Special Attack: " + GameVariables.WeaponStats.Mace.specialAttackName);
-            Console.WriteLine("         Special Attack Strength: " + GameVariables.WeaponStats.Mace.attack + " + " + GameVariables.WeaponStats.Mace.specialAttackStrength);
+            Console.WriteLine("         Special Attack Strength: Can vary between 18 and 28");
             Console.WriteLine("         Special Attack Endurance Consumption: " + GameVariables.WeaponStats.Mace.specialAttackEnduranceCost);
         }
 

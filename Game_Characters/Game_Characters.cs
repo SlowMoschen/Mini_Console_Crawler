@@ -142,10 +142,10 @@ namespace Game_Characters
 
     DisplayManager DisplayManager = new DisplayManager();
     public Weapon currentWeapon { get; set; } = new Weapon("Fists", 5, 0, 0);
-    public int level;
-    public int experience;
-    public int experienceToLevelUp;
-    public int maxHealth;
+    // public int level;
+    // public int experience;
+    // public int experienceToLevelUp;
+    // public int maxHealth;
     public int healRating;
     public int endurance = 100;
     public int maxEndurance = 100;
@@ -155,10 +155,10 @@ namespace Game_Characters
 
     public Player (string name, int attack, double strength, int armor, double health, int maxHealth, int level, int experience, int experienceToLevelUp) 
         : base(name, attack, strength, armor, health) {
-        this.maxHealth = maxHealth;
-        this.level = level;
-        this.experience = experience;
-        this.experienceToLevelUp = experienceToLevelUp;
+        // this.maxHealth = maxHealth;
+        // this.level = level;
+        // this.experience = experience;
+        // this.experienceToLevelUp = experienceToLevelUp;
         this.healRating = 20;
     }
 
@@ -170,8 +170,8 @@ namespace Game_Characters
               switch (potion.type) {
                 case "Health Potion":
                      this.health += potion.effectValue;
-                     if(this.health > this.maxHealth) {
-                          this.health = this.maxHealth;
+                     if(this.health > GameVariables.PlayerStats.maxHealth) {
+                          this.health = GameVariables.PlayerStats.maxHealth;
                      }
                      break;
                 case "Strength Potion":
@@ -202,8 +202,8 @@ namespace Game_Characters
     public void Rest() {
         this.health += this.healRating;
         this.endurance += GameVariables.GameSettings.enduranceRegeneration * 2;
-        if(this.health > this.maxHealth) {
-            this.health = this.maxHealth;
+        if(this.health > GameVariables.PlayerStats.maxHealth) {
+            this.health = GameVariables.PlayerStats.maxHealth;
         }
         if(this.endurance > this.maxEndurance) {
             this.endurance = this.maxEndurance;
@@ -296,21 +296,23 @@ namespace Game_Characters
     };
 
     public void levelUp () {
-        this.level++;
-        this.experience = 0;
-        this.experienceToLevelUp = 100 * this.level;
-        this.attack += (int)Math.Round((double)this.attack * (int)levelUpStats["attackRating"]! / this.level);
-        this.strength = this.strength * (double)levelUpStats["strengthRating"]!;
-        this.armor = this.armor * (int)levelUpStats["armorRating"]!;
-        this.maxHealth = this.maxHealth * (int)levelUpStats["healthRating"]!;
-        this.healRating = healRating * (int)levelUpStats["healthRating"]!;
-        this.health = this.maxHealth;
+        if(GameVariables.PlayerStats.level >= GameVariables.PlayerStats.maxLevel) {
+            return;
+        }
+        GameVariables.PlayerStats.level++;
+        GameVariables.PlayerStats.experience = 0;
+        GameVariables.PlayerStats.experienceToLevelUp = GameVariables.LevelUpRatings.experienceRating * GameVariables.PlayerStats.level;
+        GameVariables.PlayerStats.attack += GameVariables.LevelUpRatings.increaseAttackRating * GameVariables.PlayerStats.level;
+        GameVariables.PlayerStats.armor += GameVariables.LevelUpRatings.increaseArmorRating;
+        GameVariables.PlayerStats.maxHealth += GameVariables.LevelUpRatings.increaseMaxHealthRating * GameVariables.PlayerStats.level;
+        GameVariables.PlayerStats.health = GameVariables.PlayerStats.maxHealth;
+        this.health = GameVariables.PlayerStats.maxHealth;
     }
 
     public void gainExperience (int experience) {
-        this.experience += experience;
+        GameVariables.PlayerStats.experience += experience;
         GameVariables.GameStats.totalExperience += experience;
-        if (this.experience >= this.experienceToLevelUp) {
+        if (GameVariables.PlayerStats.experience >= GameVariables.PlayerStats.experienceToLevelUp) {
             Console.WriteLine(" You leveled up!");
             this.levelUp();
         }
@@ -397,9 +399,9 @@ namespace Game_Characters
     public new void printStats () {
         base.printStats();
         Console.WriteLine(" Endurance: " + this.endurance);
-        Console.WriteLine(" Level: " + this.level);
-        Console.WriteLine(" Experience: " + this.experience);
-        Console.WriteLine(" Experience to Level Up: " + this.experienceToLevelUp);
+        Console.WriteLine(" Level: " + GameVariables.PlayerStats.level);
+        Console.WriteLine(" Experience: " + GameVariables.PlayerStats.experience);
+        Console.WriteLine(" Experience to Level Up: " + GameVariables.PlayerStats.experienceToLevelUp);
     }
 
     new public void printBattleStats () {
@@ -418,40 +420,6 @@ namespace Game_Characters
             Console.WriteLine($" Burning for {this.burningTurns} turns.");
         }
     }
-
-    //Function to print choosen stat
-    public void printStat (string stat) {
-        switch (stat) {
-            case "name":
-                Console.WriteLine(" Name: " + this.name);
-                break;
-            case "level":
-                Console.WriteLine(" Level: " + this.level);
-                break;
-            case "experience":
-                Console.WriteLine(" Experience: " + this.experience);
-                break;
-            case "experienceToLevelUp":
-                Console.WriteLine(" Experience to Level Up: " + this.experienceToLevelUp);
-                break;
-            case "attack":
-                Console.WriteLine(" Attack: " + this.attack);
-                break;
-            case "strength":
-                Console.WriteLine(" Strength: " + this.strength);
-                break;
-            case "armor":
-                Console.WriteLine(" Armor: " + this.armor);
-                break;
-            case "health":
-                Console.WriteLine(" Health: " + this.health);
-                break;
-            default:
-                Console.WriteLine(" Invalid stat.");
-                break;
-        }
-    }
-
 }
     
     }
