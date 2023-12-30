@@ -14,7 +14,7 @@ namespace _Goblin
         public Goblin(string name, int attack, double strength, int armor, double health, int experienceOnDefeat, int goldOnDefeat)
             : base(name, attack, strength, armor, health, experienceOnDefeat, goldOnDefeat)
         {
-            this.specialAttackCount = 1;
+            specialAttackCount = 1;
         }
 
         public void steal(Player target)

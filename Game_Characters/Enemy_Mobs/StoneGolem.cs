@@ -15,7 +15,7 @@ namespace _StoneGolem
         public StoneGolem(string name, int attack, double strength, int armor, double health, int experienceOnDefeat, int goldOnDefeat)
             : base(name, attack, strength, armor, health, experienceOnDefeat, goldOnDefeat)
         {
-            this.specialAttackCount = 1;
+            specialAttackCount = 1;
         }
 
         // slam Attack - deals small amount if initial damage and stuns target

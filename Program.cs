@@ -31,7 +31,8 @@ class Program
         DisplayManager DisplayManager = new DisplayManager();
         
         DisplayManager.displayGreetings();
-        // DisplayManager.getPlayerName();
+        DisplayManager.askForTutorial();
+        DisplayManager.getPlayerName();
         Player player = new Player(
             name: GameVariables.PlayerStats.playerName,
             attack: GameVariables.PlayerStats.attack,

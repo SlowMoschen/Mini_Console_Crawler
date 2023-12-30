@@ -9,12 +9,14 @@ namespace Dungeon_Generator {
 
         public Room[] rooms { get; set; }
         public int totlaRooms { get; set; }
+        public bool isBossDungeon { get; set; }
         public Chest chest { get; set; }
 
         public Dungeon(string difficulty) {
             this.rooms = generateDungeon(difficulty);
             this.totlaRooms = this.rooms.Length;
             this.chest = new Chest(difficulty);
+            this.isBossDungeon = difficulty == "Boss" ? true : false;
         }
             
             public static Room[] generateDungeon(string difficulty) {
@@ -96,7 +98,7 @@ namespace Dungeon_Generator {
                     enemies = generateMobs(GameVariables.GameSettings.DungeonSettings.hardMobs);
                     break;
                 case "Boss":
-                    enemies = generateMobs(GameVariables.GameSettings.DungeonSettings.bossMobs, true);
+                    enemies = generateMobs(GameVariables.GameSettings.DungeonSettings.bossMobs, isBossDungeon: true);
                     break;
                 case "Dev":
                     enemies = generateMobs(2, true);

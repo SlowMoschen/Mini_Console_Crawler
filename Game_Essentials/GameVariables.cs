@@ -34,6 +34,7 @@ namespace Game_Essentials {
                 public static int enduranceCost { get; } = 10;
                 public static int specialAttackEnduranceCost { get; } = 20;
                 public static int specialAttackStrength { get; } = 20;
+                public static string specialAttackName { get; } = "Slash";
             }
 
             public class Axe {
@@ -41,6 +42,7 @@ namespace Game_Essentials {
                 public static int enduranceCost { get; } = 20;
                 public static int specialAttackEnduranceCost { get; } = 30;
                 public static int specialAttackStrength { get; } = 30;
+                public static string specialAttackName { get; } = "Chop";
             }
 
             public class Mace {
@@ -48,6 +50,7 @@ namespace Game_Essentials {
                 public static int enduranceCost { get; } = 15;
                 public static int specialAttackEnduranceCost { get; } = 25;
                 public static int specialAttackStrength { get; } = 23;
+                public static string specialAttackName { get; } = "Smash";
             }
         }
 
@@ -72,6 +75,7 @@ namespace Game_Essentials {
                 public static double health { get; } = 50;
                 public static int experienceOnDefeat { get; } = 15;
                 public static int goldOnDefeat { get; } = 5;
+                public static string[] attackNames { get; } = new string[] { "Bite", "Thrash" };
             }
 
             public class Spider {
@@ -84,6 +88,7 @@ namespace Game_Essentials {
             public static int goldOnDefeat { get; } = 10;
             public static int poisonDamage { get; } = 5;
             public static int poisonChance { get; } = 25;
+            public static string[] attackNames { get; } = new string[] { "Spit" };
         }
 
         public class Goblin {
@@ -94,6 +99,7 @@ namespace Game_Essentials {
             public static int experienceOnDefeat { get; } = 20;
             public static int goldOnDefeat { get; } = 15;
             public static int stealAmount { get; } = 3;
+            public static string[] attackNames { get; } = new string[] { "Steal" };
         }
 
         public class Assassin {
@@ -103,6 +109,7 @@ namespace Game_Essentials {
             public static double health { get; } = 30;
             public static int experienceOnDefeat { get; } = 15;
             public static int goldOnDefeat { get; } = 5;
+            public static string[] attackNames { get; } = new string[] { "Backstab" };
         }
 
         public class StoneGolem {
@@ -113,6 +120,7 @@ namespace Game_Essentials {
             public static int experienceOnDefeat { get; } = 50;
             public static int goldOnDefeat { get; } = 20;
             public static int stunChance { get; } = 15;
+            public static string[] attackNames { get; } = new string[] { "Slam" };
         }
 
         public class Dragon {
@@ -128,6 +136,7 @@ namespace Game_Essentials {
             public static int throwRockDamage { get; } = 20;
             public static int stunChance { get; } = 25;
             public static int tailStrikeDamage { get; } = 30;
+            public static string[] attackNames { get; } = new string[] { "Fire Breath", "Rock Throw", "Tail Strike" };
         }
     }
 
@@ -212,6 +221,7 @@ namespace Game_Essentials {
 
         public class GameLoopBooleans {
             public static bool ranAway { get; set;} = false;
+            public static bool isInTutorial { get; set;} = false;
             public static bool isInMenu { get; set;} = true;
             public static bool isInShop { get; set;} = false;
             public static bool isInFight { get; set;} = false;

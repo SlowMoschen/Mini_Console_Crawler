@@ -37,9 +37,19 @@ namespace Console_Output
             Console.Clear();
             this.displayGameLogo();
             Console.WriteLine(" Welcome to Console_RPG!");
-            // Console.WriteLine(" The goal of this game is to defeat all the enemies in the hardest Dungeon.");
-            Console.WriteLine(" There is no Goal yet, but you can defeat enemies in Dungeons.");
+            Console.WriteLine(" The goal of this game is to get through the Boss Dungeon.");
             this.waitForInput();
+            Console.Clear();
+        }
+
+        public void askForTutorial() {
+            Console.Clear();
+            this.displayGameLogo();
+            string tutorialChoice = InputHandler.getChoice(" Do you want to read the Tutorial?", new string[] { "Yes", "No" });
+            if(tutorialChoice == "Yes") {
+                GameVariables.GameLoopBooleans.isInTutorial = true;
+                this.displayTutorial();
+            }
             Console.Clear();
         }
 
@@ -581,6 +591,10 @@ namespace Console_Output
                         GameVariables.GameLoopBooleans.isInFight = false;
                         GameVariables.GameLoopBooleans.isDungeonCleared = false;
                         GameVariables.GameStats.survivedDungeons++;
+
+                        if(dungeon.isBossDungeon) {
+                            this.displayGameVictory();
+                        }
                     }
         }
 
@@ -609,5 +623,265 @@ namespace Console_Output
             this.displayGameStats();
             this.waitForInput(" Press any key to get back to the Main Menu");
         }
+
+        public void displayGameVictory() {
+            this.displayHeader("Congratulations");
+            Console.WriteLine(" You completed the game!");
+            Console.WriteLine(" You can still play the game and try to get better stats");
+            this.displayGameStats();
+            this.displayCredits();
+            this.waitForInput(" Press any key to get back to the Main Menu");
+        }
+
+        public void displayCredits() {
+            this.displayHeader("Credits");
+            Console.WriteLine(" This game is made with C# and .NET Core 8.0");
+            Console.WriteLine(" Game made by: Philipp Millner");
+            Console.WriteLine(" Github: https://github.com/SlowMoschen");
+            Console.WriteLine(" Github Repository: https://github.com/SlowMoschen/Mini_Console_RPG");
+            Console.WriteLine(" This game is licensed under the MIT License");
+        }
+
+        /**
+        /
+        /    Tutorial Methods
+        /
+        */
+
+        public void displayTutorial() {
+            this.displayHeader("Tutorial");
+
+            Console.WriteLine(" Welcome! And thank you for playing my little Console_RPG");
+            Console.WriteLine(" This game is a simple Console based RPG where you have to defeat enemies to get to the end of the Dungeon");
+            Console.WriteLine();
+            this.gamePlayTutorial();
+            this.waitForInput();
+            while(GameVariables.GameLoopBooleans.isInTutorial) {
+                Console.Clear();
+                this.displayHeader("Tutorial");
+                
+                string tutorialChoice = InputHandler.getChoice(" What do you want to know about?", new string[] { "Battle", "Items", "Weapons", "Enemies", "All", "Exit" });
+
+                switch (tutorialChoice)
+                {
+                    case "Battle":
+                        this.battleTutorial();
+                        this.waitForInput();
+                        break;
+                    case "Items":
+                        this.itemTutorial();
+                        this.waitForInput();
+                        break;
+                    case "Weapons":
+                        this.weaponTutorial();
+                        this.waitForInput();
+                        break;
+                    case "Enemies":
+                        this.enemyTutorial();
+                        this.waitForInput();
+                        break;
+                    case "All":
+                        this.battleTutorial();
+                        this.itemTutorial();
+                        this.weaponTutorial();
+                        this.enemyTutorial();
+                        this.displayCredits();
+                        this.waitForInput();
+                        break;
+                    case "Exit":
+                        GameVariables.GameLoopBooleans.isInTutorial = false;
+                        break;
+                }
+            }
+            
+
+        }
+
+        public void gamePlayTutorial() {
+            Console.WriteLine(" Gameplay:");
+            Console.WriteLine();
+            Console.WriteLine("     The Game is turn based");
+            Console.WriteLine("     The Dungeon is split into different rooms. Each room has a set amount of different enemies");
+            Console.WriteLine("     Every enemy in each Room will be fought in a 1 vs 1 battle");
+            Console.WriteLine("     After defeating all enemies in a room, you can enter the next room");
+            Console.WriteLine("     After defeating all enemies in the Dungeon, you will get a reward");
+        }
+
+        public void battleTutorial() {
+            Console.WriteLine(" Battle:");
+            Console.WriteLine();
+            Console.WriteLine("     You can choose between different options to attack, defend, rest or run away");
+            Console.WriteLine("     You can attack with your weapon with a normal attack,");
+            Console.WriteLine("     or use a special attack wich costs more endurance but deals more damage");
+            Console.WriteLine("     You can defend to mitigate damage");
+            Console.WriteLine("     You can rest to heal and regenerate endurance");
+            Console.WriteLine("     You can run away to end the fight, but you get no reward and you lose half of your Gold");
+            Console.WriteLine("     You can use potions to heal, increase your strength or increase your endurance");
+            Console.WriteLine("     You can only use one potion per turn");
+            Console.WriteLine("     You can only attack if you have enough endurance so keep an eye on your endurance");
+        }
+
+        public void itemTutorial() {
+            Console.WriteLine(" Items:");
+            Console.WriteLine();
+            Console.WriteLine("     Health Potions:");
+            Console.WriteLine();
+            Console.WriteLine("         Heal you for " + GameVariables.GameSettings.healPotionHealRating + " health");
+            Console.WriteLine("         Costs " + GameVariables.GameSettings.ItemPrices.healPotionPrice + " gold");
+            Console.WriteLine();
+            Console.WriteLine("     Strength Potions:");
+            Console.WriteLine();
+            Console.WriteLine("         Deal double the damage for " + GameVariables.GameSettings.EffectDurations.strengthDuration + " turns");
+            Console.WriteLine("         Costs " + GameVariables.GameSettings.ItemPrices.strengthPotionPrice + " gold");
+            Console.WriteLine();
+            Console.WriteLine("     Endurance Potions:");
+            Console.WriteLine();
+            Console.WriteLine("         Regenerates " + GameVariables.GameSettings.endurancePotionEnduranceRating + " endurance");
+            Console.WriteLine("         Costs " + GameVariables.GameSettings.ItemPrices.endurancePotionPrice + " gold");
+        }
+
+        public void weaponTutorial() {
+            Console.WriteLine(" You got 3 different weapons to choose at the start of the game");
+            Console.WriteLine(" Each weapon has a normal attack and a different special attack");
+            Console.WriteLine(" The special attack costs more endurance but deals more damage");
+            Console.WriteLine();
+            Console.WriteLine(" New weapons can be found in chests and are based on your current level");
+            Console.WriteLine();
+            Console.WriteLine(" Starting Weapons:");
+            Console.WriteLine();
+            Console.WriteLine("     Sword:");
+            Console.WriteLine();
+            Console.WriteLine("         Attack: " + GameVariables.WeaponStats.Sword.attack);
+            Console.WriteLine("         Endurance Consumption: " + GameVariables.WeaponStats.Sword.enduranceCost);
+            Console.WriteLine("         Special Attack: " + GameVariables.WeaponStats.Sword.specialAttackName);
+            Console.WriteLine("         Special Attack Strength: " + GameVariables.WeaponStats.Sword.attack + " + " + GameVariables.WeaponStats.Sword.specialAttackStrength);
+            Console.WriteLine("         Special Attack Endurance Consumption: " + GameVariables.WeaponStats.Sword.specialAttackEnduranceCost);
+            Console.WriteLine();
+            Console.WriteLine("     Axe:");
+            Console.WriteLine();
+            Console.WriteLine("         Attack: " + GameVariables.WeaponStats.Axe.attack);
+            Console.WriteLine("         Endurance Consumption: " + GameVariables.WeaponStats.Axe.enduranceCost);
+            Console.WriteLine("         Special Attack: " + GameVariables.WeaponStats.Axe.specialAttackName);
+            Console.WriteLine("         Special Attack Strength: " + GameVariables.WeaponStats.Axe.attack + " + " + GameVariables.WeaponStats.Axe.specialAttackStrength);
+            Console.WriteLine("         Special Attack Endurance Consumption: " + GameVariables.WeaponStats.Axe.specialAttackEnduranceCost);
+            Console.WriteLine();
+            Console.WriteLine("     Mace:");
+            Console.WriteLine();
+            Console.WriteLine("         Attack: " + GameVariables.WeaponStats.Mace.attack);
+            Console.WriteLine("         Endurance Consumption: " + GameVariables.WeaponStats.Mace.enduranceCost);
+            Console.WriteLine("         Special Attack: " + GameVariables.WeaponStats.Mace.specialAttackName);
+            Console.WriteLine("         Special Attack Strength: " + GameVariables.WeaponStats.Mace.attack + " + " + GameVariables.WeaponStats.Mace.specialAttackStrength);
+            Console.WriteLine("         Special Attack Endurance Consumption: " + GameVariables.WeaponStats.Mace.specialAttackEnduranceCost);
+        }
+
+        public void enemyTutorial() {
+
+            Console.WriteLine(" Every enemy has different stats and attacks");
+            Console.WriteLine(" Enemies can attack, defend or use a special attack");
+            Console.WriteLine(" Enemies can also have special abilities like poisoning or stunning");
+            Console.WriteLine(" Here are the different enemies you can encounter in the game listed:");
+            Console.WriteLine();
+            Console.WriteLine(" Enemies:");
+            Console.WriteLine();
+            Console.WriteLine("     Zombie:");
+            Console.WriteLine();
+            Console.WriteLine("         Health: " + GameVariables.EnemyStats.Zombie.health);
+            Console.WriteLine("         Attack: " + GameVariables.EnemyStats.Zombie.attack);
+            Console.WriteLine("         Strength: " + GameVariables.EnemyStats.Zombie.strength);
+            Console.WriteLine("         Armor: " + GameVariables.EnemyStats.Zombie.armor);
+            Console.WriteLine("         Experience on Defeat: " + GameVariables.EnemyStats.Zombie.experienceOnDefeat);
+            Console.WriteLine("         Gold on Defeat: " + GameVariables.EnemyStats.Zombie.goldOnDefeat);
+            Console.WriteLine("         Special Attacks:");
+            Console.WriteLine();
+            Console.WriteLine("             Bite:");
+            Console.WriteLine();
+            Console.WriteLine("                 Heals the zombie for half the damage dealt");
+            Console.WriteLine();
+            Console.WriteLine("             Thrash:");
+            Console.WriteLine();
+            Console.WriteLine("                 Deals damage to the player and itself");
+            Console.WriteLine();
+            Console.WriteLine("     Spider:");
+            Console.WriteLine();
+            Console.WriteLine("         Health: " + GameVariables.EnemyStats.Spider.health);
+            Console.WriteLine("         Attack: " + GameVariables.EnemyStats.Spider.attack);
+            Console.WriteLine("         Strength: " + GameVariables.EnemyStats.Spider.strength);
+            Console.WriteLine("         Armor: " + GameVariables.EnemyStats.Spider.armor);
+            Console.WriteLine("         Experience on Defeat: " + GameVariables.EnemyStats.Spider.experienceOnDefeat);
+            Console.WriteLine("         Gold on Defeat: " + GameVariables.EnemyStats.Spider.goldOnDefeat);
+            Console.WriteLine("         Special Attacks:");
+            Console.WriteLine();
+            Console.WriteLine("             Spit:");
+            Console.WriteLine();
+            Console.WriteLine("                 Deals damage to the player and got a 25% chance to poison the player");
+            Console.WriteLine("                 Poison deals " + GameVariables.EnemyStats.Spider.poisonDamage + " damage per turn for " + GameVariables.GameSettings.EffectDurations.poisonDuration + " turns");
+            Console.WriteLine();
+            Console.WriteLine("     Goblin:");
+            Console.WriteLine();
+            Console.WriteLine("         Health: " + GameVariables.EnemyStats.Goblin.health);
+            Console.WriteLine("         Attack: " + GameVariables.EnemyStats.Goblin.attack);
+            Console.WriteLine("         Strength: " + GameVariables.EnemyStats.Goblin.strength);
+            Console.WriteLine("         Armor: " + GameVariables.EnemyStats.Goblin.armor);
+            Console.WriteLine("         Experience on Defeat: " + GameVariables.EnemyStats.Goblin.experienceOnDefeat);
+            Console.WriteLine("         Gold on Defeat: " + GameVariables.EnemyStats.Goblin.goldOnDefeat);
+            Console.WriteLine("         Special Attacks:");
+            Console.WriteLine();
+            Console.WriteLine("             Steal:");
+            Console.WriteLine();
+            Console.WriteLine("                 Deals minimal damage and steals " + GameVariables.EnemyStats.Goblin.stealAmount + " gold from the player");
+            Console.WriteLine();
+            Console.WriteLine("     Assassin:");
+            Console.WriteLine();
+            Console.WriteLine("         Health: " + GameVariables.EnemyStats.Assassin.health);
+            Console.WriteLine("         Attack: " + GameVariables.EnemyStats.Assassin.attack);
+            Console.WriteLine("         Strength: " + GameVariables.EnemyStats.Assassin.strength);
+            Console.WriteLine("         Armor: " + GameVariables.EnemyStats.Assassin.armor);
+            Console.WriteLine("         Experience on Defeat: " + GameVariables.EnemyStats.Assassin.experienceOnDefeat);
+            Console.WriteLine("         Gold on Defeat: " + GameVariables.EnemyStats.Assassin.goldOnDefeat);
+            Console.WriteLine("         Special Attacks:");
+            Console.WriteLine();
+            Console.WriteLine("             Backstab:");
+            Console.WriteLine();
+            Console.WriteLine("                 Deals double damage");
+            Console.WriteLine();
+            Console.WriteLine("     Stone Golem:");
+            Console.WriteLine();
+            Console.WriteLine("         Health: " + GameVariables.EnemyStats.StoneGolem.health);
+            Console.WriteLine("         Attack: " + GameVariables.EnemyStats.StoneGolem.attack);
+            Console.WriteLine("         Strength: " + GameVariables.EnemyStats.StoneGolem.strength);
+            Console.WriteLine("         Armor: " + GameVariables.EnemyStats.StoneGolem.armor);
+            Console.WriteLine("         Experience on Defeat: " + GameVariables.EnemyStats.StoneGolem.experienceOnDefeat);
+            Console.WriteLine("         Gold on Defeat: " + GameVariables.EnemyStats.StoneGolem.goldOnDefeat);
+            Console.WriteLine("         Special Attacks:");
+            Console.WriteLine();
+            Console.WriteLine("             Slam:");
+            Console.WriteLine();
+            Console.WriteLine("                 Deals damage to the player and got a 25% chance to stun the player");
+            Console.WriteLine("                 Stun prevents the player from doing anything for the next turn");
+            Console.WriteLine();
+            Console.WriteLine("     Dragon(Boss):");
+            Console.WriteLine();
+            Console.WriteLine("         Health: " + GameVariables.EnemyStats.Dragon.health);
+            Console.WriteLine("         Attack: " + GameVariables.EnemyStats.Dragon.attack);
+            Console.WriteLine("         Strength: " + GameVariables.EnemyStats.Dragon.strength);
+            Console.WriteLine("         Armor: " + GameVariables.EnemyStats.Dragon.armor);
+            Console.WriteLine("         Experience on Defeat: " + GameVariables.EnemyStats.Dragon.experienceOnDefeat);
+            Console.WriteLine("         Gold on Defeat: " + GameVariables.EnemyStats.Dragon.goldOnDefeat);
+            Console.WriteLine("         Special Attacks:");
+            Console.WriteLine();
+            Console.WriteLine("             Fire Breath:");
+            Console.WriteLine();
+            Console.WriteLine("                 Deals initial damage and got a 25% chance to set the player on fire");
+            Console.WriteLine("                 Fire deals " + GameVariables.EnemyStats.Dragon.burningDamage + " damage per turn for " + GameVariables.GameSettings.EffectDurations.burnDuration + " turns");
+            Console.WriteLine();
+            Console.WriteLine("             Rock Throw:");
+            Console.WriteLine();
+            Console.WriteLine("                 Deals damage to the player and got a 25% chance to stun the player");
+            Console.WriteLine("                 Stun prevents the player from doing anything for the next turn");
+            Console.WriteLine();
+            Console.WriteLine("             Tail Strike:");
+            Console.WriteLine();
+            Console.WriteLine("                 Ignores the player's armor and deals massive amount of damage");
+            }
+        }
     }
-}
