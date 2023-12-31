@@ -272,7 +272,7 @@ namespace Dungeon_Generator {
             string[] weaponTypes = GameVariables.GameSettings.DungeonSettings.chestWeapons;
 
             //25% Chance to generate a weapon
-            if(GameVariables.getChance(100)) {
+            if(GameVariables.getChance(25)) {
                 Random random = new Random();
                 int index = random.Next(weaponTypes.Length);
 

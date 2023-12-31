@@ -606,7 +606,6 @@ namespace Console_Output
         /    Methods for Displaying Logic after the Battle
         /
         */
-
         public void displayDungeonVictory(Dungeon dungeon, Player player) {
             this.displayHeader("Dungeon Cleared");
             Console.WriteLine(" You defeated all the Enemies in this Dungeon");
@@ -721,8 +720,14 @@ namespace Console_Output
             Console.WriteLine("     The Game is turn based");
             Console.WriteLine("     The Dungeon is split into different rooms. Each room has a set amount of different enemies");
             Console.WriteLine("     Every enemy in each Room will be fought in a 1 vs 1 battle");
+            Console.WriteLine("     Enemies award experience and gold on defeat");
+            Console.WriteLine("     The highest achivable level is 30");
             Console.WriteLine("     After defeating all enemies in a room, you can enter the next room");
             Console.WriteLine("     After defeating all enemies in the Dungeon, you will get a reward");
+            Console.WriteLine("     You can choose between different options in the Main Menu");
+            Console.WriteLine("     You can enter the Dungeon, view your stats, view your inventory or go to the Shop");
+            Console.WriteLine("     You can buy potions in the Shop to heal, increase your strength or increase your endurance");
+
         }
 
         public void battleTutorial() {
@@ -770,26 +775,26 @@ namespace Console_Output
             Console.WriteLine();
             Console.WriteLine("     Sword:");
             Console.WriteLine();
-            Console.WriteLine("         Attack: The attack damage can vary between 10 and 20");
+            Console.WriteLine("         Attack: The attack damage can vary between " + GameVariables.WeaponStats.Sword.baseMinAttack + " and " + GameVariables.WeaponStats.Sword.baseMaxAttack);
             Console.WriteLine("         Endurance Consumption: " + GameVariables.WeaponStats.Sword.enduranceCost);
             Console.WriteLine("         Special Attack: " + GameVariables.WeaponStats.Sword.specialAttackName);
-            Console.WriteLine("         Special Attack Strength: Can vary between 15 and 25");
+            Console.WriteLine("         Special Attack Strength: Can vary between " + GameVariables.WeaponStats.Sword.baseMinSpecialAttack + " and " + GameVariables.WeaponStats.Sword.baseMaxSpecialAttack);
             Console.WriteLine("         Special Attack Endurance Consumption: " + GameVariables.WeaponStats.Sword.specialAttackEnduranceCost);
             Console.WriteLine();
             Console.WriteLine("     Axe:");
             Console.WriteLine();
-            Console.WriteLine("         Attack: The attack damage can vary between 15 and 25");
+            Console.WriteLine("         Attack: The attack damage can vary between " + GameVariables.WeaponStats.Axe.baseMinAttack + " and " + GameVariables.WeaponStats.Axe.baseMaxAttack);
             Console.WriteLine("         Endurance Consumption: " + GameVariables.WeaponStats.Axe.enduranceCost);
             Console.WriteLine("         Special Attack: " + GameVariables.WeaponStats.Axe.specialAttackName);
-            Console.WriteLine("         Special Attack Strength: Can vary between 20 and 30");
+            Console.WriteLine("         Special Attack Strength: Can vary between " + GameVariables.WeaponStats.Axe.baseMinSpecialAttack + " and " + GameVariables.WeaponStats.Axe.baseMaxSpecialAttack);
             Console.WriteLine("         Special Attack Endurance Consumption: " + GameVariables.WeaponStats.Axe.specialAttackEnduranceCost);
             Console.WriteLine();
             Console.WriteLine("     Mace:");
             Console.WriteLine();
-            Console.WriteLine("         Attack: The attack damage can vary between 15 and 25");
+            Console.WriteLine("         Attack: The attack damage can vary between " + GameVariables.WeaponStats.Mace.baseMinAttack + " and " + GameVariables.WeaponStats.Mace.baseMaxAttack);
             Console.WriteLine("         Endurance Consumption: " + GameVariables.WeaponStats.Mace.enduranceCost);
             Console.WriteLine("         Special Attack: " + GameVariables.WeaponStats.Mace.specialAttackName);
-            Console.WriteLine("         Special Attack Strength: Can vary between 18 and 28");
+            Console.WriteLine("         Special Attack Strength: Can vary between " + GameVariables.WeaponStats.Mace.baseMinSpecialAttack + " and " + GameVariables.WeaponStats.Mace.baseMaxSpecialAttack);
             Console.WriteLine("         Special Attack Endurance Consumption: " + GameVariables.WeaponStats.Mace.specialAttackEnduranceCost);
         }
 

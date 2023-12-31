@@ -25,6 +25,7 @@ namespace Weapons
             Console.WriteLine("     Attack: " + this.attack);
             Console.WriteLine("     Special Attack: " + this.specialAttackStrength);
             Console.WriteLine("     Endurance Consumption: " + this.enduranceCost);
+            Console.WriteLine("     Special Attack Endurance Consumption: " + this.specialAttackEnduranceCost);
         }
         
     }

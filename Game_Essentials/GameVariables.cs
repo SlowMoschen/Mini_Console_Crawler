@@ -30,222 +30,80 @@ namespace Game_Essentials {
         public class WeaponStats {
             private static Random random = new Random();
 
-            public class Sword {
-                public static int getAttack() {
-                    if(GameVariables.PlayerStats.level < 3) {
-                        return random.Next(10, 21);
-                    }
-                    else if(GameVariables.PlayerStats.level < 6) {
-                        return random.Next(25, 41);
-                    }
-                    else if(GameVariables.PlayerStats.level < 9) {
-                        return random.Next(45, 61);
-                    }
-                    else if(GameVariables.PlayerStats.level < 12) {
-                        return random.Next(65, 81);
-                    }
-                    else if(GameVariables.PlayerStats.level < 15) {
-                        return random.Next(85, 101);
-                    }
-                    else if(GameVariables.PlayerStats.level < 18) {
-                        return random.Next(105, 121);
-                    }
-                    else if(GameVariables.PlayerStats.level < 21) {
-                        return random.Next(125, 141);
-                    }
-                    else if(GameVariables.PlayerStats.level < 24) {
-                        return random.Next(145, 161);
-                    }
-                    else if(GameVariables.PlayerStats.level < 27) {
-                        return random.Next(165, 181);
-                    }
-                    else if(GameVariables.PlayerStats.level < 30) {
-                        return random.Next(185, 201);
-                    }
-                    return 0;
-                }
-                public static int getSpecialAttackStrength() {
-                    if(GameVariables.PlayerStats.level < 3) {
-                        return random.Next(15, 26);
-                    }
-                    else if(GameVariables.PlayerStats.level < 6) {
-                        return random.Next(30, 46);
-                    }
-                    else if(GameVariables.PlayerStats.level < 9) {
-                        return random.Next(50, 66);
-                    }
-                    else if(GameVariables.PlayerStats.level < 12) {
-                        return random.Next(70, 86);
-                    }
-                    else if(GameVariables.PlayerStats.level < 15) {
-                        return random.Next(90, 106);
-                    }
-                    else if(GameVariables.PlayerStats.level < 18) {
-                        return random.Next(110, 126);
-                    }
-                    else if(GameVariables.PlayerStats.level < 21) {
-                        return random.Next(130, 146);
-                    }
-                    else if(GameVariables.PlayerStats.level < 24) {
-                        return random.Next(150, 166);
-                    }
-                    else if(GameVariables.PlayerStats.level < 27) {
-                        return random.Next(170, 186);
-                    }
-                    else if(GameVariables.PlayerStats.level < 30) {
-                        return random.Next(190, 206);
-                    }
-                    return 0;
-                }
-                public static int enduranceCost { get; } = 10;
-                public static int specialAttackEnduranceCost { get; } = 20;
-                public static string specialAttackName { get; } = "Slash";
+            public int baseMinAttack { get; } 
+            public int baseMaxAttack { get; }
+            public int baseMinSpecialAttack { get; }
+            public int baseMaxSpecialAttack { get; }
+            public int minMinMuliplier { get; }
+            public int minMaxMuliplier { get; }
+            public int enduranceCost { get; }
+            public int specialAttackEnduranceCost { get; }
+            public string specialAttackName { get; }
+
+            public WeaponStats(int baseMinAttack, int baseMaxAttack, int baseMinSpecialAttack, int baseMaxSpecialAttack, int minMinMuliplier, int minMaxMuliplier, int enduranceCost, int specialAttackEnduranceCost, string specialAttackName) {
+                this.baseMinAttack = baseMinAttack;
+                this.baseMaxAttack = baseMaxAttack;
+                this.baseMinSpecialAttack = baseMinSpecialAttack;
+                this.baseMaxSpecialAttack = baseMaxSpecialAttack;
+                this.minMinMuliplier = minMinMuliplier;
+                this.minMaxMuliplier = minMaxMuliplier;
+                this.enduranceCost = enduranceCost;
+                this.specialAttackEnduranceCost = specialAttackEnduranceCost;
+                this.specialAttackName = specialAttackName;
             }
 
-            public class Axe {
-                
-                public static int getAttack() {
-                    if(GameVariables.PlayerStats.level < 3) {
-                        return random.Next(15, 26);
-                    }
-                    else if(GameVariables.PlayerStats.level < 6) {
-                        return random.Next(30, 46);
-                    }
-                    else if(GameVariables.PlayerStats.level < 9) {
-                        return random.Next(50, 66);
-                    }
-                    else if(GameVariables.PlayerStats.level < 12) {
-                        return random.Next(70, 86);
-                    }
-                    else if(GameVariables.PlayerStats.level < 15) {
-                        return random.Next(90, 106);
-                    }
-                    else if(GameVariables.PlayerStats.level < 18) {
-                        return random.Next(110, 126);
-                    }
-                    else if(GameVariables.PlayerStats.level < 21) {
-                        return random.Next(130, 146);
-                    }
-                    else if(GameVariables.PlayerStats.level < 24) {
-                        return random.Next(150, 166);
-                    }
-                    else if(GameVariables.PlayerStats.level < 27) {
-                        return random.Next(170, 186);
-                    }
-                    else if(GameVariables.PlayerStats.level < 30) {
-                        return random.Next(190, 206);
-                    }
-                    return 0;
-                }
-                public static int getSpecialAttackStrength() {
-                    if(GameVariables.PlayerStats.level < 3) {
-                        return random.Next(20, 31);
-                    }
-                    else if(GameVariables.PlayerStats.level < 6) {
-                        return random.Next(40, 56);
-                    }
-                    else if(GameVariables.PlayerStats.level < 9) {
-                        return random.Next(60, 76);
-                    }
-                    else if(GameVariables.PlayerStats.level < 12) {
-                        return random.Next(80, 96);
-                    }
-                    else if(GameVariables.PlayerStats.level < 15) {
-                        return random.Next(100, 116);
-                    }
-                    else if(GameVariables.PlayerStats.level < 18) {
-                        return random.Next(120, 136);
-                    }
-                    else if(GameVariables.PlayerStats.level < 21) {
-                        return random.Next(140, 156);
-                    }
-                    else if(GameVariables.PlayerStats.level < 24) {
-                        return random.Next(160, 176);
-                    }
-                    else if(GameVariables.PlayerStats.level < 27) {
-                        return random.Next(180, 196);
-                    }
-                    else if(GameVariables.PlayerStats.level < 30) {
-                        return random.Next(200, 216);
-                    }
-                    return 0;
-                }
-                public static int enduranceCost { get; } = 20;
-                public static int specialAttackEnduranceCost { get; } = 30;
-                public static string specialAttackName { get; } = "Chop";
+            public int getAttack() {
+                return CalculateAttack(baseMinAttack, baseMaxAttack, minMinMuliplier, minMaxMuliplier);
             }
 
-            public class Mace {
-                public static int getAttack() {
-                    if(GameVariables.PlayerStats.level < 3) {
-                        return random.Next(15, 26);
-                    }
-                    else if(GameVariables.PlayerStats.level < 6) {
-                        return random.Next(40, 56);
-                    }
-                    else if(GameVariables.PlayerStats.level < 9) {
-                        return random.Next(60, 76);
-                    }
-                    else if(GameVariables.PlayerStats.level < 12) {
-                        return random.Next(80, 96);
-                    }
-                    else if(GameVariables.PlayerStats.level < 15) {
-                        return random.Next(100, 116);
-                    }
-                    else if(GameVariables.PlayerStats.level < 18) {
-                        return random.Next(120, 136);
-                    }
-                    else if(GameVariables.PlayerStats.level < 21) {
-                        return random.Next(140, 156);
-                    }
-                    else if(GameVariables.PlayerStats.level < 24) {
-                        return random.Next(160, 176);
-                    }
-                    else if(GameVariables.PlayerStats.level < 27) {
-                        return random.Next(180, 196);
-                    }
-                    else if(GameVariables.PlayerStats.level < 30) {
-                        return random.Next(200, 216);
-                    }
-                    return 0;
-                }
-                public static int getSpecialAttackStrength() {
-                    if(GameVariables.PlayerStats.level < 3) {
-                        return random.Next(18, 29);
-                    }
-                    else if(GameVariables.PlayerStats.level < 6) {
-                        return random.Next(38, 54);
-                    }
-                    else if(GameVariables.PlayerStats.level < 9) {
-                        return random.Next(58, 74);
-                    }
-                    else if(GameVariables.PlayerStats.level < 12) {
-                        return random.Next(78, 94);
-                    }
-                    else if(GameVariables.PlayerStats.level < 15) {
-                        return random.Next(98, 114);
-                    }
-                    else if(GameVariables.PlayerStats.level < 18) {
-                        return random.Next(118, 134);
-                    }
-                    else if(GameVariables.PlayerStats.level < 21) {
-                        return random.Next(138, 154);
-                    }
-                    else if(GameVariables.PlayerStats.level < 24) {
-                        return random.Next(158, 174);
-                    }
-                    else if(GameVariables.PlayerStats.level < 27) {
-                        return random.Next(178, 194);
-                    }
-                    else if(GameVariables.PlayerStats.level < 30) {
-                        return random.Next(198, 214);
-                    }
-                    return 0;
-                }
-                public static int enduranceCost { get; } = 15;
-                public static int specialAttackEnduranceCost { get; } = 25;
-                public static string specialAttackName { get; } = "Smash";
+            public int getSpecialAttackStrength() {
+                return CalculateAttack(baseMinSpecialAttack, baseMaxSpecialAttack, minMinMuliplier, minMaxMuliplier);
             }
+
+            private static int CalculateAttack(int baseMinAttack, int baseMaxAttack, int minMinMuliplier, int minMaxMuliplier) {
+                Random random = new Random();
+                int playerLevel = GameVariables.PlayerStats.level;
+                int min = baseMinAttack + ((playerLevel - 1) / GameVariables.GameSettings.WeaponStrenghtLevelBreakpoint) * minMinMuliplier;
+                int max = baseMaxAttack + ((playerLevel - 1) / GameVariables.GameSettings.WeaponStrenghtLevelBreakpoint) * minMaxMuliplier;
+
+                return random.Next(min, max + 1);
+            }
+
+            public static WeaponStats Sword = new WeaponStats(
+                baseMinAttack: 20,
+                baseMaxAttack: 28,
+                baseMinSpecialAttack: 28,
+                baseMaxSpecialAttack: 35,
+                minMinMuliplier: 10,
+                minMaxMuliplier: 15,
+                enduranceCost: 10,
+                specialAttackEnduranceCost: 18,
+                specialAttackName: "Slash"
+            );
+            public static WeaponStats Axe = new WeaponStats(
+                baseMinAttack: 25,
+                baseMaxAttack: 35,
+                baseMinSpecialAttack: 35,
+                baseMaxSpecialAttack: 45,
+                minMinMuliplier: 12,
+                minMaxMuliplier: 17,
+                enduranceCost: 18,
+                specialAttackEnduranceCost: 28,
+                specialAttackName: "Chop"
+            );
+            public static WeaponStats Mace = new WeaponStats(
+                baseMinAttack: 22,
+                baseMaxAttack: 30,
+                baseMinSpecialAttack: 30,
+                baseMaxSpecialAttack: 40,
+                minMinMuliplier: 12,
+                minMaxMuliplier: 18,
+                enduranceCost: 12,
+                specialAttackEnduranceCost: 20,
+                specialAttackName: "Bash"
+            );
+
+            
         }
 
         public class LevelUpRatings {
@@ -348,6 +206,9 @@ namespace Game_Essentials {
             public static int strengthPotionStrengthRating { get; } = 2;
             public static int endurancePotionEnduranceRating { get; } = 50;
             public static int enduranceRegeneration { get; } = 7;
+            
+            // Every 3 levels the Weapons get stronger
+            public static int WeaponStrenghtLevelBreakpoint { get; } = 3;
 
             public class ItemMaxQuantity {
                 public static int healPotionMaxQuantity { get; } = 5;
