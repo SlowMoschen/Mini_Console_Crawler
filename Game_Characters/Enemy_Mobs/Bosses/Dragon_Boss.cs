@@ -11,7 +11,7 @@ using Game_Essentials;
     tailStrike - Ignore the player's armor
  */
 
-namespace Boss_Dragon
+namespace _Dragon_Boss
 {
     public class Dragon : Enemy
     {

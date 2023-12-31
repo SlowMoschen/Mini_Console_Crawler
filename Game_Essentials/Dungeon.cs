@@ -1,4 +1,6 @@
-using Boss_Dragon;
+using _Dragon_Boss;
+using _GiantSpider_MiniBoss;
+using _DemonicSorcerer_MiniBoss;
 using Game_Essentials;
 using Game_Characters;
 using _Items;
@@ -150,33 +152,75 @@ namespace Dungeon_Generator {
 
         // Generate a room of enemies
         public static Enemy[] generateRoom(string difficulty) {
-            Enemy[] enemies;
+            List<Enemy> enemies = new List<Enemy>();
+
             switch (difficulty)
             {
                 case "Easy":
-                    enemies = generateMobs(GameVariables.GameSettings.DungeonSettings.easyMobs);
+                    enemies.AddRange(generateMobs(GameVariables.GameSettings.DungeonSettings.easyMobs));
                     break;
                 case "Medium":
-                    enemies = generateMobs(GameVariables.GameSettings.DungeonSettings.mediumMobs);
+                    enemies.AddRange(generateMobs(GameVariables.GameSettings.DungeonSettings.mediumMobs));
+                    
+                    if(GameVariables.getChance(GameVariables.GameSettings.DungeonSettings.miniBossSpawnChance)) {
+                        enemies.Add(generateMiniBoss());
+                    }
                     break;
                 case "Hard":
-                    enemies = generateMobs(GameVariables.GameSettings.DungeonSettings.hardMobs);
+                    enemies.AddRange(generateMobs(GameVariables.GameSettings.DungeonSettings.hardMobs));
+
+                    if(GameVariables.getChance(GameVariables.GameSettings.DungeonSettings.miniBossSpawnChance)) {
+                        enemies.Add(generateMiniBoss());
+                    }
                     break;
                 case "Boss":
-                    enemies = generateMobs(GameVariables.GameSettings.DungeonSettings.bossMobs, isBossDungeon: true);
+                    enemies.AddRange(generateMobs(GameVariables.GameSettings.DungeonSettings.bossMobs, true));
                     break;
                 case "Dev":
-                    enemies = generateMobs(2, true);
+                    enemies.AddRange(generateMobs(1));
                     break;
                 default:
-                    enemies = generateMobs(1);
+                    enemies.AddRange(generateMobs(1));
                     break;
             }
-            return enemies;
+            return enemies.ToArray();
+        }
+
+        public static Enemy generateMiniBoss() {
+            string[] miniBossTypes = GameVariables.GameSettings.DungeonSettings.miniBossTypes;
+            Random random = new Random();
+            int index = random.Next(miniBossTypes.Length);
+
+            string miniBossType = miniBossTypes[index];
+
+            switch (miniBossType) {
+                case "Giant Spider":
+                    return new GiantSpider(
+                        "Giant Spider",
+                        attack: GameVariables.EnemyStats.GiantSpider.attack,
+                        strength: GameVariables.EnemyStats.GiantSpider.strength,
+                        armor: GameVariables.EnemyStats.GiantSpider.armor,
+                        health: GameVariables.EnemyStats.GiantSpider.health,
+                        experienceOnDefeat: GameVariables.EnemyStats.GiantSpider.experienceOnDefeat,
+                        goldOnDefeat: GameVariables.EnemyStats.GiantSpider.goldOnDefeat
+                    );
+                case "Demonic Sorcerer":
+                    return new DemonicSorcerer(
+                        "Demonic Sorcerer",
+                        attack: GameVariables.EnemyStats.DemonicSorcerer.attack,
+                        strength: GameVariables.EnemyStats.DemonicSorcerer.strength,
+                        armor: GameVariables.EnemyStats.DemonicSorcerer.armor,
+                        health: GameVariables.EnemyStats.DemonicSorcerer.health,
+                        experienceOnDefeat: GameVariables.EnemyStats.DemonicSorcerer.experienceOnDefeat,
+                        goldOnDefeat: GameVariables.EnemyStats.DemonicSorcerer.goldOnDefeat
+                    );
+            }
+
+            return null;
         }
 
         // Generate a number of random enemies
-        // If the dungeon is a boss dungeon, the last enemy will be a boss
+        // If the dungeon is a boss dungeon, the last enemy will be the boss
         public static Enemy[] generateMobs(int count, bool isBossDungeon = false)
         {
             Enemy[] enemies = new Enemy[count];
@@ -199,15 +243,6 @@ namespace Dungeon_Generator {
                         experienceOnDefeat: GameVariables.EnemyStats.Dragon.experienceOnDefeat,
                         goldOnDefeat: GameVariables.EnemyStats.Dragon.goldOnDefeat
                     );
-                    // enemies[i] = new _StoneGolem.StoneGolem(
-                    //     "Stone Golem Boss",
-                    //     attack: GameVariables.EnemyStats.StoneGolem.attack,
-                    //     strength: GameVariables.EnemyStats.StoneGolem.strength,
-                    //     armor: GameVariables.EnemyStats.StoneGolem.armor,
-                    //     health: GameVariables.EnemyStats.StoneGolem.health,
-                    //     experienceOnDefeat: GameVariables.EnemyStats.StoneGolem.experienceOnDefeat,
-                    //     goldOnDefeat: GameVariables.EnemyStats.StoneGolem.goldOnDefeat
-                    // );
                     continue;
                 }
 

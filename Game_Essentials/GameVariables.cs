@@ -31,7 +31,7 @@ namespace Game_Essentials {
         }
     }
         public class GameStats {
-            public static string version { get; } = "0.9.0";
+            public static string version { get; } = "0.9.2";
             public static int surviedRooms { get; set;} = 0;
             public static int survivedDungeons { get; set;} = 0;
             public static int killedEnemies { get; set;} = 0;
@@ -168,6 +168,18 @@ namespace Game_Essentials {
                 }
             }
 
+            public class GiantSpiderStats : SpiderStats {
+                public int stunChance { get; }
+                public int webShotDamage { get; }
+                public int poisonBiteDamage { get; }
+
+                public GiantSpiderStats(int attack, double strength, int armor, double health, int experienceOnDefeat, int goldOnDefeat, int poisonDamage, int poisonChance, int stunChance, int webShotDamage, int poisonBiteDamage, string[] attackNames) : base(attack, strength, armor, health, experienceOnDefeat, goldOnDefeat, poisonDamage, poisonChance, attackNames) {
+                    this.stunChance = stunChance;
+                    this.webShotDamage = webShotDamage;
+                    this.poisonBiteDamage = poisonBiteDamage;
+                }
+            }
+
             public class GoblinStats : EnemyStats {
                 public int stealAmount { get; }
                 
@@ -181,6 +193,22 @@ namespace Game_Essentials {
                 
                 public StoneGolemStats(int attack, double strength, int armor, double health, int experienceOnDefeat, int goldOnDefeat, int stunChance, string[] attackNames) : base(attack, strength, armor, health, experienceOnDefeat, goldOnDefeat, attackNames) {
                     this.stunChance = stunChance;
+                }
+            }
+
+            public class DemonicSorcererStats : EnemyStats {
+                public int hellFireBlastDamage { get; }
+                public int burnChance { get; }
+                public int burningDamage { get; }
+                public double darkPactAttackPercentage { get; }
+                public double darkPactHealthPercentage { get; }
+                
+                public DemonicSorcererStats(int attack, double strength, int armor, double health, int experienceOnDefeat, int goldOnDefeat, int hellFireBlastDamage, int burnChance, int burningDamage, double darkPactAttackPercentage, double darkPactHealthPercentage, string[] attackNames) : base(attack, strength, armor, health, experienceOnDefeat, goldOnDefeat, attackNames) {
+                    this.hellFireBlastDamage = hellFireBlastDamage;
+                    this.burnChance = burnChance;
+                    this.burningDamage = burningDamage;
+                    this.darkPactAttackPercentage = darkPactAttackPercentage;
+                    this.darkPactHealthPercentage = darkPactHealthPercentage;
                 }
             }
 
@@ -256,6 +284,42 @@ namespace Game_Essentials {
                 stunChance: 15
             );
 
+            /**
+            *
+            *   Mini Bosses
+            *
+            */
+
+            public static GiantSpiderStats GiantSpider = new GiantSpiderStats(
+                attack: 30,
+                strength: 1.0,
+                armor: 10,
+                health: 150,
+                experienceOnDefeat: 100,
+                goldOnDefeat: 50,
+                attackNames: new string[] { "Web Shot", "Poison Bite" },
+                poisonDamage: 10,
+                poisonChance: 15,
+                stunChance: 25,
+                webShotDamage: 20,
+                poisonBiteDamage: 30
+            );
+
+            public static DemonicSorcererStats DemonicSorcerer = new DemonicSorcererStats(
+                attack: 30,
+                strength: 1.0,
+                armor: 5,
+                health: 150,
+                experienceOnDefeat: 100,
+                goldOnDefeat: 50,
+                attackNames: new string[] { "Hell Fire Blast", "Dark Pact" },
+                hellFireBlastDamage: 10,
+                burnChance: 15,
+                burningDamage: 5,
+                darkPactAttackPercentage: 0.2,
+                darkPactHealthPercentage: 0.35
+            );
+
             public static DragonStats Dragon = new DragonStats(
                 attack: 50,
                 strength: 1.5,
@@ -314,6 +378,8 @@ namespace Game_Essentials {
         public class DungeonSettings {
                 private static Random random = new Random();
                 public static string[] enemyTypes { get; } = new string[] { "Zombie", "Spider", "Goblin", "Assassin", "Stone Golem" };
+                public static string[] miniBossTypes { get; } = new string[] { "Giant Spider", "Demonic Sorcerer" };
+                public static int miniBossSpawnChance { get; } = 25;
                 public static int easyRooms { get; } = 1;
                 public static int mediumRooms { get; } = 2;
                 public static int hardRooms { get; } = 3;

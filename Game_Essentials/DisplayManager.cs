@@ -426,7 +426,71 @@ namespace Console_Output
                 }
             }
 
-            if(enemy is Boss_Dragon.Dragon && !player.isDefending) {
+            if(enemy is _DemonicSorcerer_MiniBoss.DemonicSorcerer && !player.isDefending) {
+
+                double hellFireBlastDamage = (enemy.attack + GameVariables.EnemyStats.DemonicSorcerer.hellFireBlastDamage) * enemy.strength / player.armor;
+
+                switch(enemyChoice) 
+                {
+                    case "attack":
+                        Console.WriteLine($" The demonic sorcerer attacked you for {enemyDamage} damage");
+                        break;
+                    case "hellFireBlast":
+                        Console.WriteLine($" The demonic sorcerer used hell fire blast on you for {hellFireBlastDamage} damage");
+                        if(player.isBurning) {
+                            Console.WriteLine($" You took {GameVariables.EnemyStats.DemonicSorcerer.burningDamage} damage from the fire");
+                            Console.WriteLine($" You are burning for {player.burningTurns} more turns");
+                        }
+                        break;
+                    case "darkPact":
+                        Console.WriteLine($" The demonic sorcerer used dark pact and gained {GameVariables.EnemyStats.DemonicSorcerer.darkPactAttackPercentage * 100}% attack for {GameVariables.EnemyStats.DemonicSorcerer.darkPactHealthPercentage * 100}% of its health");
+                        break;
+                    case "defend":
+                        Console.WriteLine(" The demonic sorcerer defended the attack");
+                        break;
+                }
+
+                if(player.isBurning && enemyChoice != "hellFireBlast") {
+                    Console.WriteLine($" You took {GameVariables.EnemyStats.DemonicSorcerer.burningDamage} damage from the fire");
+                    Console.WriteLine($" You are burning for {player.burningTurns} more turns");
+                }
+            }
+
+            if(enemy is _GiantSpider_MiniBoss.GiantSpider && !player.isDefending) {
+
+                double webShotDamage = (enemy.attack + GameVariables.EnemyStats.GiantSpider.webShotDamage) * enemy.strength / player.armor;
+                double poisonBiteDamage = (enemy.attack + GameVariables.EnemyStats.GiantSpider.poisonBiteDamage) * enemy.strength / player.armor;
+
+                switch(enemyChoice)
+                {
+                    case "attack":
+                        Console.WriteLine($" The giant spider attacked you for {enemyDamage} damage");
+                        break;
+                    case "webShot":
+                        Console.WriteLine($" The giant spider used web shot on you for {webShotDamage} damage");
+                        if(player.isStunned) {
+                            Console.WriteLine(" You are stunned for the next turn");
+                        }
+                        break;
+                    case "poisonBite":
+                        Console.WriteLine($" The giant spider used poison bite on you for {poisonBiteDamage} damage");
+                        if(player.isPoisoned) {
+                            Console.WriteLine($" You took {GameVariables.EnemyStats.GiantSpider.poisonDamage} damage from the poison");
+                            Console.WriteLine($" You are poisoned for {player.poisonedTurns} more turns");
+                        }
+                        break;
+                    case "defend":
+                        Console.WriteLine(" The giant spider defended the attack");
+                        break;
+                }
+
+                if(player.isPoisoned && enemyChoice != "poisonBite") {
+                    Console.WriteLine($" You took {GameVariables.EnemyStats.GiantSpider.poisonDamage} damage from the poison");
+                    Console.WriteLine($" You are poisoned for {player.poisonedTurns} more turns");
+                }
+            }
+
+            if(enemy is _Dragon_Boss.Dragon && !player.isDefending) {
                 switch (enemyChoice)
                 {
                     case "attack":
@@ -747,7 +811,7 @@ namespace Console_Output
             Console.WriteLine("     You can choose between different options to attack, defend, rest or run away");
             Console.WriteLine("     You can attack with your weapon with a normal attack,");
             Console.WriteLine("     or use a special attack wich costs more endurance but deals more damage");
-            Console.WriteLine("     You can defend to mitigate damage");
+            Console.WriteLine("     You can defend to take no damage from the enemy's attack");
             Console.WriteLine("     You can rest to heal and regenerate endurance");
             Console.WriteLine("     You can run away to end the fight, but you get no reward and you lose half of your Gold");
             Console.WriteLine("     You can use potions to heal, increase your strength or increase your endurance");
@@ -849,7 +913,7 @@ namespace Console_Output
             Console.WriteLine();
             Console.WriteLine("             Spit:");
             Console.WriteLine();
-            Console.WriteLine("                 Deals damage to the player and got a 25% chance to poison the player");
+            Console.WriteLine("                 Deals damage to the player and got a " + GameVariables.EnemyStats.Spider.poisonChance + "% chance to poison the player");
             Console.WriteLine("                 Poison deals " + GameVariables.EnemyStats.Spider.poisonDamage + " damage per turn for " + GameVariables.GameSettings.EffectDurations.poisonDuration + " turns");
             Console.WriteLine();
             Console.WriteLine("     Goblin:");
@@ -892,8 +956,47 @@ namespace Console_Output
             Console.WriteLine();
             Console.WriteLine("             Slam:");
             Console.WriteLine();
-            Console.WriteLine("                 Deals damage to the player and got a 25% chance to stun the player");
+            Console.WriteLine("                 Deals damage to the player and got a " + GameVariables.EnemyStats.StoneGolem.stunChance + "% chance to stun the player");
             Console.WriteLine("                 Stun prevents the player from doing anything for the next turn");
+            Console.WriteLine();
+            Console.WriteLine("     Demonic Sorcerer(Mini Boss):");
+            Console.WriteLine();
+            Console.WriteLine("         Health: " + GameVariables.EnemyStats.DemonicSorcerer.health);
+            Console.WriteLine("         Attack: " + GameVariables.EnemyStats.DemonicSorcerer.attack);
+            Console.WriteLine("         Strength: " + GameVariables.EnemyStats.DemonicSorcerer.strength);
+            Console.WriteLine("         Armor: " + GameVariables.EnemyStats.DemonicSorcerer.armor);
+            Console.WriteLine("         Experience on Defeat: " + GameVariables.EnemyStats.DemonicSorcerer.experienceOnDefeat);
+            Console.WriteLine("         Gold on Defeat: " + GameVariables.EnemyStats.DemonicSorcerer.goldOnDefeat);
+            Console.WriteLine("         Special Attacks:");
+            Console.WriteLine();
+            Console.WriteLine("             Hell Fire Blast:");
+            Console.WriteLine();
+            Console.WriteLine("                 Deals damage to the player and got a " + GameVariables.EnemyStats.DemonicSorcerer.burnChance + "% to set the player on fire");
+            Console.WriteLine("                 Fire deals " + GameVariables.EnemyStats.DemonicSorcerer.burningDamage + " damage per turn for " + GameVariables.GameSettings.EffectDurations.burnDuration + " turns");
+            Console.WriteLine();
+            Console.WriteLine("             Dark Pact:");
+            Console.WriteLine();
+            Console.WriteLine("                 Gains " + GameVariables.EnemyStats.DemonicSorcerer.darkPactAttackPercentage * 100 + "% attack for " + GameVariables.EnemyStats.DemonicSorcerer.darkPactHealthPercentage * 100 + "% of its health");
+            Console.WriteLine();
+            Console.WriteLine("     Giant Spider(Mini Boss):");
+            Console.WriteLine();
+            Console.WriteLine("         Health: " + GameVariables.EnemyStats.GiantSpider.health);
+            Console.WriteLine("         Attack: " + GameVariables.EnemyStats.GiantSpider.attack);
+            Console.WriteLine("         Strength: " + GameVariables.EnemyStats.GiantSpider.strength);
+            Console.WriteLine("         Armor: " + GameVariables.EnemyStats.GiantSpider.armor);
+            Console.WriteLine("         Experience on Defeat: " + GameVariables.EnemyStats.GiantSpider.experienceOnDefeat);
+            Console.WriteLine("         Gold on Defeat: " + GameVariables.EnemyStats.GiantSpider.goldOnDefeat);
+            Console.WriteLine("         Special Attacks:");
+            Console.WriteLine();
+            Console.WriteLine("             Web Shot:");
+            Console.WriteLine();
+            Console.WriteLine("                 Deals damage to the player and got a " + GameVariables.EnemyStats.GiantSpider.stunChance + "% chance to stun the player");
+            Console.WriteLine("                 Stun prevents the player from doing anything for the next turn");
+            Console.WriteLine();
+            Console.WriteLine("             Poison Bite:");
+            Console.WriteLine();
+            Console.WriteLine("                 Deals damage to the player and got a " + GameVariables.EnemyStats.GiantSpider.poisonChance + "% chance to poison the player");
+            Console.WriteLine("                 Poison deals " + GameVariables.EnemyStats.GiantSpider.poisonDamage + " damage per turn for " + GameVariables.GameSettings.EffectDurations.poisonDuration + " turns");
             Console.WriteLine();
             Console.WriteLine("     Dragon(Boss):");
             Console.WriteLine();
@@ -907,12 +1010,12 @@ namespace Console_Output
             Console.WriteLine();
             Console.WriteLine("             Fire Breath:");
             Console.WriteLine();
-            Console.WriteLine("                 Deals initial damage and got a 25% chance to set the player on fire");
+            Console.WriteLine("                 Deals initial damage and got a " + GameVariables.EnemyStats.Dragon.burnChance + "% chance to set the player on fire");
             Console.WriteLine("                 Fire deals " + GameVariables.EnemyStats.Dragon.burningDamage + " damage per turn for " + GameVariables.GameSettings.EffectDurations.burnDuration + " turns");
             Console.WriteLine();
             Console.WriteLine("             Rock Throw:");
             Console.WriteLine();
-            Console.WriteLine("                 Deals damage to the player and got a 25% chance to stun the player");
+            Console.WriteLine("                 Deals damage to the player and got a " + GameVariables.EnemyStats.Dragon.stunChance + "% to stun the player");
             Console.WriteLine("                 Stun prevents the player from doing anything for the next turn");
             Console.WriteLine();
             Console.WriteLine("             Tail Strike:");

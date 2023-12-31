@@ -302,7 +302,7 @@ namespace Game_Characters
         GameVariables.PlayerStats.level++;
         GameVariables.PlayerStats.experience = 0;
         GameVariables.PlayerStats.experienceToLevelUp = GameVariables.LevelUpRatings.experienceRating * GameVariables.PlayerStats.level;
-        GameVariables.PlayerStats.attack += GameVariables.LevelUpRatings.increaseAttackRating * GameVariables.PlayerStats.level;
+        GameVariables.PlayerStats.attack += GameVariables.LevelUpRatings.increaseAttackRating;
         GameVariables.PlayerStats.armor += GameVariables.LevelUpRatings.increaseArmorRating;
         GameVariables.PlayerStats.maxHealth += GameVariables.LevelUpRatings.increaseMaxHealthRating * GameVariables.PlayerStats.level;
         GameVariables.PlayerStats.health = GameVariables.PlayerStats.maxHealth;
