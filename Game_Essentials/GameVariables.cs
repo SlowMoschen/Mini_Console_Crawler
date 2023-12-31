@@ -31,7 +31,7 @@ namespace Game_Essentials {
         }
     }
         public class GameStats {
-            public static string version { get; } = "0.8.7";
+            public static string version { get; } = "0.9.0";
             public static int surviedRooms { get; set;} = 0;
             public static int survivedDungeons { get; set;} = 0;
             public static int killedEnemies { get; set;} = 0;
