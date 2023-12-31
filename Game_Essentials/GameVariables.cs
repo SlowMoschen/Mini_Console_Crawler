@@ -140,76 +140,137 @@ namespace Game_Essentials {
 
         public class EnemyStats {
 
-            public class Zombie {
-                public static int attack { get; } = 15;
-                public static double strength { get; } = 1.0;
-                public static int armor { get; } = 5;
-                public static double health { get; } = 50;
-                public static int experienceOnDefeat { get; } = 15;
-                public static int goldOnDefeat { get; } = 5;
-                public static string[] attackNames { get; } = new string[] { "Bite", "Thrash" };
+            public int attack { get; }
+            public double strength { get; }
+            public int armor { get; }
+            public double health { get; }
+            public int experienceOnDefeat { get; }
+            public int goldOnDefeat { get; }
+            public string[] attackNames { get; }
+
+            public EnemyStats(int attack, double strength, int armor, double health, int experienceOnDefeat, int goldOnDefeat, string[] attackNames) {
+                this.attack = attack;
+                this.strength = strength;
+                this.armor = armor;
+                this.health = health;
+                this.experienceOnDefeat = experienceOnDefeat;
+                this.goldOnDefeat = goldOnDefeat;
+                this.attackNames = attackNames;
+            }
+            
+            public class SpiderStats : EnemyStats {
+                public int poisonDamage { get; }
+                public int poisonChance { get; }
+                
+                public SpiderStats(int attack, double strength, int armor, double health, int experienceOnDefeat, int goldOnDefeat, int poisonDamage, int poisonChance, string[] attackNames) : base(attack, strength, armor, health, experienceOnDefeat, goldOnDefeat, attackNames) {
+                    this.poisonDamage = poisonDamage;
+                    this.poisonChance = poisonChance;
+                }
             }
 
-            public class Spider {
+            public class GoblinStats : EnemyStats {
+                public int stealAmount { get; }
+                
+                public GoblinStats(int attack, double strength, int armor, double health, int experienceOnDefeat, int goldOnDefeat, int stealAmount, string[] attackNames) : base(attack, strength, armor, health, experienceOnDefeat, goldOnDefeat, attackNames) {
+                    this.stealAmount = stealAmount;
+                }
+            }
 
-            public static int attack { get; } = 20;
-            public static double strength { get; } = 1.0;
-            public static int armor { get; } = 2;
-            public static double health { get; } = 80;
-            public static int experienceOnDefeat { get; } = 30;
-            public static int goldOnDefeat { get; } = 10;
-            public static int poisonDamage { get; } = 5;
-            public static int poisonChance { get; } = 25;
-            public static string[] attackNames { get; } = new string[] { "Spit" };
-        }
+            public class StoneGolemStats : EnemyStats {
+                public int stunChance { get; }
+                
+                public StoneGolemStats(int attack, double strength, int armor, double health, int experienceOnDefeat, int goldOnDefeat, int stunChance, string[] attackNames) : base(attack, strength, armor, health, experienceOnDefeat, goldOnDefeat, attackNames) {
+                    this.stunChance = stunChance;
+                }
+            }
 
-        public class Goblin {
-            public static int attack { get; } = 5;
-            public static double strength { get; } = 1.0;
-            public static int armor { get; } = 10;
-            public static double health { get; } = 40;
-            public static int experienceOnDefeat { get; } = 20;
-            public static int goldOnDefeat { get; } = 15;
-            public static int stealAmount { get; } = 3;
-            public static string[] attackNames { get; } = new string[] { "Steal" };
-        }
+            public class DragonStats : EnemyStats {
+                public int fireBreathDamage { get; }
+                public int burnChance { get; }
+                public int burningDamage { get; }
+                public int throwRockDamage { get; }
+                public int stunChance { get; }
+                public int tailStrikeDamage { get; }
+                
+                public DragonStats(int attack, double strength, int armor, double health, int experienceOnDefeat, int goldOnDefeat, int fireBreathDamage, int burnChance, int burningDamage, int throwRockDamage, int stunChance, int tailStrikeDamage, string[] attackNames) : base(attack, strength, armor, health, experienceOnDefeat, goldOnDefeat, attackNames) {
+                    this.fireBreathDamage = fireBreathDamage;
+                    this.burnChance = burnChance;
+                    this.burningDamage = burningDamage;
+                    this.throwRockDamage = throwRockDamage;
+                    this.stunChance = stunChance;
+                    this.tailStrikeDamage = tailStrikeDamage;
+                }
+            }
 
-        public class Assassin {
-            public static int attack { get; } = 50;
-            public static double strength { get; } = 1.0;
-            public static int armor { get; } = 0;
-            public static double health { get; } = 30;
-            public static int experienceOnDefeat { get; } = 15;
-            public static int goldOnDefeat { get; } = 5;
-            public static string[] attackNames { get; } = new string[] { "Backstab" };
-        }
+            public static EnemyStats Zombie = new EnemyStats(
+                attack: 15,
+                strength: 1.0,
+                armor: 5,
+                health: 50,
+                experienceOnDefeat: 15,
+                goldOnDefeat: 5,
+                attackNames: new string[] { "Bite", "Thrash" }
+            );
 
-        public class StoneGolem {
-            public static int attack { get; } = 10;
-            public static double strength { get; } = 1.0;
-            public static int armor { get; } = 20;
-            public static double health { get; } = 100;
-            public static int experienceOnDefeat { get; } = 50;
-            public static int goldOnDefeat { get; } = 20;
-            public static int stunChance { get; } = 15;
-            public static string[] attackNames { get; } = new string[] { "Slam" };
-        }
+            public static SpiderStats Spider = new SpiderStats(
+                attack: 20,
+                strength: 1.0,
+                armor: 2,
+                health: 80,
+                experienceOnDefeat: 30,
+                goldOnDefeat: 10,
+                attackNames: new string[] { "Spit" },
+                poisonDamage: 5,
+                poisonChance: 25
+            );
 
-        public class Dragon {
-            public static int attack { get; } = 50;
-            public static double strength { get; } = 1.5;
-            public static int armor { get; } = 35;
-            public static double health { get; } = 250;
-            public static int experienceOnDefeat { get; } = 1200;
-            public static int goldOnDefeat { get; } = 350;
-            public static int fireBreathDamage { get; } = 10;
-            public static int burnChance { get; } = 33;
-            public static int burningDamage { get; } = 12;
-            public static int throwRockDamage { get; } = 20;
-            public static int stunChance { get; } = 25;
-            public static int tailStrikeDamage { get; } = 30;
-            public static string[] attackNames { get; } = new string[] { "Fire Breath", "Rock Throw", "Tail Strike" };
-        }
+            public static GoblinStats Goblin = new GoblinStats(
+                attack: 5,
+                strength: 1.0,
+                armor: 10,
+                health: 40,
+                experienceOnDefeat: 20,
+                goldOnDefeat: 15,
+                attackNames: new string[] { "Steal" },
+                stealAmount: 3
+            );
+
+            public static EnemyStats Assassin = new EnemyStats(
+                attack: 50,
+                strength: 1.0,
+                armor: 0,
+                health: 30,
+                experienceOnDefeat: 15,
+                goldOnDefeat: 5,
+                attackNames: new string[] { "Backstab" }
+            );
+
+            public static StoneGolemStats StoneGolem = new StoneGolemStats(
+                attack: 10,
+                strength: 1.0,
+                armor: 20,
+                health: 100,
+                experienceOnDefeat: 50,
+                goldOnDefeat: 20,
+                attackNames: new string[] { "Slam" },
+                stunChance: 15
+            );
+
+            public static DragonStats Dragon = new DragonStats(
+                attack: 50,
+                strength: 1.5,
+                armor: 35,
+                health: 250,
+                experienceOnDefeat: 1200,
+                goldOnDefeat: 350,
+                attackNames: new string[] { "Fire Breath", "Rock Throw", "Tail Strike" },
+                fireBreathDamage: 10,
+                burnChance: 33,
+                burningDamage: 12,
+                throwRockDamage: 20,
+                stunChance: 25,
+                tailStrikeDamage: 30
+            );
     }
 
 

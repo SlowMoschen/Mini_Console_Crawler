@@ -60,14 +60,14 @@ namespace Dungeon_Generator {
                         rooms = 1;
                         break;
                 }
-                Room[] rooms = new Room[rooms];
+                Room[] dungeonRooms = new Room[rooms];
     
                 for (int i = 0; i < rooms; i++)
                 {
-                    rooms[i] = new Room(i + 1, difficulty);
+                    dungeonRooms[i] = new Room(i + 1, difficulty);
                 }
     
-                return rooms;
+                return dungeonRooms;
             }
 
 
