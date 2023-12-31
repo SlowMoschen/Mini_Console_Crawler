@@ -5,6 +5,14 @@ using Console_Output;
 using _Inventory;
 using _Items;
 
+/**
+*
+*   Here are the classes for the game characters
+*   - The Player class could be moved to a separate file for better readability
+*
+*/
+
+
 namespace Game_Characters
 {
 
@@ -142,10 +150,6 @@ namespace Game_Characters
 
     DisplayManager DisplayManager = new DisplayManager();
     public Weapon currentWeapon { get; set; } = new Weapon("Fists", 5, 0, 0);
-    // public int level;
-    // public int experience;
-    // public int experienceToLevelUp;
-    // public int maxHealth;
     public int healRating;
     public int endurance = 100;
     public int maxEndurance = 100;
@@ -155,10 +159,6 @@ namespace Game_Characters
 
     public Player (string name, int attack, double strength, int armor, double health, int maxHealth, int level, int experience, int experienceToLevelUp) 
         : base(name, attack, strength, armor, health) {
-        // this.maxHealth = maxHealth;
-        // this.level = level;
-        // this.experience = experience;
-        // this.experienceToLevelUp = experienceToLevelUp;
         this.healRating = 20;
     }
 
@@ -422,4 +422,4 @@ namespace Game_Characters
     }
 }
     
-    }
+}

@@ -1,6 +1,22 @@
 using Game_Characters;
 using Game_Essentials;
 
+/**
+*
+*   Weapons
+*   - Contains all weapons and their stats
+*   - All stats are stored in GameVariables.cs
+*
+*   @param string name - The name of the weapon
+*   @param int attack - The attack of the weapon
+*   @param int enduranceCost - The endurance cost of the weapon
+*   @param int specialAttackEnduranceCost - The endurance cost of the special attack of the weapon
+*   @param int specialAttackStrength - The strength of the special attack of the weapon
+*   @param string specialAttackName - The name of the special attack of the weapon
+*   @param Action<Character, Player> specialAttack - The special attack of the weapon
+*
+*/
+
 namespace Weapons 
 {
 

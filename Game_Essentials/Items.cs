@@ -1,5 +1,20 @@
 using Game_Characters;
 
+/**
+*
+*   Items
+*   currently only contains potions
+*   - Contains all items and their stats
+*
+*   @param string name - The name of the item
+*   @param string type - The type of the item
+*   @param string description - The description of the item
+*   @param int price - The price of the item
+*   @param int quantity - The quantity of the item
+*   @param int maxQuantity - The maximum quantity of the item
+*
+*/
+
 namespace _Items 
 {
     public class Item {

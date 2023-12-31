@@ -1,3 +1,14 @@
+
+/**
+* This class handles all user input and validation
+*
+* @param string message - The message to be displayed to the user
+* @param string[] options - The options the user can choose from
+* @param string[] prices - The prices of the options - optional
+* @return string - The user's choice
+*/
+
+
 namespace UserInput 
 {
     public class InputHandler {

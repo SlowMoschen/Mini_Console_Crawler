@@ -7,6 +7,17 @@ using UserInput;
 using Dungeon_Generator;
 using _Items;
 
+/**
+*
+*   This class is responsible for displaying the game to the user
+*
+*   Sadly, the code is not very clean and the methods are very long
+*   Some of the Methods contain Game Logic, which should be in its own class
+*
+*   Maybe one way to refactor this is to create a class that read text files and display them
+*
+*/
+
 namespace Console_Output 
 {
     public class DisplayManager {
@@ -769,7 +780,8 @@ namespace Console_Output
             Console.WriteLine(" The special attack costs more endurance but deals more damage");
             Console.WriteLine(" The special attack damage is calculated by the attack damage + the special attack strength");
             Console.WriteLine();
-            Console.WriteLine(" New weapons can be found in chests and are based on your current level");
+            Console.WriteLine(" Weapons are getting stronger after " + GameVariables.GameSettings.weaponUpgradeInterval + " levels");
+            Console.WriteLine(" New Weapons can be found in chests after defeating all enemies in a Dungeon");
             Console.WriteLine();
             Console.WriteLine(" Starting Weapons:");
             Console.WriteLine();

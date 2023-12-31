@@ -8,6 +8,12 @@ using System;
 using System.Linq;
 using System.Diagnostics;
 
+/**
+*
+*   Console RPG Main Program
+*
+*/
+
 class Program
 {   
     static void Main(string[] args)

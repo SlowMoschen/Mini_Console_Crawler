@@ -3,6 +3,18 @@ using Console_RPG;
 using Game_Characters;
 using Dungeon_Generator;
 
+/**
+* This class contains all the variables that are used in the game
+* It is divided into sections:
+* - GameStats - contains general stats of the Game
+* - WeaponStats - contains stats of the Weapons
+* - LevelUpRatings - contains ratings for the level up system
+* - PlayerStats - contains stats of the Player
+* - EnemyStats - contains stats of the Enemies
+* - GameSettings - contains settings of the Game
+* - GameLoopBooleans - contains booleans that are used in the GameLoop
+*/
+
 namespace Game_Essentials {
 
     public class GameVariables {
@@ -63,8 +75,8 @@ namespace Game_Essentials {
             private static int CalculateAttack(int baseMinAttack, int baseMaxAttack, int minMinMuliplier, int minMaxMuliplier) {
                 Random random = new Random();
                 int playerLevel = GameVariables.PlayerStats.level;
-                int min = baseMinAttack + ((playerLevel - 1) / GameVariables.GameSettings.WeaponStrenghtLevelBreakpoint) * minMinMuliplier;
-                int max = baseMaxAttack + ((playerLevel - 1) / GameVariables.GameSettings.WeaponStrenghtLevelBreakpoint) * minMaxMuliplier;
+                int min = baseMinAttack + ((playerLevel - 1) / GameVariables.GameSettings.weaponUpgradeInterval) * minMinMuliplier;
+                int max = baseMaxAttack + ((playerLevel - 1) / GameVariables.GameSettings.weaponUpgradeInterval) * minMaxMuliplier;
 
                 return random.Next(min, max + 1);
             }
@@ -208,7 +220,7 @@ namespace Game_Essentials {
             public static int enduranceRegeneration { get; } = 7;
             
             // Every 3 levels the Weapons get stronger
-            public static int WeaponStrenghtLevelBreakpoint { get; } = 3;
+            public static int weaponUpgradeInterval { get; } = 3;
 
             public class ItemMaxQuantity {
                 public static int healPotionMaxQuantity { get; } = 5;

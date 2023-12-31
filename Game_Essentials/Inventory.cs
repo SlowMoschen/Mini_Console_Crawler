@@ -3,6 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using _Items;
 
+/**
+*
+*   Inventory
+*   - Used by the player to store items
+*
+*   @param List<Item> items - The list of items in the inventory
+*   @param int gold - The amount of gold the player has
+*
+*/
+
 namespace _Inventory 
 {
     public class InventoryManager {

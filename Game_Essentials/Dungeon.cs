@@ -5,6 +5,20 @@ using _Items;
 using Weapons;
 using UserInput;
 
+/**
+*
+*   Dungeon Generator
+*   - Genreates a dungeon with a rooms and enemies according to the difficulty
+*   - The Dungeon has a chest with gold and a possibility of a weapon and items
+*
+*   @param Room[] rooms - The rooms of the dungeon
+*   @param int totalRooms - The total number of rooms in the dungeon
+*   @param bool isBossDungeon - If the dungeon is a boss dungeon
+*   @param Chest chest - The chest of the dungeon   
+*
+*/
+
+
 namespace Dungeon_Generator {
 
     public class Dungeon {
@@ -16,13 +30,13 @@ namespace Dungeon_Generator {
         public Chest chest { get; set; }
 
         public Dungeon(string difficulty) {
-            this.rooms = generateDungeon(difficulty);
+            this.rooms = generateRooms(difficulty);
             this.totlaRooms = this.rooms.Length;
             this.chest = new Chest(difficulty);
             this.isBossDungeon = difficulty == "Boss" ? true : false;
         }
             
-            public static Room[] generateDungeon(string difficulty) {
+            public static Room[] generateRooms(string difficulty) {
 
                 int rooms;
                 switch (difficulty)
@@ -46,16 +60,19 @@ namespace Dungeon_Generator {
                         rooms = 1;
                         break;
                 }
-                Room[] dungeon = new Room[rooms];
+                Room[] rooms = new Room[rooms];
     
                 for (int i = 0; i < rooms; i++)
                 {
-                    dungeon[i] = new Room(i + 1, difficulty);
+                    rooms[i] = new Room(i + 1, difficulty);
                 }
     
-                return dungeon;
+                return rooms;
             }
 
+
+        // Method used to open the chest at the end of the dungeon
+        // Could be refactored so that the Console.WriteLine() are in the DisplayManager
         public void openChest(Player player) {
             // If chest has no items or weapons, only gold
             if(this.chest.items.Length == 0 && this.chest.weapon == null) 
@@ -158,7 +175,8 @@ namespace Dungeon_Generator {
             return enemies;
         }
 
-        // Generate a number of zombies
+        // Generate a number of random enemies
+        // If the dungeon is a boss dungeon, the last enemy will be a boss
         public static Enemy[] generateMobs(int count, bool isBossDungeon = false)
         {
             Enemy[] enemies = new Enemy[count];
