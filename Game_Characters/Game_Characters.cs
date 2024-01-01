@@ -1,4 +1,7 @@
 using Weapons;
+using _GiantSpider_MiniBoss;
+using _DemonicSorcerer_MiniBoss;
+using _Dragon_Boss;
 using System.Collections;
 using Game_Essentials;
 using Console_Output;
@@ -60,11 +63,16 @@ namespace Game_Characters
         }
 
 
-        public void applyOverTimeEffects()
+        public void applyOverTimeEffects(Enemy enemy)
         {
             if (this.poisonedTurns > 0)
             {
                 this.poisonedTurns--;
+
+                if(enemy is GiantSpider) {
+                    this.health -= GameVariables.EnemyStats.GiantSpider.poisonDamage;
+                }
+
                 this.health -= GameVariables.EnemyStats.Spider.poisonDamage;
             }
 
@@ -75,7 +83,13 @@ namespace Game_Characters
             if (this.burningTurns > 0)
             {
                 this.burningTurns--;
-                this.health -= GameVariables.EnemyStats.Dragon.burningDamage;
+                if(enemy is Dragon) {
+                    this.health -= GameVariables.EnemyStats.Dragon.burningDamage;
+                }
+
+                if(enemy is DemonicSorcerer) {
+                    this.health -= GameVariables.EnemyStats.DemonicSorcerer.burningDamage;
+                }
             }
 
             if(this.burningTurns == 0) {

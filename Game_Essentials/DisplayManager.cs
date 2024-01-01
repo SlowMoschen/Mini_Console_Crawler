@@ -383,11 +383,16 @@ namespace Console_Output
                         Console.WriteLine($" The goblin attacked you for {enemyDamage} damage");
                         break;
                     case "steal":
-                        Console.WriteLine($" The goblin stole {GameVariables.EnemyStats.Goblin.stealAmount} gold from you");
-                        
-                        if(GameVariables.GameLoopBooleans.wasEnemyAttackMade) {
-                            Console.WriteLine($" The goblin attacked you for {enemyDamage} damage");
+
+                        if(player.InventoryManager.gold > 0) {
+                            Console.WriteLine($" The goblin stole {GameVariables.EnemyStats.Goblin.stealAmount} gold from you");
+                        } else {
+                            Console.WriteLine(" The goblin tried to steal gold from you, but you have no gold");
                         }
+                        
+                        // if(GameVariables.GameLoopBooleans.wasEnemyAttackMade) {
+                        //     Console.WriteLine($" The goblin attacked you for {enemyDamage} damage");
+                        // }
                         break;
                     case "defend":
                         Console.WriteLine(" The goblin defended the attack");
@@ -458,8 +463,8 @@ namespace Console_Output
 
             if(enemy is _GiantSpider_MiniBoss.GiantSpider && !player.isDefending) {
 
-                double webShotDamage = (enemy.attack + GameVariables.EnemyStats.GiantSpider.webShotDamage) * enemy.strength / player.armor;
-                double poisonBiteDamage = (enemy.attack + GameVariables.EnemyStats.GiantSpider.poisonBiteDamage) * enemy.strength / player.armor;
+                double webShotDamage = ((enemy.attack + GameVariables.EnemyStats.GiantSpider.webShotDamage) * enemy.strength) / player.armor;
+                double poisonBiteDamage = ((enemy.attack + GameVariables.EnemyStats.GiantSpider.poisonBiteDamage) * enemy.strength) / player.armor;
 
                 switch(enemyChoice)
                 {
@@ -578,7 +583,7 @@ namespace Console_Output
 
                             string enemyChoice = enemy.executeMove(player);
                             player.decrementBuffs();
-                            player.applyOverTimeEffects();
+                            player.applyOverTimeEffects(enemy);
 
                             if (!GameVariables.GameLoopBooleans.isInFight)
                             {
@@ -877,6 +882,7 @@ namespace Console_Output
         public void enemyTutorial() {
 
             Console.WriteLine(" Every enemy has different stats and attacks");
+            Console.WriteLine(" The some of the stats are scaling with the player's level");
             Console.WriteLine(" Enemies can attack, defend or use a special attack");
             Console.WriteLine(" Enemies can also have special abilities like poisoning or stunning");
             Console.WriteLine(" Here are the different enemies you can encounter in the game listed:");
@@ -946,6 +952,8 @@ namespace Console_Output
             Console.WriteLine();
             Console.WriteLine("     Stone Golem:");
             Console.WriteLine();
+            Console.WriteLine("         Can't defend");
+            Console.WriteLine();
             Console.WriteLine("         Health: " + GameVariables.EnemyStats.StoneGolem.health);
             Console.WriteLine("         Attack: " + GameVariables.EnemyStats.StoneGolem.attack);
             Console.WriteLine("         Strength: " + GameVariables.EnemyStats.StoneGolem.strength);
@@ -999,6 +1007,8 @@ namespace Console_Output
             Console.WriteLine("                 Poison deals " + GameVariables.EnemyStats.GiantSpider.poisonDamage + " damage per turn for " + GameVariables.GameSettings.EffectDurations.poisonDuration + " turns");
             Console.WriteLine();
             Console.WriteLine("     Dragon(Boss):");
+            Console.WriteLine();
+            Console.WriteLine("         Can't defend");
             Console.WriteLine();
             Console.WriteLine("         Health: " + GameVariables.EnemyStats.Dragon.health);
             Console.WriteLine("         Attack: " + GameVariables.EnemyStats.Dragon.attack);

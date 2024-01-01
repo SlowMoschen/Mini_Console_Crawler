@@ -31,7 +31,7 @@ namespace Game_Essentials {
         }
     }
         public class GameStats {
-            public static string version { get; } = "0.9.2";
+            public static string version { get; } = "0.9.3";
             public static int surviedRooms { get; set;} = 0;
             public static int survivedDungeons { get; set;} = 0;
             public static int killedEnemies { get; set;} = 0;
@@ -75,8 +75,9 @@ namespace Game_Essentials {
             private static int CalculateAttack(int baseMinAttack, int baseMaxAttack, int minMinMuliplier, int minMaxMuliplier) {
                 Random random = new Random();
                 int playerLevel = GameVariables.PlayerStats.level;
-                int min = baseMinAttack + ((playerLevel - 1) / GameVariables.GameSettings.weaponUpgradeInterval) * minMinMuliplier;
-                int max = baseMaxAttack + ((playerLevel - 1) / GameVariables.GameSettings.weaponUpgradeInterval) * minMaxMuliplier;
+                int interval = GameVariables.GameSettings.weaponUpgradeInterval;
+                int min = baseMinAttack + ((playerLevel - 1) / interval) * minMinMuliplier;
+                int max = baseMaxAttack + ((playerLevel - 1) / interval) * minMaxMuliplier;
 
                 return random.Next(min, max + 1);
             }
@@ -157,6 +158,10 @@ namespace Game_Essentials {
                 this.goldOnDefeat = goldOnDefeat;
                 this.attackNames = attackNames;
             }
+
+            public static int getScaledStat(int baseStat, int scaleRating) {
+                return baseStat + (GameVariables.PlayerStats.level - 1) * scaleRating;
+            }
             
             public class SpiderStats : EnemyStats {
                 public int poisonDamage { get; }
@@ -231,54 +236,54 @@ namespace Game_Essentials {
             }
 
             public static EnemyStats Zombie = new EnemyStats(
-                attack: 15,
+                attack: getScaledStat(baseStat: 10, scaleRating: 2),
                 strength: 1.0,
                 armor: 5,
-                health: 50,
-                experienceOnDefeat: 15,
+                health: getScaledStat(baseStat: 50, scaleRating: 10),
+                experienceOnDefeat: getScaledStat(baseStat: 10, scaleRating: 5),
                 goldOnDefeat: 5,
                 attackNames: new string[] { "Bite", "Thrash" }
             );
 
             public static SpiderStats Spider = new SpiderStats(
-                attack: 20,
+                attack: getScaledStat(baseStat: 15, scaleRating: 2),
                 strength: 1.0,
                 armor: 2,
-                health: 80,
-                experienceOnDefeat: 30,
+                health: getScaledStat(baseStat: 80, scaleRating: 10),
+                experienceOnDefeat: getScaledStat(baseStat: 30, scaleRating: 5),
                 goldOnDefeat: 10,
                 attackNames: new string[] { "Spit" },
-                poisonDamage: 5,
+                poisonDamage: getScaledStat(baseStat: 5, scaleRating: 2),
                 poisonChance: 25
             );
 
             public static GoblinStats Goblin = new GoblinStats(
-                attack: 5,
+                attack: getScaledStat(baseStat: 5, scaleRating: 2),
                 strength: 1.0,
                 armor: 10,
-                health: 40,
-                experienceOnDefeat: 20,
+                health: getScaledStat(baseStat: 40, scaleRating: 10),
+                experienceOnDefeat: getScaledStat(baseStat: 20, scaleRating: 5),
                 goldOnDefeat: 15,
                 attackNames: new string[] { "Steal" },
                 stealAmount: 3
             );
 
             public static EnemyStats Assassin = new EnemyStats(
-                attack: 50,
+                attack: getScaledStat(baseStat: 50, scaleRating: 2),
                 strength: 1.0,
                 armor: 0,
-                health: 30,
-                experienceOnDefeat: 15,
+                health: getScaledStat(baseStat: 100, scaleRating: 10),
+                experienceOnDefeat: getScaledStat(baseStat: 30, scaleRating: 5),
                 goldOnDefeat: 5,
                 attackNames: new string[] { "Backstab" }
             );
 
             public static StoneGolemStats StoneGolem = new StoneGolemStats(
-                attack: 10,
+                attack: getScaledStat(baseStat: 20, scaleRating: 2),
                 strength: 1.0,
                 armor: 20,
-                health: 100,
-                experienceOnDefeat: 50,
+                health: getScaledStat(baseStat: 200, scaleRating: 10),
+                experienceOnDefeat: getScaledStat(baseStat: 50, scaleRating: 5),
                 goldOnDefeat: 20,
                 attackNames: new string[] { "Slam" },
                 stunChance: 15
@@ -291,49 +296,49 @@ namespace Game_Essentials {
             */
 
             public static GiantSpiderStats GiantSpider = new GiantSpiderStats(
-                attack: 30,
+                attack: getScaledStat(baseStat: 40, scaleRating: 2),
                 strength: 1.0,
                 armor: 10,
-                health: 150,
-                experienceOnDefeat: 100,
+                health: getScaledStat(baseStat: 150, scaleRating: 10),
+                experienceOnDefeat: getScaledStat(baseStat: 100, scaleRating: 5),
                 goldOnDefeat: 50,
                 attackNames: new string[] { "Web Shot", "Poison Bite" },
-                poisonDamage: 10,
-                poisonChance: 15,
+                poisonDamage: getScaledStat(baseStat: 10, scaleRating: 2),
+                poisonChance: 25,
                 stunChance: 25,
-                webShotDamage: 20,
-                poisonBiteDamage: 30
+                webShotDamage: getScaledStat(baseStat: 20, scaleRating: 2),
+                poisonBiteDamage: getScaledStat(baseStat: 30, scaleRating: 2)
             );
 
             public static DemonicSorcererStats DemonicSorcerer = new DemonicSorcererStats(
-                attack: 30,
+                attack: getScaledStat(baseStat: 40, scaleRating: 2),
                 strength: 1.0,
                 armor: 5,
-                health: 150,
-                experienceOnDefeat: 100,
+                health: getScaledStat(baseStat: 150, scaleRating: 10),
+                experienceOnDefeat: getScaledStat(baseStat: 100, scaleRating: 5),
                 goldOnDefeat: 50,
                 attackNames: new string[] { "Hell Fire Blast", "Dark Pact" },
                 hellFireBlastDamage: 10,
                 burnChance: 15,
-                burningDamage: 5,
+                burningDamage: getScaledStat(baseStat: 10, scaleRating: 2),
                 darkPactAttackPercentage: 0.2,
                 darkPactHealthPercentage: 0.35
             );
 
             public static DragonStats Dragon = new DragonStats(
-                attack: 50,
+                attack: 150,
                 strength: 1.5,
                 armor: 35,
-                health: 250,
+                health: 1200,
                 experienceOnDefeat: 1200,
                 goldOnDefeat: 350,
                 attackNames: new string[] { "Fire Breath", "Rock Throw", "Tail Strike" },
-                fireBreathDamage: 10,
+                fireBreathDamage: 35,
                 burnChance: 33,
-                burningDamage: 12,
-                throwRockDamage: 20,
+                burningDamage: 18,
+                throwRockDamage: 30,
                 stunChance: 25,
-                tailStrikeDamage: 30
+                tailStrikeDamage: 45
             );
     }
 

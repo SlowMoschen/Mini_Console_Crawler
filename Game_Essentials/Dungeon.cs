@@ -177,7 +177,7 @@ namespace Dungeon_Generator {
                     enemies.AddRange(generateMobs(GameVariables.GameSettings.DungeonSettings.bossMobs, true));
                     break;
                 case "Dev":
-                    enemies.AddRange(generateMobs(1));
+                    enemies.AddRange(generateMobs(1, true));
                     break;
                 default:
                     enemies.AddRange(generateMobs(1));
@@ -226,22 +226,31 @@ namespace Dungeon_Generator {
             Enemy[] enemies = new Enemy[count];
             string[] enemytypes = GameVariables.GameSettings.DungeonSettings.enemyTypes;
             Random random = new Random();
-            int index = random.Next(enemytypes.Length);
 
-            string enemyType = enemytypes[index];
 
             for (int i = 0; i < count; i++)
             {
+                int index = random.Next(enemytypes.Length);
+                string enemyType = enemytypes[index];
 
                 if(isBossDungeon && i == count - 1) {
-                    enemies[i] = new Dragon(
-                        "Dragon Boss",
-                        attack: GameVariables.EnemyStats.Dragon.attack,
-                        strength: GameVariables.EnemyStats.Dragon.strength,
-                        armor: GameVariables.EnemyStats.Dragon.armor,
-                        health: GameVariables.EnemyStats.Dragon.health,
-                        experienceOnDefeat: GameVariables.EnemyStats.Dragon.experienceOnDefeat,
-                        goldOnDefeat: GameVariables.EnemyStats.Dragon.goldOnDefeat
+                    // enemies[i] = new Dragon(
+                    //     "Dragon Boss",
+                    //     attack: GameVariables.EnemyStats.Dragon.attack,
+                    //     strength: GameVariables.EnemyStats.Dragon.strength,
+                    //     armor: GameVariables.EnemyStats.Dragon.armor,
+                    //     health: GameVariables.EnemyStats.Dragon.health,
+                    //     experienceOnDefeat: GameVariables.EnemyStats.Dragon.experienceOnDefeat,
+                    //     goldOnDefeat: GameVariables.EnemyStats.Dragon.goldOnDefeat
+                    // );
+                    enemies[i] = new Zombie.Zombie(
+                        "Zombie Boss",
+                        attack: GameVariables.EnemyStats.Zombie.attack,
+                        strength: GameVariables.EnemyStats.Zombie.strength,
+                        armor: GameVariables.EnemyStats.Zombie.armor,
+                        health: GameVariables.EnemyStats.Zombie.health,
+                        experienceOnDefeat: GameVariables.EnemyStats.Zombie.experienceOnDefeat,
+                        goldOnDefeat: GameVariables.EnemyStats.Zombie.goldOnDefeat
                     );
                     continue;
                 }
@@ -262,12 +271,12 @@ namespace Dungeon_Generator {
                     case "Zombie":
                         enemies[i] = new Zombie.Zombie(
                             enemytypes[index],
-                            attack: GameVariables.EnemyStats.Spider.attack,
-                            strength: GameVariables.EnemyStats.Spider.strength,
-                            armor: GameVariables.EnemyStats.Spider.armor,
-                            health: GameVariables.EnemyStats.Spider.health,
-                            experienceOnDefeat: GameVariables.EnemyStats.Spider.experienceOnDefeat,
-                            goldOnDefeat: GameVariables.EnemyStats.Spider.goldOnDefeat
+                            attack: GameVariables.EnemyStats.Zombie.attack,
+                            strength: GameVariables.EnemyStats.Zombie.strength,
+                            armor: GameVariables.EnemyStats.Zombie.armor,
+                            health: GameVariables.EnemyStats.Zombie.health,
+                            experienceOnDefeat: GameVariables.EnemyStats.Zombie.experienceOnDefeat,
+                            goldOnDefeat: GameVariables.EnemyStats.Zombie.goldOnDefeat
                         );
                         break;
                     case "Goblin":
@@ -397,9 +406,11 @@ namespace Dungeon_Generator {
         // genrates the Items based on
         public static Item[] generateItems(string difficulty) {
             int length = GameVariables.GameSettings.DungeonSettings.getChestItemsCount(difficulty);
+
             if(difficulty == "Dev") {
                 length = 5;
             }
+            
             Item[] items = new Item[length];
 
             if(difficulty == "Boss" || difficulty == "Hard") {
