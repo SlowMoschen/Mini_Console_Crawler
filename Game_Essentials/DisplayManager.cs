@@ -288,6 +288,7 @@ namespace Console_Output
             Console.Write("]\n");
         }
 
+
         // Method to display a header with a message
         // Calulate the padding based on the message length
         // Example: displayHeader("Hello World") will display:

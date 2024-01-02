@@ -35,6 +35,7 @@ class Program
 
         // Initialize Game
         DisplayManager DisplayManager = new DisplayManager();
+        GameVariables.EnemyStats.initializeAllEnemies();
         
         DisplayManager.displayGreetings();
         DisplayManager.askForTutorial();

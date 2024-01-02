@@ -322,13 +322,28 @@ namespace Game_Characters
         GameVariables.PlayerStats.experienceToLevelUp = GameVariables.LevelUpRatings.experienceRating * GameVariables.PlayerStats.level;
         GameVariables.PlayerStats.attack += GameVariables.LevelUpRatings.increaseAttackRating;
         GameVariables.PlayerStats.armor += GameVariables.LevelUpRatings.increaseArmorRating;
-        GameVariables.PlayerStats.maxHealth += GameVariables.LevelUpRatings.increaseMaxHealthRating * GameVariables.PlayerStats.level;
+        GameVariables.PlayerStats.maxHealth = GameVariables.LevelUpRatings.increaseMaxHealthRating * GameVariables.PlayerStats.level;
         GameVariables.PlayerStats.health = GameVariables.PlayerStats.maxHealth;
 
         this.armor = GameVariables.PlayerStats.armor;
         this.attack = GameVariables.PlayerStats.attack;
         this.strength = GameVariables.PlayerStats.strength;
         this.health = GameVariables.PlayerStats.maxHealth;
+
+        if(GameVariables.EnemyStats.allEnemies == null) {
+            Console.WriteLine("Enemies are null");
+        } else {
+            foreach(GameVariables.EnemyStats enemy in GameVariables.EnemyStats.allEnemies) {
+                try { 
+                    enemy.updateStats();
+                    Console.WriteLine("Updated enemy stats");
+                }
+                catch (Exception e) {
+                    Console.WriteLine("Error updating enemy stats: " + e);
+                }
+            }
+        }
+
     }
 
     public void gainExperience (int experience) {
