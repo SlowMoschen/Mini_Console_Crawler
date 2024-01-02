@@ -183,6 +183,11 @@ namespace Game_Characters
 
     public void usePotion(string potionType) {
        Item item = this.InventoryManager.getExistingItem(potionType);
+       
+       if(item == null) {
+            return;
+       }
+
        if(item is Potion) {
             Potion potion = (Potion)item;
          if(potion != null) {
@@ -195,6 +200,8 @@ namespace Game_Characters
                      break;
                 case "Strength Potion":
                      this.strength *= potion.effectValue;
+                        this.strengthBuffed = true;
+                        this.strengthBuffTurns = GameVariables.GameSettings.EffectDurations.strengthDuration;
                      break;
                 case "Endurance Potion":
                      this.endurance += potion.effectValue;

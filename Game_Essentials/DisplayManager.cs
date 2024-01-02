@@ -119,12 +119,18 @@ namespace Console_Output
             
             switch (menuChoice) {
                 case "Buy":
+                    
+                    if(player.InventoryManager.gold == 0) {
+                        Console.WriteLine(" You don't have any gold");
+                        break;
+                    }
+
                     string itemChoice = this.displayOptionMenu(" What would you like to buy?", GameVariables.GameSettings.Options.shopItems, GameVariables.GameSettings.ItemPrices.allItemPrices);
-                    if(itemChoice == "Heal Potion") 
+                    if(itemChoice == "Health Potion") 
                     {
                         
                         Potion healPotion = new _Items.Potion(
-                            name: "Heal Potion", 
+                            name: "Health Potion", 
                             type: "Health Potion", 
                             description: "Heals the Player for " + GameVariables.GameSettings.healPotionHealRating + " health", 
                             price: GameVariables.GameSettings.ItemPrices.healPotionPrice, 
@@ -289,9 +295,9 @@ namespace Console_Output
         }
 
         // Method to display a menu with a message and options
-        public string displayOptionMenu(string message ,string[] options, string[] prices = null) {
+        public string displayOptionMenu(string message ,string[] options, string[] numbers = null) {
             Console.WriteLine();
-            string playerChoice = InputHandler.getChoice(message, options, prices);
+            string playerChoice = InputHandler.getChoice(message, options, numbers);
             Console.WriteLine();
             return playerChoice;
         }
@@ -371,11 +377,11 @@ namespace Console_Output
                         Console.WriteLine($" You healed for {player.healRating} health and got {(GameVariables.GameSettings.enduranceRegeneration * 2) + GameVariables.GameSettings.enduranceRegeneration } endurance back.");
                         break;
                     case "Use Potion":
-                        if(attackChoice == "Heal Potion") {
+                        if(attackChoice == "Health Potion") {
                             Console.WriteLine($" You healed for {GameVariables.GameSettings.healPotionHealRating} health");
                         } else if(attackChoice == "Strength Potion") {
                             Console.WriteLine(player.strength);
-                            Console.WriteLine($" You gained strength for {GameVariables.GameSettings.EffectDurations.strengthDuration} turns");
+                            Console.WriteLine($" You gained strength for {GameVariables.GameSettings.EffectDurations.strengthDuration - 1} turns");
                         } else if(attackChoice == "Endurance Potion") {
                             Console.WriteLine($" You gained {GameVariables.GameSettings.endurancePotionEnduranceRating} endurance");
                         }
@@ -613,7 +619,20 @@ namespace Console_Output
                                         player.Rest();
                                         break;
                                     case "Use Potion":
-                                        attackChoice = this.displayOptionMenu(" What item do you want to use?", GameVariables.GameSettings.Options.shopItems);
+                                        string[] itemCounts = { 
+                                            player.InventoryManager.getItemQuantity("Endurance Potion").ToString(),
+                                            player.InventoryManager.getItemQuantity("Strength Potion").ToString(), 
+                                            player.InventoryManager.getItemQuantity("Health Potion").ToString()
+                                            };
+                                        string[] itemNames = player.InventoryManager.items.Select(item => item.name).ToArray();
+
+                                        if(player.InventoryManager.items.Count == 0) {
+                                            Console.WriteLine(" You don't have any items in your inventory");
+                                            this.waitForInput();    
+                                            continue;
+                                        }
+
+                                        attackChoice = this.displayOptionMenu(" What item do you want to use?", itemNames, itemCounts);
                                         player.usePotion(attackChoice);
                                         break;
                                     case "Defend":
@@ -692,7 +711,15 @@ namespace Console_Output
         }
 
         public void enterDungeon(Player player) {
+            this.displayHeader("Dungeon Selection");
             string fightChoice = this.displayOptionMenu(" In wich Dungeon do you want to go?", GameVariables.GameSettings.Options.difficultyOptions);
+
+                while(fightChoice == "Boss" && GameVariables.PlayerStats.level < 20) {
+                    Console.WriteLine(" You have to be at least level 20 to enter the Boss Dungeon");
+                    this.waitForInput();
+                    this.displayHeader("Dungeon Selection");
+                    fightChoice = this.displayOptionMenu(" In which Dungeon do you want to go?", GameVariables.GameSettings.Options.difficultyOptions);
+                }
 
                     Dungeon dungeon = new Dungeon(fightChoice);
 

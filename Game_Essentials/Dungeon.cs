@@ -79,7 +79,7 @@ namespace Dungeon_Generator {
             // If chest has no items or weapons, only gold
             if(this.chest.items.Length == 0 && this.chest.weapon == null) 
             {
-                Console.WriteLine(" You found a chest with Items!");
+                Console.WriteLine(" You found a chest with Gold!");
                 Console.WriteLine(" You found " + this.chest.gold + " gold!");
                 player.InventoryManager.gold += this.chest.gold;
             } 
@@ -449,18 +449,18 @@ namespace Dungeon_Generator {
             {
                 case "Health Potion":
                     return new Potion(
-                            name: "Endurance Potion",
-                            type: "Endurance Potion",
-                            description: "Increases the Player's endurance by " + GameVariables.GameSettings.endurancePotionEnduranceRating + " for " + GameVariables.GameSettings.EffectDurations.strengthDuration + " turns",
+                            name: "Health Potion",
+                            type: "Health Potion",
+                            description: "Heals the Player for " + GameVariables.GameSettings.healPotionHealRating + " health",
                             price: GameVariables.GameSettings.ItemPrices.endurancePotionPrice,
                             maxQuantity: GameVariables.GameSettings.ItemMaxQuantity.endurancePotionMaxQuantity,
                             effectValue: GameVariables.GameSettings.endurancePotionEnduranceRating
                         );
                 case "Endurance Potion":
                     return new Potion(
-                            name: "Heal Potion", 
-                            type: "Health Potion", 
-                            description: "Heals the Player for " + GameVariables.GameSettings.healPotionHealRating + " health", 
+                            name: "Endurance Potion", 
+                            type: "Endurance Potion", 
+                            description: "Increases the Player's endurance by " + GameVariables.GameSettings.endurancePotionEnduranceRating + " for " + GameVariables.GameSettings.EffectDurations.strengthDuration + " turns", 
                             price: GameVariables.GameSettings.ItemPrices.healPotionPrice, 
                             maxQuantity: GameVariables.GameSettings.ItemMaxQuantity.healPotionMaxQuantity, 
                             effectValue: GameVariables.GameSettings.healPotionHealRating

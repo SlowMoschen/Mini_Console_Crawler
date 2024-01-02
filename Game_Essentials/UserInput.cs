@@ -23,7 +23,7 @@ namespace UserInput
             for (int i = 0; i < options.Length; i++)
             {
                 int number = i + 1;
-                Console.WriteLine(" " + number + ". " + options[i] + (prices != null ? " - " + prices[i] + "G" : ""));
+                Console.WriteLine(" " + number + ". " + options?[i] + (prices != null ? " - " + prices[i] : ""));
             }
 
             Console.WriteLine();

@@ -89,8 +89,8 @@ namespace Game_Essentials {
                 baseMaxSpecialAttack: 45,
                 minMinMuliplier: 15,
                 minMaxMuliplier: 18,
-                enduranceCost: 10,
-                specialAttackEnduranceCost: 15,
+                enduranceCost: 18,
+                specialAttackEnduranceCost: 25,
                 specialAttackName: "Slash"
             );
             public static WeaponStats Axe = new WeaponStats(
@@ -100,8 +100,8 @@ namespace Game_Essentials {
                 baseMaxSpecialAttack: 60,
                 minMinMuliplier: 17,
                 minMaxMuliplier: 20,
-                enduranceCost: 20,
-                specialAttackEnduranceCost: 30,
+                enduranceCost: 25,
+                specialAttackEnduranceCost: 45,
                 specialAttackName: "Chop"
             );
             public static WeaponStats Mace = new WeaponStats(
@@ -111,8 +111,8 @@ namespace Game_Essentials {
                 baseMaxSpecialAttack: 50,
                 minMinMuliplier: 16,
                 minMaxMuliplier: 18,
-                enduranceCost: 14,
-                specialAttackEnduranceCost: 22,
+                enduranceCost: 21,
+                specialAttackEnduranceCost: 28,
                 specialAttackName: "Bash"
             );
 
@@ -255,8 +255,8 @@ namespace Game_Essentials {
             public static EnemyStats Zombie = new EnemyStats(
                 attack: getScaledStat(baseStat: 20, scaleRating: GameVariables.EnemyStats.attackDamageScaling, levelInterval: GameVariables.EnemyStats.attackDamageScalingInterval),
                 strength: 1.0,
-                armor: 5,
-                health: getScaledStat(baseStat: 50, scaleRating: GameVariables.EnemyStats.healthScaling, levelInterval: GameVariables.EnemyStats.healthScalingInterval),
+                armor: 10,
+                health: getScaledStat(baseStat: 110, scaleRating: GameVariables.EnemyStats.healthScaling, levelInterval: GameVariables.EnemyStats.healthScalingInterval),
                 experienceOnDefeat: getScaledStat(baseStat: 10, scaleRating: GameVariables.EnemyStats.experienceScaling, levelInterval: GameVariables.EnemyStats.experienceScalingInterval),
                 goldOnDefeat: 5,
                 attackNames: new string[] { "Bite", "Thrash" }
@@ -265,8 +265,8 @@ namespace Game_Essentials {
             public static SpiderStats Spider = new SpiderStats(
                 attack: getScaledStat(baseStat: 10, scaleRating: GameVariables.EnemyStats.attackDamageScaling, levelInterval: GameVariables.EnemyStats.attackDamageScalingInterval),
                 strength: 1.0,
-                armor: 2,
-                health: getScaledStat(baseStat: 80, scaleRating: GameVariables.EnemyStats.healthScaling, levelInterval: GameVariables.EnemyStats.healthScalingInterval),
+                armor: 20,
+                health: getScaledStat(baseStat: 110, scaleRating: GameVariables.EnemyStats.healthScaling, levelInterval: GameVariables.EnemyStats.healthScalingInterval),
                 experienceOnDefeat: getScaledStat(baseStat: 30, scaleRating: GameVariables.EnemyStats.experienceScaling, levelInterval: GameVariables.EnemyStats.experienceScalingInterval),
                 goldOnDefeat: 10,
                 attackNames: new string[] { "Spit" },
@@ -277,8 +277,8 @@ namespace Game_Essentials {
             public static GoblinStats Goblin = new GoblinStats(
                 attack: getScaledStat(baseStat: 5, scaleRating: GameVariables.EnemyStats.attackDamageScaling, levelInterval: GameVariables.EnemyStats.attackDamageScalingInterval),
                 strength: 1.0,
-                armor: 10,
-                health: getScaledStat(baseStat: 40, scaleRating: GameVariables.EnemyStats.healthScaling, levelInterval: GameVariables.EnemyStats.healthScalingInterval),
+                armor: 20,
+                health: getScaledStat(baseStat: 120, scaleRating: GameVariables.EnemyStats.healthScaling, levelInterval: GameVariables.EnemyStats.healthScalingInterval),
                 experienceOnDefeat: getScaledStat(baseStat: 20, scaleRating: GameVariables.EnemyStats.experienceScaling, levelInterval: GameVariables.EnemyStats.experienceScalingInterval),
                 goldOnDefeat: 15,
                 attackNames: new string[] { "Steal" },
@@ -286,9 +286,9 @@ namespace Game_Essentials {
             );
 
             public static EnemyStats Assassin = new EnemyStats(
-                attack: getScaledStat(baseStat: 50, scaleRating: GameVariables.EnemyStats.attackDamageScaling, levelInterval: GameVariables.EnemyStats.attackDamageScalingInterval),
+                attack: getScaledStat(baseStat: 20, scaleRating: GameVariables.EnemyStats.attackDamageScaling, levelInterval: GameVariables.EnemyStats.attackDamageScalingInterval),
                 strength: 1.0,
-                armor: 0,
+                armor: 5,
                 health: getScaledStat(baseStat: 100, scaleRating: GameVariables.EnemyStats.healthScaling, levelInterval: GameVariables.EnemyStats.healthScalingInterval),
                 experienceOnDefeat: getScaledStat(baseStat: 30, scaleRating: GameVariables.EnemyStats.experienceScaling, levelInterval: GameVariables.EnemyStats.experienceScalingInterval),
                 goldOnDefeat: 5,
@@ -298,8 +298,8 @@ namespace Game_Essentials {
             public static StoneGolemStats StoneGolem = new StoneGolemStats(
                 attack: getScaledStat(baseStat: 20, scaleRating: GameVariables.EnemyStats.attackDamageScaling, levelInterval: GameVariables.EnemyStats.attackDamageScalingInterval),
                 strength: 1.0,
-                armor: 20,
-                health: getScaledStat(baseStat: 200, scaleRating: GameVariables.EnemyStats.healthScaling, levelInterval: GameVariables.EnemyStats.healthScalingInterval),
+                armor: 35,
+                health: getScaledStat(baseStat: 300, scaleRating: GameVariables.EnemyStats.healthScaling, levelInterval: GameVariables.EnemyStats.healthScalingInterval),
                 experienceOnDefeat: getScaledStat(baseStat: 50, scaleRating: GameVariables.EnemyStats.experienceScaling, levelInterval: GameVariables.EnemyStats.experienceScalingInterval),
                 goldOnDefeat: 20,
                 attackNames: new string[] { "Slam" },
@@ -313,33 +313,33 @@ namespace Game_Essentials {
             */
 
             public static GiantSpiderStats GiantSpider = new GiantSpiderStats(
-                attack: getScaledStat(baseStat: 40, scaleRating: GameVariables.EnemyStats.attackDamageScaling, levelInterval: GameVariables.EnemyStats.attackDamageScalingInterval),
+                attack: getScaledStat(baseStat: 50, scaleRating: GameVariables.EnemyStats.attackDamageScaling, levelInterval: GameVariables.EnemyStats.attackDamageScalingInterval),
                 strength: 1.0,
                 armor: 10,
-                health: getScaledStat(baseStat: 150, scaleRating: GameVariables.EnemyStats.healthScaling, levelInterval: GameVariables.EnemyStats.healthScalingInterval),
-                experienceOnDefeat: getScaledStat(baseStat: 100, scaleRating: GameVariables.EnemyStats.experienceScaling, levelInterval: GameVariables.EnemyStats.experienceScalingInterval),
+                health: getScaledStat(baseStat: 350, scaleRating: GameVariables.EnemyStats.healthScaling, levelInterval: GameVariables.EnemyStats.healthScalingInterval),
+                experienceOnDefeat: getScaledStat(baseStat: 200, scaleRating: GameVariables.EnemyStats.experienceScaling, levelInterval: GameVariables.EnemyStats.experienceScalingInterval),
                 goldOnDefeat: 50,
                 attackNames: new string[] { "Web Shot", "Poison Bite" },
                 poisonDamage: getScaledStat(baseStat: 10, scaleRating: GameVariables.EnemyStats.poisonDamageScaling, levelInterval: GameVariables.EnemyStats.poisonDamageScalingInterval),
                 poisonChance: 25,
                 stunChance: 25,
-                webShotDamage: getScaledStat(baseStat: 20, scaleRating: GameVariables.EnemyStats.attackDamageScaling, levelInterval: GameVariables.EnemyStats.attackDamageScalingInterval),
-                poisonBiteDamage: getScaledStat(baseStat: 30, scaleRating: GameVariables.EnemyStats.attackDamageScaling, levelInterval: GameVariables.EnemyStats.attackDamageScalingInterval)
+                webShotDamage: getScaledStat(baseStat: 15, scaleRating: GameVariables.EnemyStats.attackDamageScaling, levelInterval: GameVariables.EnemyStats.attackDamageScalingInterval),
+                poisonBiteDamage: getScaledStat(baseStat: 10, scaleRating: GameVariables.EnemyStats.attackDamageScaling, levelInterval: GameVariables.EnemyStats.attackDamageScalingInterval)
             );
 
             public static DemonicSorcererStats DemonicSorcerer = new DemonicSorcererStats(
-                attack: getScaledStat(baseStat: 40, scaleRating: GameVariables.EnemyStats.attackDamageScaling, levelInterval: GameVariables.EnemyStats.attackDamageScalingInterval),
+                attack: getScaledStat(baseStat: 35, scaleRating: GameVariables.EnemyStats.attackDamageScaling, levelInterval: GameVariables.EnemyStats.attackDamageScalingInterval),
                 strength: 1.0,
                 armor: 5,
-                health: getScaledStat(baseStat: 150, scaleRating: GameVariables.EnemyStats.healthScaling, levelInterval: GameVariables.EnemyStats.healthScalingInterval),
-                experienceOnDefeat: getScaledStat(baseStat: 100, scaleRating: GameVariables.EnemyStats.experienceScaling, levelInterval: GameVariables.EnemyStats.experienceScalingInterval),
+                health: getScaledStat(baseStat: 500, scaleRating: GameVariables.EnemyStats.healthScaling, levelInterval: GameVariables.EnemyStats.healthScalingInterval),
+                experienceOnDefeat: getScaledStat(baseStat: 200, scaleRating: GameVariables.EnemyStats.experienceScaling, levelInterval: GameVariables.EnemyStats.experienceScalingInterval),
                 goldOnDefeat: 50,
                 attackNames: new string[] { "Hell Fire Blast", "Dark Pact" },
-                hellFireBlastDamage: 10,
+                hellFireBlastDamage: getScaledStat(baseStat: 20, scaleRating: GameVariables.EnemyStats.attackDamageScaling, levelInterval: GameVariables.EnemyStats.attackDamageScalingInterval),
                 burnChance: 15,
                 burningDamage: getScaledStat(baseStat: 10, scaleRating: GameVariables.EnemyStats.burningDamageScaling, levelInterval: GameVariables.EnemyStats.burningDamageScalingInterval),
                 darkPactAttackPercentage: 0.2,
-                darkPactHealthPercentage: 0.35
+                darkPactHealthPercentage: 0.3
             );
 
             public static DragonStats Dragon = new DragonStats(
@@ -361,7 +361,7 @@ namespace Game_Essentials {
 
 
         public class GameSettings {            
-            public static int healPotionHealRating => 20 + (int)Math.Pow(GameVariables.PlayerStats.level, 2);
+            public static int healPotionHealRating => 40 + (int)Math.Pow(GameVariables.PlayerStats.level, 2);
             public static int strengthPotionStrengthRating { get; } = 2;
             public static int endurancePotionEnduranceRating { get; } = 50;
             public static int enduranceRegeneration { get; } = 7;
@@ -379,13 +379,13 @@ namespace Game_Essentials {
                 public static int healPotionPrice { get; } = 15;
                 public static int strengthPotionPrice { get; } = 35;
                 public static int endurancePotionPrice { get; } = 25;
-                public static string[] allItemPrices { get; } = new string[] { healPotionPrice.ToString(), strengthPotionPrice.ToString(), endurancePotionPrice.ToString() };
+                public static string[] allItemPrices { get; } = new string[] { healPotionPrice.ToString() + "G", strengthPotionPrice.ToString() + "G", endurancePotionPrice.ToString() + "G" };
             }
             
             public class EffectDurations {
                 public static int poisonDuration { get; } = 3;
                 public static int burnDuration { get; } = 3;
-                public static int strengthDuration { get; } = 3;
+                public static int strengthDuration { get; } = 4;
                 public static int stunDuration { get; } = 1;
             }
             
@@ -395,7 +395,7 @@ namespace Game_Essentials {
                 public static string[]? attackOptions { get; set; }
                 public static string[] mainMenuOptions { get; } = new string[] { "Enter Dungeon", "View Stats", "View Inventory", "Shop", "Game Infos" };
                 public static string[] shopMenuOptions { get; } = new string[] { "Buy", "Exit" }; 
-                public static string[] shopItems { get; } = new string[] { "Heal Potion", "Strength Potion", "Endurance Potion" };
+                public static string[] shopItems { get; } = new string[] { "Health Potion", "Strength Potion", "Endurance Potion" };
             }
 
         public class DungeonSettings {
