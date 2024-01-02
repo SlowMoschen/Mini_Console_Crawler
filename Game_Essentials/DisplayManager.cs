@@ -35,9 +35,10 @@ namespace Console_Output
             Console.Clear();
             Console.WriteLine(" ---------------------------");
             Console.WriteLine(" |                         |");
-            Console.WriteLine(" |       Console_RPG       |");
+            Console.WriteLine(" |     Console_Crawler     |");
             Console.WriteLine(" |                         |");
-            Console.WriteLine(" |   A simple console RPG  |");
+            Console.WriteLine(" |    A simple console     |");
+            Console.WriteLine(" |     Dungeon Crawler     |");
             Console.WriteLine(" |                         |");
             Console.WriteLine(" ---------------------------");
             Console.WriteLine(" Version: " + GameVariables.GameStats.version);
@@ -47,7 +48,7 @@ namespace Console_Output
         public void displayGreetings() {
             Console.Clear();
             this.displayGameLogo();
-            Console.WriteLine(" Welcome to Console_RPG!");
+            Console.WriteLine(" Welcome to Console_Crawler!");
             Console.WriteLine(" The goal of this game is to get through the Boss Dungeon.");
             this.waitForInput();
             Console.Clear();
@@ -842,12 +843,14 @@ namespace Console_Output
             Console.WriteLine("     You can choose between different options to attack, defend, rest or run away");
             Console.WriteLine("     You can attack with your weapon with a normal attack,");
             Console.WriteLine("     or use a special attack wich costs more endurance but deals more damage");
+            Console.WriteLine("     You can only attack if you have enough endurance so keep an eye on your endurance");
+            Console.WriteLine("     The damage calculation is as follows: (Attack Damage * Strength) * Damage Reduction");
+            Console.WriteLine("     The damage reduction is calculated by the armor in percent");
             Console.WriteLine("     You can defend to take no damage from the enemy's attack");
             Console.WriteLine("     You can rest to heal and regenerate endurance");
-            Console.WriteLine("     You can run away to end the fight, but you get no reward and you lose half of your Gold");
             Console.WriteLine("     You can use potions to heal, increase your strength or increase your endurance");
             Console.WriteLine("     You can only use one potion per turn");
-            Console.WriteLine("     You can only attack if you have enough endurance so keep an eye on your endurance");
+            Console.WriteLine("     You can run away to end the fight, but you get no reward and you lose half of your Gold");
         }
 
         public void itemTutorial() {
@@ -872,7 +875,7 @@ namespace Console_Output
         public void weaponTutorial() {
             Console.WriteLine(" You got 3 different weapons to choose at the start of the game");
             Console.WriteLine(" Each weapon has a normal attack and a different special attack");
-            Console.WriteLine(" The special attack costs more endurance but deals more damage");
+            Console.WriteLine(" The special attack costs more endurance but deals segniificantly more damage");
             Console.WriteLine(" The special attack damage is calculated by the attack damage + the special attack strength");
             Console.WriteLine();
             Console.WriteLine(" Weapons are getting stronger after " + GameVariables.GameSettings.weaponUpgradeInterval + " levels");

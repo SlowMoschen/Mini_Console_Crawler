@@ -1,0 +1,15 @@
+D:\Backup\Programming\C#\Console_RPG\obj\Debug\net8.0\Console_Crawler.GeneratedMSBuildEditorConfig.editorconfig
+D:\Backup\Programming\C#\Console_RPG\obj\Debug\net8.0\Console_Crawler.AssemblyInfoInputs.cache
+D:\Backup\Programming\C#\Console_RPG\obj\Debug\net8.0\Console_Crawler.AssemblyInfo.cs
+D:\Backup\Programming\C#\Console_RPG\obj\Debug\net8.0\Console_Crawler.csproj.CoreCompileInputs.cache
+D:\Backup\Programming\C#\Console_RPG\obj\Debug\net8.0\Console_Crawler.sourcelink.json
+D:\Backup\Programming\C#\Console_RPG\bin\Debug\net8.0\Console_Crawler.exe
+D:\Backup\Programming\C#\Console_RPG\bin\Debug\net8.0\Console_Crawler.deps.json
+D:\Backup\Programming\C#\Console_RPG\bin\Debug\net8.0\Console_Crawler.runtimeconfig.json
+D:\Backup\Programming\C#\Console_RPG\bin\Debug\net8.0\Console_Crawler.dll
+D:\Backup\Programming\C#\Console_RPG\bin\Debug\net8.0\Console_Crawler.pdb
+D:\Backup\Programming\C#\Console_RPG\obj\Debug\net8.0\Console_Crawler.dll
+D:\Backup\Programming\C#\Console_RPG\obj\Debug\net8.0\refint\Console_Crawler.dll
+D:\Backup\Programming\C#\Console_RPG\obj\Debug\net8.0\Console_Crawler.pdb
+D:\Backup\Programming\C#\Console_RPG\obj\Debug\net8.0\Console_Crawler.genruntimeconfig.cache
+D:\Backup\Programming\C#\Console_RPG\obj\Debug\net8.0\ref\Console_Crawler.dll

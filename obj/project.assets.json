@@ -14,9 +14,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Backup\\Programming\\C#\\Console_RPG\\Console_RPG.csproj",
-      "projectName": "Console_RPG",
-      "projectPath": "D:\\Backup\\Programming\\C#\\Console_RPG\\Console_RPG.csproj",
+      "projectUniqueName": "D:\\Backup\\Programming\\C#\\Console_RPG\\Console_Crawler.csproj",
+      "projectName": "Console_Crawler",
+      "projectPath": "D:\\Backup\\Programming\\C#\\Console_RPG\\Console_Crawler.csproj",
       "packagesPath": "C:\\Users\\Phili\\.nuget\\packages\\",
       "outputPath": "D:\\Backup\\Programming\\C#\\Console_RPG\\obj\\",
       "projectStyle": "PackageReference",
