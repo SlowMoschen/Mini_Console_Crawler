@@ -191,6 +191,67 @@ namespace Console_Output
 
         }
 
+        public void displayTutorial() {
+            this.displayHeader("Tutorial");
+            
+            Console.WriteLine(" Welcome! And thank you for playing my little Console_RPG");
+            Console.WriteLine(" This game is a simple Console based RPG where you have to defeat enemies to get to the end of the Dungeon");
+            Console.WriteLine();
+            this.gamePlayTutorial();
+            this.waitForInput(" Press any Key to continue to Tutorial Menu");
+            this.displayTutorialMenu(); 
+        }
+
+        public void displayTutorialMenu() {
+            this.displayHeader("Tutorial");
+
+             while(GameVariables.GameLoopBooleans.isInTutorial) {
+                Console.Clear();
+                this.displayHeader("Tutorial");
+                
+                string tutorialChoice = InputHandler.getChoice(" What do you want to know about?", new string[] { "Gameplay", "Battle", "Items", "Weapons", "Enemies", "Credits", "All", "Exit" });
+
+                switch (tutorialChoice)
+                {
+                    case "Gameplay":
+                        this.gamePlayTutorial();
+                        this.waitForInput();
+                        break;
+                    case "Battle":
+                        this.battleTutorial();
+                        this.waitForInput();
+                        break;
+                    case "Items":
+                        this.itemTutorial();
+                        this.waitForInput();
+                        break;
+                    case "Weapons":
+                        this.weaponTutorial();
+                        this.waitForInput();
+                        break;
+                    case "Enemies":
+                        this.enemyTutorial();
+                        this.waitForInput();
+                        break;
+                    case "Credits":
+                        this.displayCredits();
+                        this.waitForInput();
+                        break;
+                    case "All":
+                        this.battleTutorial();
+                        this.itemTutorial();
+                        this.weaponTutorial();
+                        this.enemyTutorial();
+                        this.displayCredits();
+                        this.waitForInput();
+                        break;
+                    case "Exit":
+                        GameVariables.GameLoopBooleans.isInTutorial = false;
+                        break;
+                }
+            }
+
+        }
 
 
         /*
@@ -278,10 +339,10 @@ namespace Console_Output
 
         public void displayBattleOutcome(string playerChoice, string enemyChoice, Player player, Enemy enemy, string attackChoice)
         {
-            double playerDamage = player.currentWeapon.attack * player.strength / enemy.armor;
-            double playerKickDamage = (player.attack + player.kickAttackStrength) * player.strength / enemy.armor;
-            double playerSpecialAttackDamage = (player.currentWeapon.specialAttackStrength + player.currentWeapon.attack) * player.strength / enemy.armor;
-            double enemyDamage = enemy.attack * enemy.strength / player.armor;
+            double playerDamage = (int)((player.currentWeapon.attack * player.strength) * (1 - player.CalculateDamageReduction(enemy.armor)));
+            double playerKickDamage = (int)((player.attack * player.strength) * (1 - player.CalculateDamageReduction(enemy.armor)));
+            double playerSpecialAttackDamage = (int)(((player.currentWeapon.attack + player.currentWeapon.specialAttackStrength) * player.strength) * (1 - player.CalculateDamageReduction(enemy.armor)));
+            double enemyDamage = (int)((enemy.attack * enemy.strength) * (1 - enemy.CalculateDamageReduction(enemy.armor)));
             double enemyHeal = enemyDamage / 2;
             double enemySelfDamage = enemyDamage / 4;
 
@@ -731,68 +792,6 @@ namespace Console_Output
         /    Tutorial Methods
         /
         */
-
-        public void displayTutorial() {
-            this.displayHeader("Tutorial");
-            
-            Console.WriteLine(" Welcome! And thank you for playing my little Console_RPG");
-            Console.WriteLine(" This game is a simple Console based RPG where you have to defeat enemies to get to the end of the Dungeon");
-            Console.WriteLine();
-            this.gamePlayTutorial();
-            this.waitForInput(" Press any Key to continue to Tutorial Menu");
-            this.displayTutorialMenu(); 
-        }
-
-        public void displayTutorialMenu() {
-            this.displayHeader("Tutorial");
-
-             while(GameVariables.GameLoopBooleans.isInTutorial) {
-                Console.Clear();
-                this.displayHeader("Tutorial");
-                
-                string tutorialChoice = InputHandler.getChoice(" What do you want to know about?", new string[] { "Gameplay", "Battle", "Items", "Weapons", "Enemies", "Credits", "All", "Exit" });
-
-                switch (tutorialChoice)
-                {
-                    case "Gameplay":
-                        this.gamePlayTutorial();
-                        this.waitForInput();
-                        break;
-                    case "Battle":
-                        this.battleTutorial();
-                        this.waitForInput();
-                        break;
-                    case "Items":
-                        this.itemTutorial();
-                        this.waitForInput();
-                        break;
-                    case "Weapons":
-                        this.weaponTutorial();
-                        this.waitForInput();
-                        break;
-                    case "Enemies":
-                        this.enemyTutorial();
-                        this.waitForInput();
-                        break;
-                    case "Credits":
-                        this.displayCredits();
-                        this.waitForInput();
-                        break;
-                    case "All":
-                        this.battleTutorial();
-                        this.itemTutorial();
-                        this.weaponTutorial();
-                        this.enemyTutorial();
-                        this.displayCredits();
-                        this.waitForInput();
-                        break;
-                    case "Exit":
-                        GameVariables.GameLoopBooleans.isInTutorial = false;
-                        break;
-                }
-            }
-
-        }
 
         public void gamePlayTutorial() {
             Console.WriteLine(" Gameplay:");

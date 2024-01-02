@@ -19,11 +19,13 @@ namespace _DemonicSorcerer_MiniBoss
         }
 
         public void hellFireBlast(Player target) {
+            int damage = (int)(((this.attack + GameVariables.EnemyStats.DemonicSorcerer.hellFireBlastDamage) * this.strength) * (1 - this.CalculateDamageReduction(target.armor)));
+
             if (target.isDefending) {
                 target.isDefending = false;
                 return;
             } else {
-                target.health -= ((this.attack + GameVariables.EnemyStats.DemonicSorcerer.hellFireBlastDamage) * this.strength) / target.armor;
+                target.health -= damage;
                 if(GameVariables.getChance(GameVariables.EnemyStats.DemonicSorcerer.burnChance)) {
                     target.isBurning = true;
                     target.burningTurns = 3;

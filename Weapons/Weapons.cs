@@ -55,6 +55,8 @@ namespace Weapons
 
         public void slash(Character target, Player player)
         {
+            int damage = (int)(((this.attack + this.specialAttackStrength) * player.strength) * (1 - player.CalculateDamageReduction(target.armor)));
+
             if (target.isDefending)
             {
                 target.isDefending = false;
@@ -62,7 +64,7 @@ namespace Weapons
             }
             else
             {
-                target.health -= (this.attack + this.specialAttackStrength) * player.strength / target.armor;
+                target.health -= damage;
             }
         }
     }
@@ -76,6 +78,8 @@ namespace Weapons
 
         public void chop(Character target, Player player)
         {
+            int damage = (int)(((this.attack + this.specialAttackStrength) * player.strength) * (1 - player.CalculateDamageReduction(target.armor)));
+
             if (target.isDefending)
             {
                 target.isDefending = false;
@@ -83,7 +87,7 @@ namespace Weapons
             }
             else
             {
-                target.health -= (this.attack + this.specialAttackStrength) * player.strength / target.armor;
+                target.health -= damage;
             }
         }
     }
@@ -97,6 +101,8 @@ namespace Weapons
 
         public void bash(Character target, Player player)
         {
+            int damage = (int)(((this.attack + this.specialAttackStrength) * player.strength) * (1 - player.CalculateDamageReduction(target.armor)));
+
             if (target.isDefending)
             {
                 target.isDefending = false;
@@ -104,7 +110,7 @@ namespace Weapons
             }
             else
             {
-                target.health -= (this.attack + this.specialAttackStrength) * player.strength / target.armor;
+                target.health -= damage;
             }
         }
     }

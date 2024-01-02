@@ -20,22 +20,26 @@ namespace Zombie
         // Bite Attack - heals zombie for half the damage dealt
         public void bite(Player target)
         {
+            int damage = (int)((this.attack * this.strength) * (1 - this.CalculateDamageReduction(target.armor)));
+
             if(target.isDefending) {
                 target.isDefending = false;
             } else {
-                target.health -= this.attack * this.strength / target.armor;
-                this.health += (this.attack * this.strength / target.armor) / 2;
+                target.health -= damage;
+                this.health += damage / 2;
             }
         }
 
         // Thrash Attack - deals damage to target and self
         public void thrash(Player target)
         {
+            int damage = (int)((this.attack * this.strength) * (1 - this.CalculateDamageReduction(target.armor)));
+
             if(target.isDefending) {
                 target.isDefending = false;
             } else {
-                target.health -= this.attack * this.strength / target.armor;
-                this.health -= (this.attack * this.strength / target.armor) / 4;
+                target.health -= damage;
+                this.health -= damage / 4;
             }
         }
 

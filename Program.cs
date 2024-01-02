@@ -73,7 +73,6 @@ class Program
                 player.health =GameVariables.PlayerStats.maxHealth;
                 GameVariables.GameLoopBooleans.isDead = false;
                 Console.WriteLine(" You have been revived!");
-                break;
             }
 
             switch (menuChoice)

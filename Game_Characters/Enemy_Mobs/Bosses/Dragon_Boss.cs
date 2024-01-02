@@ -22,6 +22,7 @@ namespace _Dragon_Boss
 
         public void fireBreath(Player target)
         {
+            int damage = (int)(((this.attack + GameVariables.EnemyStats.Dragon.fireBreathDamage) * this.strength) * (1 - this.CalculateDamageReduction(target.armor)));
             if (target.isDefending)
             {
                 target.isDefending = false;
@@ -29,14 +30,18 @@ namespace _Dragon_Boss
             }
             else
             {
-                target.health -= ((this.attack + GameVariables.EnemyStats.Dragon.fireBreathDamage) * this.strength) / target.armor;
-                target.isBurning = true;
-                target.burningTurns = 3;
+                target.health -= damage;
+                if(GameVariables.getChance(GameVariables.EnemyStats.Dragon.burnChance)) {
+                    target.isBurning = true;
+                    target.burningTurns = 3;
+                }
             }
         }
 
         public void rockThrow(Player target)
         {
+            int damage = (int)(((this.attack + GameVariables.EnemyStats.Dragon.throwRockDamage) * this.strength) * (1 - this.CalculateDamageReduction(target.armor)));
+
             if (target.isDefending)
             {
                 target.isDefending = false;
@@ -44,7 +49,7 @@ namespace _Dragon_Boss
             }
             else
             {
-                target.health -= ((this.attack + GameVariables.EnemyStats.Dragon.throwRockDamage) * this.strength) + GameVariables.EnemyStats.Dragon.throwRockDamage / target.armor;
+                target.health -= damage;
                 if(GameVariables.getChance(GameVariables.EnemyStats.Dragon.stunChance)) {
                     target.isStunned = true;
                 }
@@ -53,6 +58,7 @@ namespace _Dragon_Boss
 
         public void tailStrike(Player target)
         {
+            int damage = (int)(((this.attack + GameVariables.EnemyStats.Dragon.tailStrikeDamage) * this.strength) * (1 - this.CalculateDamageReduction(target.armor)));
             if (target.isDefending)
             {
                 target.isDefending = false;
@@ -60,7 +66,7 @@ namespace _Dragon_Boss
             }
             else
             {
-                target.health -= ((this.attack + GameVariables.EnemyStats.Dragon.tailStrikeDamage) * this.strength);
+                target.health -= damage;
             }
         }
 

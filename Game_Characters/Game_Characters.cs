@@ -48,12 +48,18 @@ namespace Game_Characters
             this.health = health;
         }
 
+        public double CalculateDamageReduction (int armor) {
+            return (double)armor / (armor + GameVariables.GameSettings.damageReductionRate);
+        }
+
         public void Attack (Character target) {
+            int damage = (int)((this.attack * this.strength) * (1 - this.CalculateDamageReduction(target.armor)));
+
             if(target.isDefending) {
                 target.isDefending = false;
                 return;
             } else {
-                target.health -= this.attack * this.strength / target.armor;
+                target.health -= damage;
             }
         }
 
@@ -167,7 +173,6 @@ namespace Game_Characters
     public int healRating;
     public int endurance = 100;
     public int maxEndurance = 100;
-    public int kickAttackStrength = 5;
     public InventoryManager InventoryManager { get; set; } = new InventoryManager();
     public int strengthBuffTurns { get; set; }
 
@@ -189,7 +194,7 @@ namespace Game_Characters
                      }
                      break;
                 case "Strength Potion":
-                     this.strength += potion.effectValue;
+                     this.strength *= potion.effectValue;
                      break;
                 case "Endurance Potion":
                      this.endurance += potion.effectValue;
@@ -208,7 +213,7 @@ namespace Game_Characters
             this.strengthBuffTurns--;
             if(this.strengthBuffTurns <= 0) {
                 this.strengthBuffed = false;
-                this.strength = 1.0;
+                this.strength = GameVariables.PlayerStats.strength;
             }
         }
     }
@@ -225,6 +230,7 @@ namespace Game_Characters
     }
 
     new public void Attack (Character target) {
+        int damage = (int)((this.currentWeapon.attack * this.strength) * (1 - this.CalculateDamageReduction(target.armor)));
 
         if(this.endurance >= this.currentWeapon.enduranceCost) {
             GameVariables.GameLoopBooleans.wasPlayerAttackMade = true;
@@ -232,7 +238,7 @@ namespace Game_Characters
                 this.endurance -= this.currentWeapon.enduranceCost;
                 return;
             } else {
-                target.health -= this.currentWeapon.attack * this.strength / target.armor;
+                target.health -= damage;
                 this.endurance -= this.currentWeapon.enduranceCost;
             }
         }
@@ -241,6 +247,7 @@ namespace Game_Characters
     }
 
     public void kickAttack (Character target) {
+        int damage = (int)((this.attack * this.strength) * (1 - this.CalculateDamageReduction(target.armor)));
 
         if(this.endurance > 6) {
             GameVariables.GameLoopBooleans.wasPlayerAttackMade = true;
@@ -248,7 +255,7 @@ namespace Game_Characters
                 this.endurance -= 6;
                 return;
             } else {
-                target.health -= (this.attack + kickAttackStrength) * this.strength / target.armor ;
+                target.health -= damage;
                 this.endurance -= 6;
             }
         }
@@ -299,16 +306,6 @@ namespace Game_Characters
         }
     }
 
-    //Level rating - how much stats will increase per level
-    Hashtable levelUpStats = new Hashtable {
-        {"experienceRating", 100},
-        {"attackRating", 2},
-        {"strengthRating", 1.1},
-        {"armorRating", 2},
-        {"healthRating", 2},
-        {"healRating", 2}
-    };
-
     public void levelUp () {
         if(GameVariables.PlayerStats.level >= GameVariables.PlayerStats.maxLevel) {
             return;
@@ -320,15 +317,22 @@ namespace Game_Characters
         GameVariables.PlayerStats.armor += GameVariables.LevelUpRatings.increaseArmorRating;
         GameVariables.PlayerStats.maxHealth += GameVariables.LevelUpRatings.increaseMaxHealthRating * GameVariables.PlayerStats.level;
         GameVariables.PlayerStats.health = GameVariables.PlayerStats.maxHealth;
+
+        this.armor = GameVariables.PlayerStats.armor;
+        this.attack = GameVariables.PlayerStats.attack;
+        this.strength = GameVariables.PlayerStats.strength;
         this.health = GameVariables.PlayerStats.maxHealth;
     }
 
     public void gainExperience (int experience) {
+        if(GameVariables.PlayerStats.level >= GameVariables.PlayerStats.maxLevel) {
+            return;
+        }
         GameVariables.PlayerStats.experience += experience;
         GameVariables.GameStats.totalExperience += experience;
         if (GameVariables.PlayerStats.experience >= GameVariables.PlayerStats.experienceToLevelUp) {
-            Console.WriteLine(" You leveled up!");
             this.levelUp();
+            Console.WriteLine(" You leveled up! You are now level " + GameVariables.PlayerStats.level + "!");
         }
     }
 

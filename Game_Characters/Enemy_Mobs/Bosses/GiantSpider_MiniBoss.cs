@@ -10,11 +10,13 @@ namespace _GiantSpider_MiniBoss
         }
 
         public void webShot(Player target) {
+            int damage = (int)(((this.attack + GameVariables.EnemyStats.GiantSpider.webShotDamage) * this.strength) * (1 - this.CalculateDamageReduction(target.armor)));
+
             if (target.isDefending) {
                 target.isDefending = false;
                 return;
             } else {
-                target.health -= ((this.attack + GameVariables.EnemyStats.GiantSpider.webShotDamage) * this.strength) / target.armor;
+                target.health -= damage;
                 if(GameVariables.getChance(GameVariables.EnemyStats.GiantSpider.stunChance)) {
                     target.isStunned = true;
                 }
@@ -22,11 +24,14 @@ namespace _GiantSpider_MiniBoss
         }
 
         public void poisonBite(Player target) {
+            int damage = (int)(((this.attack + GameVariables.EnemyStats.GiantSpider.poisonBiteDamage) * this.strength) * (1 - this.CalculateDamageReduction(target.armor)));
+
+
             if (target.isDefending) {
                 target.isDefending = false;
                 return;
             } else {
-                target.health -= ((this.attack + GameVariables.EnemyStats.GiantSpider.poisonBiteDamage) * this.strength) / target.armor;
+                target.health -= damage;
                 if(GameVariables.getChance(GameVariables.EnemyStats.GiantSpider.poisonChance)) {
                     target.isPoisoned = true;
                     target.poisonedTurns = 3;

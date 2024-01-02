@@ -102,6 +102,7 @@ namespace Dungeon_Generator {
                 if(changeWeapon == "Yes") {
                     player.currentWeapon = this.chest.weapon;
                     player.setAttackOptions();
+                    Console.WriteLine(" You changed your weapon to " + this.chest.weapon.name + "!");
                 } else {
                     Console.WriteLine(" You left the weapon in the chest.");
                 }
@@ -119,6 +120,7 @@ namespace Dungeon_Generator {
                 if(changeWeapon == "Yes") {
                     player.currentWeapon = this.chest.weapon;
                     player.setAttackOptions();
+                    Console.WriteLine(" You changed your weapon to " + this.chest.weapon.name + "!");
                 } else {
                     Console.WriteLine(" You left the weapon in the chest.");
                 }

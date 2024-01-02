@@ -19,13 +19,15 @@ namespace _Goblin
 
         public void steal(Player target)
         {
+            int damage = (int)((this.attack * this.strength) * (1 - this.CalculateDamageReduction(target.armor)));
+
             if(target.isDefending) {
                 target.isDefending = false;
                 target.loseGold(GameVariables.EnemyStats.Goblin.stealAmount);
                 return;
             } else {
                 GameVariables.GameLoopBooleans.wasEnemyAttackMade = true;
-                target.health -= this.attack * this.strength / target.armor;
+                target.health -= damage;
                 target.loseGold(GameVariables.EnemyStats.Goblin.stealAmount);
             }
         }

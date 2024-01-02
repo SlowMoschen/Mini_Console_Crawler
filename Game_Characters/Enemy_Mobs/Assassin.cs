@@ -18,11 +18,14 @@ namespace _Assassin
         // Backstab Attack - deals double damage and ignores target's defense
         public void backstab(Player target)
         {
+            int damage = (int)((this.attack * this.strength) * (1 - this.CalculateDamageReduction(target.armor)));
+
+
             if(target.isDefending) {
                 target.isDefending = false;
-                target.health -= (this.attack * this.strength / target.armor) * 2;
+                target.health -= damage * 2;
             } else {
-                target.health -= (this.attack * this.strength / target.armor) * 2;
+                target.health -= damage * 2;
             }
         }
 

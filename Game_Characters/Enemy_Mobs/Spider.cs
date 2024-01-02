@@ -20,11 +20,13 @@ namespace _Spider
         // spit Attack - deals small amount if initial damage and poisons target
         public void spit(Character target)
         {
+            int damage = (int)((this.attack * this.strength) * (1 - this.CalculateDamageReduction(target.armor)));
+
             if(target.isDefending) {
                 target.isDefending = false;
                 return;
             } else {
-                target.health -= this.attack * this.strength / target.armor;
+                target.health -= damage;
 
                 // 25% chance to poison target
                 if(GameVariables.getChance(GameVariables.EnemyStats.Spider.poisonChance)) {
