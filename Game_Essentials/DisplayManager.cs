@@ -102,6 +102,7 @@ namespace Console_Output
         public string displayMainMenu() {
             Console.Clear();
             this.displayHeader("Main Menu");
+            this.displayLevelProgressBar(GameVariables.PlayerStats.experience, GameVariables.PlayerStats.experienceToLevelUp);
             string menuChoice = this.displayOptionMenu(" What would you like to do?", GameVariables.GameSettings.Options.mainMenuOptions);
             return menuChoice;
         }
@@ -273,6 +274,18 @@ namespace Console_Output
             Console.WriteLine(message);
             Console.ReadKey();
             Console.Clear();
+        }
+
+        // .Write() is used here to piece the progress bar together
+        public void displayLevelProgressBar(int currentExperience, int experienceToNextLevel) {
+            double progress = (double)currentExperience / experienceToNextLevel;
+            int barSize = 20;
+            int progressInBar = (int)(progress * barSize);
+
+            Console.Write("Level Progress: [");
+            Console.Write(new string('#', progressInBar));
+            Console.Write(new string('.', barSize - progressInBar));
+            Console.Write("]\n");
         }
 
         // Method to display a header with a message
