@@ -1,3 +1,3 @@
-### Contribution
-Feel free to make some changes to the Codebase or work on one of the Issues.
-You can add a Contributers Field in the .displayCredits() Method of the DisplayManager to honor your contribution.
+# This Repo is deprecated
+Because of the unreadable Codebase I rewritting the whole Game
+Please go to https://github.com/SlowMoschen/Console_Crawler for the new Repo
